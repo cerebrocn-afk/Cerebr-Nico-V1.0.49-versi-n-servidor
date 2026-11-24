@@ -1,0 +1,17 @@
+.env
+.prettierrc
+.wrangler/
+dist/
+node_modules/
+
+# System
+.DS_Store
+.idea/
+.vscode/
+.cursor
+pnpm-lock.yaml
+
+# Private keys
+key.pem
+key.pem.pub
+*.pem

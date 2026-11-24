@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>CerebroNico · Hemisferios, raíz y pendrive (v2.3.2)</title>
+<style>
+  :root{--bg:#0b0e13;--panel:#11161d;--panel2:#151b23;--line:#232c37;--txt:#c9d3de;--dim:#8593a3;
+        --izq:#5f8ba3;--der:#8a9a5e;--warn:#b58a4a;--bad:#a8605c;--ok:#6f9a72}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.62 -apple-system,"Segoe UI",system-ui,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 22px 90px}
+  h1{font-size:25px;letter-spacing:.2px;margin:0 0 6px;font-weight:600}
+  h2{font-size:18px;margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);font-weight:600;color:#dbe4ee}
+  h3{font-size:15px;margin:22px 0 8px;color:#c3cedb;font-weight:600}
+  p{margin:9px 0}
+  .sub{color:var(--dim);font-size:13px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+  .veredicto{border-left:3px solid var(--ok);background:#101720}
+  .advertencia{border-left:3px solid var(--warn)}
+  .rojo{border-left:3px solid var(--bad)}
+  code{background:#0d1218;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12.5px;color:#a9c2d4}
+  pre{background:#0d1218;border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:12.5px;color:#a9c2d4}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th{color:#dbe4ee;font-weight:600;text-align:left;border-bottom:1px solid var(--line);padding:8px 9px;background:var(--panel2)}
+  td{border-bottom:1px solid #1a222c;padding:8px 9px;vertical-align:top}
+  .n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11.5px;border:1px solid var(--line);color:var(--dim);margin-right:5px}
+  .t-izq{color:var(--izq);border-color:#2c414d}.t-der{color:var(--der);border-color:#3b452a}
+  .chf{font-size:12.5px;color:var(--dim);margin:6px 0 0}
+  .fu{color:#7b8896;font-size:11.5px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:800px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Hemisferios, raíz de datos y el escenario pendrive</h1>
+<p class="sub">CerebroNico IDE · base verificada <b>v2.3.2</b> (10 578 comprobaciones · 0 fallos) · 4/11/2026 ·
+todo lo afirmado tiene <code>archivo:línea</code> al pie</p>
+
+<div class="card veredicto">
+<h3 style="margin-top:2px">Respuesta corta a tu pregunta</h3>
+<p><strong>No hay confusión en el código: hay una divergencia real, medida y con dueño.</strong> La arquitectura de dos
+asientos es intencional y está documentada en <code>src/engine/hemisferios.ts</code>, que además define el nombre exacto
+de lo que vos percibís como confusión: <em>«cerebro escindido»</em> = una mitad que nombra a la otra sin que la otra la
+nombre.</p>
+<p>Y la respuesta al pendrive, antes que nada, porque es la que cambia lo que hacés con el USB:</p>
+<p><strong>De fábrica NO es un plan para pendrive.</strong> En Windows la raíz de datos está fijada a una letra
+absoluta — <code>C:\Cerebronico</code> — tanto en el default del motor como en el <code>.bat</code>. Del pendrive viaja
+el hemisferio <em>izquierdo</em> (código, leyes, daemons). El hemisferio <em>derecho</em> (memoria, índice, lecciones)
+se queda en el <code>C:</code> de la máquina donde se instaló. Si forzás la raíz al USB, funciona hasta que la
+letra cambia: ahí la aplicación <em>no</em> busca en el pendrive, cae al default y te muestra un cerebro vacío que en
+realidad sigue intacto adentro del USB.</p>
+</div>
+
+<h2>1 · Los dos hemisferios y su ley de referencia cruzada</h2>
+<p>Tu descripción del 31/10 (<em>«el cerebro izquierdo y el derecho, la interfaz está en el medio, carpeta raíz de
+instalador o exe, mitad de cerebro/documentación en disco C:\CEREBRONICO, la otra mitad y espejo de base de datos»</em>)
+es literal el encabezado del módulo. El asiento partido es este:</p>
+
+<svg viewBox="0 0 1040 372" width="100%" role="img" aria-label="Mapa de los dos hemisferios y sus referencias cruzadas">
+  <defs>
+    <marker id="f" marker-width="7" marker-height="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#6f7f8f"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1040" height="372" fill="#0b0e13"/>
+
+  <!-- IZQUIERDO -->
+  <rect x="26" y="46" width="430" height="250" rx="11" fill="#11161d" stroke="#2c414d"/>
+  <text x="48" y="32" fill="#5f8ba3" font-size="14" font-weight="600">HEMISFERIO IZQUIERDO · instalación</text>
+  <text x="48" y="74" fill="#c9d3de" font-size="13">árbol del exe / app/ — el código y las leyes</text>
+  <g font-size="12.5" fill="#a9b7c5">
+    <text x="52" y="102">· cerebro.md — las leyes del agente</text>
+    <text x="52" y="124">· manual-motor — el que el abordaje exige leer</text>
+    <text x="52" y="146">· RUTAS-DEL-SISTEMA.md — el mapa, batido contra disco</text>
+    <text x="52" y="168">· server.ts — el monolito, un solo dueño del ciclo</text>
+    <text x="52" y="190">· agent_bridge_5000.py — el puente al PC</text>
+    <text x="52" y="212">· scripts/hindsight_daemon.py — memoria (:5100)</text>
+    <text x="52" y="234">· scripts/creador_daemon.py — sitios web (:5102)</text>
+    <text x="52" y="256">· src/engine/ — los órganos puros</text>
+  </g>
+  <text x="52" y="283" fill="#8593a3" font-size="11.5">8 piezas declaradas · NUCLEO intocable del izquierdo</text>
+
+  <!-- INTERFAZ -->
+  <rect x="470" y="118" width="100" height="106" rx="10" fill="#151b23" stroke="#33404e"/>
+  <text x="520" y="158" text-anchor="middle" fill="#dbe4ee" font-size="12.5" font-weight="600">INTERFAZ</text>
+  <text x="520" y="178" text-anchor="middle" fill="#8593a3" font-size="11">en el medio</text>
+  <text x="520" y="196" text-anchor="middle" fill="#8593a3" font-size="11">:3000</text>
+
+  <!-- DERECHO -->
+  <rect x="584" y="46" width="430" height="250" rx="11" fill="#11161d" stroke="#3b452a"/>
+  <text x="606" y="32" fill="#8a9a5e" font-size="14" font-weight="600">HEMISFERIO DERECHO · C:\Cerebronico</text>
+  <text x="606" y="74" fill="#c9d3de" font-size="13">raíz de datos — la memoria aprendida</text>
+  <g font-size="12.5" fill="#a9b7c5">
+    <text x="610" y="102">· cerebro/CEREBRO.md — la cara humana del índice</text>
+    <text x="610" y="124">· cerebro/vectores.json — el índice vectorial</text>
+    <text x="610" y="146">· .cerebro-db — kb.json · auditoria.jsonl · firmas</text>
+    <text x="610" y="168">· LECCIONES.md — las L que escribió el motor</text>
+    <text x="610" y="190">· REANUDAR.md — estado de servicios del turno</text>
+    <text x="610" y="212">· perfeccion.md · puente-permitidos.json</text>
+    <text x="610" y="234">· .cerebronico/espejos — telemetría y salud</text>
+    <text x="610" y="256">· .cerebro-papelera — nada se borra a sangre</text>
+  </g>
+  <text x="610" y="283" fill="#8593a3" font-size="11.5">14 piezas declaradas · 9 carpetas NUCLEO intocables</text>
+
+  <!-- referencias cruzadas -->
+  <g stroke="#6f7f8f" stroke-width="1.2" fill="none" marker-end="url(#f)">
+    <path d="M456 122 C 520 84, 560 84, 584 102"/>
+    <path d="M584 124 C 560 106, 520 106, 456 148"/>
+  </g>
+  <text x="520" y="330" text-anchor="middle" fill="#8593a3" font-size="12">
+    5 REFERENCIAS CRUZADAS obligatorias · si existe una sola dirección, el cerebro está ESCINDIDO
+  </text>
+  <text x="520" y="352" text-anchor="middle" fill="#7b8896" font-size="11.5">
+    cerebro.md ↔ cerebro/CEREBRO.md · cerebroOrgano.ts ↔ vectores.json · .bat ↔ REANUDAR.md · server.ts ↔ LECCIONES.md · puente.py ↔ puente-permitidos.json
+  </text>
+</svg>
+<p class="chf">Fig. 1 — Los dos asientos y el par de flechas que la valla exige en <strong>ambos sentidos</strong>
+(<code>REFERENCIAS_CRUZADAS</code>, 5 pares). Fuente: <code>src/engine/hemisferios.ts:31-83</code>.</p>
+
+<div class="card rojo">
+<h3 style="margin-top:2px">La divergencia existe: está medida, no inferida</h3>
+<p>El 1/11 subiste la carpeta real y se midió ahí. De <strong>69 archivos</strong> en la raíz de datos:</p>
+<ul>
+<li><code>LECCIONES.md</code> vivo (las L37/L38 las escribió el motor en esa sesión).</li>
+<li><code>REANUDAR.md</code> vivo, con el estado de servicios del último turno.</li>
+<li><code>cerebro/CEREBRO.md</code> y <code>cerebro/vectores.json</code> presentes.</li>
+<li><code>.cerebro-db/kb.json</code> con entradas reales, no la semilla.</li>
+</ul>
+<p>Es decir: <strong>el hemisferio derecho está sano y con contenido</strong>. Lo que falla no es el asiento, es la
+<em>referencia</em>: el izquierdo nombra al derecho en 5 puntos y el derecho no siempre devuelve el nombre. Eso es
+exactamente lo que <code>hemisferios.ts</code> llama «cerebro escindido», y es lo que la valla
+<code>tests/hemisferios.test.ts</code> detecta.</p>
+</div>
+
+<h2>2 · La raíz de datos: dónde vive cada mitad</h2>
+<table>
+<tr><th>Pieza</th><th>Ruta por defecto</th><th>Quién la fija</th><th>¿Viaja en el pendrive?</th></tr>
+<tr><td>Árbol del código</td><td><code>&lt;instalación&gt;/app</code></td><td>el instalador / el zip</td><td class="n">Sí — es el izquierdo</td></tr>
+<tr><td>Raíz de datos</td><td><code>C:\Cerebronico</code></td><td><code>PROJECT_DIR</code> (motor) y <code>CN_PROJECT_DIR</code> (puente)</td><td class="n">No — se queda en el C:</td></tr>
+<tr><td>Bóveda de claves</td><td><code>C:\CN</code></td><td><code>CN_BOVEDA_RAIZ</code></td><td class="n">No — y no debe</td></tr>
+<tr><td>Espejos de salud</td><td><code>&lt;raíz de datos&gt;/.cerebronico/espejos</code></td><td><code>CN_HINDSITE_MIRROR</code></td><td class="n">No</td></tr>
+<tr><td>Sitios del creador</td><td><code>&lt;raíz de datos&gt;/.creador</code></td><td><code>CN_CREADOR_ROOT</code></td><td class="n">No</td></tr>
+</table>
+<p class="fu">Fuente: <code>RUTAS-DEL-SISTEMA.md</code> y los defaults de <code>server.ts</code> / <code>agent_bridge_5000.py</code>.</p>
+
+<div class="card advertencia">
+<h3 style="margin-top:2px">El detalle que rompe el pendrive: dos variables, una raíz</h3>
+<p>El motor lee <code>PROJECT_DIR</code>; el puente Python lee <code>CN_PROJECT_DIR</code>. <strong>Si no coinciden, el
+almacén se parte en dos</strong>: el motor escribe en una carpeta y el puente lee de otra. En un pendrive esto pasa
+solo, porque el <code>.bat</code> fija una y el puente arranca con la otra si no se la pasás.</p>
+<p>Si querés el pendrive de verdad, hay que fijar <strong>las dos</strong> a la misma ruta del USB, y aceptar que la
+letra (<code>E:</code>, <code>F:</code>…) cambia según la máquina. La forma robusta es una ruta relativa al ejecutable,
+no una letra absoluta — y eso hoy <em>no</em> está implementado.</p>
+</div>
+
+<h2>3 · El escenario pendrive, en concreto</h2>
+<h3>3.1 · Qué pasa hoy si copiás todo al USB</h3>
+<ol>
+<li>Copiás <code>app/</code> al pendrive. El izquierdo viaja completo: código, leyes, daemons, <code>node_modules</code>.</li>
+<li>En la máquina nueva, el motor arranca y busca <code>C:\Cerebronico</code>. <strong>No existe</strong> → lo crea vacío.</li>
+<li>El cerebro aparece <strong>vacío</strong>: sin lecciones, sin índice, sin memoria. Pero el contenido real sigue en el
+USB, en la carpeta que copiaste.</li>
+<li>Si además el puente arranca sin <code>CN_PROJECT_DIR</code>, escribe en <em>otra</em> carpeta vacía. Dos cerebros
+vacíos, ninguno con lo que traías.</li>
+</ol>
+
+<h3>3.2 · Qué habría que hacer para que funcione</h3>
+<table>
+<tr><th>Paso</th><th>Qué</th><th>Estado</th></tr>
+<tr><td>1</td><td>Raíz de datos relativa al ejecutable, no a una letra absoluta</td><td>❌ no implementado</td></tr>
+<tr><td>2</td><td>Unificar <code>PROJECT_DIR</code> y <code>CN_PROJECT_DIR</code> en un solo origen</td><td>⚠️ existen separadas</td></tr>
+<tr><td>3</td><td>Detectar que la raíz cambió de letra y avisar en vez de crear una vacía</td><td>❌ no implementado</td></tr>
+<tr><td>4</td><td>Portable: no escribir en <code>C:\CN</code> (bóveda) sino junto al ejecutable</td><td>⚠️ configurable con <code>CN_BOVEDA_RAIZ</code></td></tr>
+<tr><td>5</td><td>Verificar al arrancar que el hemisferio derecho tiene contenido y decirlo</td><td>✅ lo hace el aviso «el cerebro esta vacio»</td></tr>
+</table>
+
+<h3>3.3 · Mientras tanto: cómo llevarte el cerebro a otra máquina</h3>
+<pre>1. Copiá el árbol app/ completo al pendrive.
+2. Copiá TAMBIÉN la raíz de datos (C:\Cerebronico) al pendrive.
+3. En la máquina nueva, antes de arrancar:
+     set PROJECT_DIR=&lt;letra&gt;:\Cerebronico
+     set CN_PROJECT_DIR=&lt;letra&gt;:\Cerebronico
+4. Arrancá con iniciar_todo_windows.bat.
+5. Comprobá: el aviso «el cerebro esta vacio» NO debe aparecer.</pre>
+<p class="fu">Si aparece, la raíz no se está leyendo: revisá que las dos variables apunten a la misma carpeta.</p>
+
+<h2>4 · Lo que este documento NO dice</h2>
+<ul>
+<li>No dice que el pendrive esté soportado: <strong>no lo está</strong> de fábrica.</li>
+<li>No dice que la arquitectura de dos asientos sea un error: es intencional y está probada.</li>
+<li>No cubre el «servidor caído»: eso está en <code>RECETA-servidor-caido-y-puertos.md</code>.</li>
+<li>Los números de comprobaciones (10 578) son de la base v2.3.2; la entrega actual es v2.3.8 con 10 661.</li>
+</ul>
+
+</div></body>
+</html>

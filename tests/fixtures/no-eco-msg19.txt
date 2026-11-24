@@ -1,0 +1,739 @@
+**index.html** — página principal del sitio web
+```html file="index.html"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CerebroNico</title>
+    <meta name="description" content="CerebroNico es una IDE local para desarrollo de software">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>CerebroNico</h1>
+        <nav>
+            <ul>
+                <li><a href="#features">Características</a></li>
+                <li><a href="#pricing">Precios</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="hero">
+            <h2>Desarrolla con Inteligencia</h2>
+            <p>CerebroNico es tu IDE local para desarrollo de software con IA integrada.</p>
+            <a href="#contact" class="cta-button">Empieza Ahora</a>
+        </section>
+        <section id="features">
+            <h2>Características</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>Autocompletado Inteligente</h3>
+                    <p>Obtén sugerencias de código en tiempo real.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Depuración Avanzada</h3>
+                    <p>Herramientas de depuración integradas.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Integración con IA</h3>
+                    <p>Asistencia de IA para tus proyectos.</p>
+                </div>
+            </div>
+        </section>
+        <section id="pricing">
+            <h2>Precios</h2>
+            <div class="pricing-table">
+                <div class="pricing-item">
+                    <h3>Básico</h3>
+                    <p class="price">$9.99/mes</p>
+                    <ul>
+                        <li>Acceso a características básicas</li>
+                        <li>Soporte por correo electrónico</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Elegir Plan</a>
+                </div>
+                <div class="pricing-item">
+                    <h3>Pro</h3>
+                    <p class="price">$19.99/mes</p>
+                    <ul>
+                        <li>Acceso a todas las características</li>
+                        <li>Soporte prioritario</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Elegir Plan</a>
+                </div>
+                <div class="pricing-item">
+                    <h3>Empresarial</h3>
+                    <p class="price">$49.99/mes</p>
+                    <ul>
+                        <li>Acceso a características avanzadas</li>
+                        <li>Soporte 24/7</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Elegir Plan</a>
+                </div>
+            </div>
+        </section>
+        <section id="contact">
+            <h2>Contacto</h2>
+            <form>
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Mensaje:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit" class="cta-button">Enviar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 CerebroNico. Todos los derechos reservados.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+**styles.css** — hoja de estilos principal
+```css file="styles.css"
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background: #007BFF;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background: #0056b3;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 2rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+#hero {
+    text-align: center;
+    padding: 2rem;
+    background: #f4f4f4;
+}
+
+#hero h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+#hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: #007BFF;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.cta-button:hover {
+    background: #0056b3;
+}
+
+.feature-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    flex: 1;
+    min-width: 200px;
+    margin: 1rem;
+    padding: 1rem;
+    background: #f4f4f4;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.feature-item h3 {
+    margin-top: 0;
+}
+
+.pricing-table {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.pricing-item {
+    flex: 1;
+    min-width: 200px;
+    margin: 1rem;
+    padding: 1rem;
+    background: #f4f4f4;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.pricing-item h3 {
+    margin-top: 0;
+}
+
+.price {
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
+.pricing-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.pricing-item li {
+    margin: 0.5rem 0;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form textarea {
+    height: 100px;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: white;
+}
+```
+
+**script.js** — script principal para interactividad
+```javascript file="script.js"
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        alert('Formulario enviado');
+    });
+});
+```
+
+**README.md** — documento de introducción
+```markdown file="README.md"
+# CerebroNico
+
+CerebroNico es una IDE local para desarrollo de software con IA integrada.
+
+## Características
+
+- Autocompletado inteligente
+- Depuración avanzada
+- Integración con IA
+
+## Instalación
+
+1. Clona el repositorio
+2. Instala las dependencias con `npm install`
+3. Inicia la aplicación con `npm start`
+
+## Uso
+
+- Abre la aplicación en tu navegador
+- Comienza a desarrollar con las características avanzadas
+
+## Contribución
+
+Si deseas contribuir, por favor sigue las directrices de contribución.
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT.
+```
+
+**package.json** — configuración de npm
+```json file="package.json"
+{
+  "name": "cerebronico",
+  "version": "1.0.0",
+  "description": "CerebroNico es una IDE local para desarrollo de software",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server"
+  },
+  "keywords": [
+    "ide",
+    "desarrollo",
+    "software",
+    "ia"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
+}
+```
+
+**server.ts** — servidor local para desarrollo
+```typescript file="server.ts"
+import express from 'express';
+import path from 'path';
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
+```
+
+**tsconfig.json** — configuración de TypeScript
+```json file="tsconfig.json"
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
+```
+
+**src/constants.ts** — constantes globales
+```typescript file="src/constants.ts"
+export const APP_NAME = "CerebroNico";
+export const API_URL = "http://localhost:5000/api";
+export const VERSION = "1.0.0";
+```
+
+**src/utils/helpers.ts** — funciones de ayuda
+```typescript file="src/utils/helpers.ts"
+export function formatDate(date: Date): string {
+    return date.toLocaleDateString();
+}
+
+export function capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+```
+
+**src/components/Header.tsx** — componente de encabezado
+```typescript file="src/components/Header.tsx"
+import React from 'react';
+
+interface HeaderProps {
+    title: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ title }) => {
+    return (
+        <header>
+            <h1>{title}</h1>
+        </header>
+    );
+};
+
+export default Header;
+```
+
+**src/components/Footer.tsx** — componente de pie de página
+```typescript file="src/components/Footer.tsx"
+import React from 'react';
+
+const Footer: React.FC = () => {
+    return (
+        <footer>
+            <p>&copy; 2023 CerebroNico. Todos los derechos reservados.</p>
+        </footer>
+    );
+};
+
+export default Footer;
+```
+
+**src/pages/Home.tsx** — página principal
+```typescript file="src/pages/Home.tsx"
+import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
+const Home: React.FC = () => {
+    return (
+        <div>
+            <Header title="CerebroNico" />
+            <main>
+                <section id="hero">
+                    <h2>Desarrolla con Inteligencia</h2>
+                    <p>CerebroNico es tu IDE local para desarrollo de software con IA integrada.</p>
+                    <a href="#contact" className="cta-button">Empieza Ahora</a>
+                </section>
+                <section id="features">
+                    <h2>Características</h2>
+                    <div className="feature-list">
+                        <div className="feature-item">
+                            <h3>Autocompletado Inteligente</h3>
+                            <p>Obtén sugerencias de código en tiempo real.</p>
+                        </div>
+                        <div className="feature-item">
+                            <h3>Depuración Avanzada</h3>
+                            <p>Herramientas de depuración integradas.</p>
+                        </div>
+                        <div className="feature-item">
+                            <h3>Integración con IA</h3>
+                            <p>Asistencia de IA para tus proyectos.</p>
+                        </div>
+                    </div>
+                </section>
+                <section id="pricing">
+                    <h2>Precios</h2>
+                    <div className="pricing-table">
+                        <div className="pricing-item">
+                            <h3>Básico</h3>
+                            <p className="price">$9.99/mes</p>
+                            <ul>
+                                <li>Acceso a características básicas</li>
+                                <li>Soporte por correo electrónico</li>
+                            </ul>
+                            <a href="#contact" className="cta-button">Elegir Plan</a>
+                        </div>
+                        <div className="pricing-item">
+                            <h3>Pro</h3>
+                            <p className="price">$19.99/mes</p>
+                            <ul>
+                                <li>Acceso a todas las características</li>
+                                <li>Soporte prioritario</li>
+                            </ul>
+                            <a href="#contact" className="cta-button">Elegir Plan</a>
+                        </div>
+                        <div className="pricing-item">
+                            <h3>Empresarial</h3>
+                            <p className="price">$49.99/mes</p>
+                            <ul>
+                                <li>Acceso a características avanzadas</li>
+                                <li>Soporte 24/7</li>
+                            </ul>
+                            <a href="#contact" className="cta-button">Elegir Plan</a>
+                        </div>
+                    </div>
+                </section>
+                <section id="contact">
+                    <h2>Contacto</h2>
+                    <form>
+                        <label htmlFor="name">Nombre:</label>
+                        <input type="text" id="name" name="name" required />
+                        <label htmlFor="email">Email:</label>
+                        <input type="email" id="email" name="email" required />
+                        <label htmlFor="message">Mensaje:</label>
+                        <textarea id="message" name="message" required></textarea>
+                        <button type="submit" className="cta-button">Enviar</button>
+                    </form>
+                </section>
+            </main>
+            <Footer />
+        </div>
+    );
+};
+
+export default Home;
+```
+
+**src/App.tsx** — componente principal de la aplicación
+```typescript file="src/App.tsx"
+import React from 'react';
+import Home from './pages/Home';
+
+const App: React.FC = () => {
+    return (
+        <div className="App">
+            <Home />
+        </div>
+    );
+};
+
+export default App;
+```
+
+**src/index.tsx** — punto de entrada de la aplicación
+```typescript file="src/index.tsx"
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles.css';
+import App from './App';
+
+ReactDOM.render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+    document.getElementById('root')
+);
+```
+
+**src/styles.css** — hoja de estilos principal
+```css file="src/styles.css"
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background: #007BFF;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background: #0056b3;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 2rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+#hero {
+    text-align: center;
+    padding: 2rem;
+    background: #f4f4f4;
+}
+
+#hero h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+#hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: #007BFF;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.cta-button:hover {
+    background: #0056b3;
+}
+
+.feature-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    flex: 1;
+    min-width: 200px;
+    margin: 1rem;
+    padding: 1rem;
+    background: #f4f4f4;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.feature-item h3 {
+    margin-top: 0;
+}
+
+.pricing-table {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.pricing-item {
+    flex: 1;
+    min-width: 200px;
+    margin: 1rem;
+    padding: 1rem;
+    background: #f4f4f4;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.pricing-item h3 {
+    margin-top: 0;
+}
+
+.price {
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
+.pricing-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.pricing-item li {
+    margin: 0.5rem 0;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form textarea {
+    height: 100px;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: white;
+}
+```
+
+**src/tests/App.test.tsx** — pruebas para el componente principal
+```typescript file="src/tests/App.test.tsx"
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from '../App';
+
+test('renders learn react link', () => {
+    render(<App />);
+    const linkElement = screen.getByText(/learn react/i);
+    expect(linkElement).toBeInTheDocument();
+});
+```
+
+**src/tests/Home.test.tsx** — pruebas para la página principal
+```typescript file="src/tests/Home.test.tsx"
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Home from '../pages/Home';
+
+test('renders home page', () => {
+    render(<Home />);
+    const heroElement = screen.getByText(/Desarrolla con Inteligencia/i);
+    expect(heroElement).toBeInTheDocument();
+});
+```
+
+**src/tests/Header.test.tsx** — pruebas para el componente de encabezado
+```typescript file="src/tests/Header.test.tsx"
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Header from '../components/Header';
+
+test('renders header', () => {
+    render(<Header title="CerebroNico" />);
+    const headerElement = screen.getByText(/CerebroNico/i);
+    expect(headerElement).toBeInTheDocument();
+});
+```
+
+**src/tests/Footer.test.tsx** — pruebas para el componente de pie de página
+```typescript file="src/tests/Footer.test.tsx"
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Footer from '../components/Footer';
+
+test('renders footer', () => {
+    render(<Footer />);
+    const footerElement = screen.getByText(/© 2023 CerebroNico/i);
+    expect(footerElement).toBeInTheDocument();
+});
+```

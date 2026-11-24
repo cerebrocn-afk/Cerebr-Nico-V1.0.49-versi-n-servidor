@@ -1,0 +1,21 @@
+{
+  "evidenciaTurno": "CABLEADO",
+  "motorEvidencia": "CABLEADO",
+  "matrizVerificacion": "INDIRECTO",
+  "motorRecuperacion": "HUÉRFANO",
+  "estadoRescate": "CABLEADO",
+  "presupuestoReparacion": "HUÉRFANO",
+  "grafoProyecto": "INDIRECTO",
+  "grafoRico": "INDIRECTO",
+  "guardianRegresion": "HUÉRFANO",
+  "navegadorReal": "HUÉRFANO",
+  "regresionVisual": "HUÉRFANO",
+  "redimensionPantalla": "HUÉRFANO",
+  "pantallaCompleta": "HUÉRFANO",
+  "enrutadorModelo": "HUÉRFANO",
+  "modelTiers": "CABLEADO",
+  "providerRouting": "CABLEADO",
+  "memoriaArquitectura": "HUÉRFANO",
+  "memoriaResiliente": "CABLEADO",
+  "memoriaNegativa": "HUÉRFANO"
+}

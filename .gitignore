@@ -1,0 +1,70 @@
+# dependencias
+node_modules/
+vendor/*/node_modules/
+
+# Claves y secretos — nunca viajan en el repo/ZIP (guardián sin-claves)
+.env
+.env.*
+!.env.servidor.example
+# la plantilla SÍ viaja: dos suites la leen (creadorWeb, hindsightHibrido)
+!.env.example
+*.key
+*.pem
+secrets.json
+
+# Sesiones locales de CerebroNico
+*.cn
+sesion-*.json
+*.log
+
+# salidas de build
+dist/
+dist_electron/
+dist_build/
+app.7z
+release/
+
+# cache de herramientas
+.vite/
+*.tsbuildinfo
+
+# scratch y diagnóstico generado por sesiones de build/validación — solo en la raíz de la casa
+/tsc-out.txt
+/_tsc_raw.txt
+/_tsc_resultado.txt
+/validar-salida.txt
+/_tsc*.cjs
+/_tsc*.mjs
+/_tsc*.js
+/_tsc*.bat
+/_tsc.cmd
+/_leer_tsc.mjs
+/.leer-tsc.cjs
+/.leer-tsc.js
+/leer-tsc.cjs
+/compilar-check.cjs
+/lanzar-build.cjs
+/_verif*.cjs
+/_verif*.mjs
+/_fix_*.cjs
+/_tsc-embedder.cjs
+/_buscar_tags.mjs
+/tsconfig.scoped*.json
+
+# datos y estado del usuario en la raíz de la casa
+.cerebro-db/
+.cerebro-papelera/
+.cerebronico/
+.proyectos/
+.revisiones/
+memoria_history/
+.autonomia-deps/
+.vigilante/
+
+__pycache__/
+
+# Datos privados de la edición servidor
+.sesiones/
+workspace/
+.aistudio/
+validacion-servidor/

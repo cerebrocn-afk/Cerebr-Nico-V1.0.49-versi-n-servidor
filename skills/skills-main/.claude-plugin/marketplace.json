@@ -1,0 +1,20 @@
+{
+  "name": "unblocked-skills",
+  "owner": {
+    "name": "Unblocked",
+    "url": "https://getunblocked.com"
+  },
+  "metadata": {
+    "description": "Unblocked is the context layer for agentic software development. It gives your agents the organizational understanding your best engineers already have by connecting the context scattered across your code, messaging platforms, issue trackers, documentation, and product and production data. The result: reliable code that reflects how your team actually builds software, generated with fewer tokens and less back-and-forth.",
+    "version": "1.0.0",
+    "repository": "https://github.com/unblocked/skills"
+  },
+  "plugins": [
+    {
+      "name": "unblocked-skills",
+      "description": "Unblocked is the context layer for agentic software development. It gives your agents the organizational understanding your best engineers already have by connecting the context scattered across your code, messaging platforms, issue trackers, documentation, and product and production data. The result: reliable code that reflects how your team actually builds software, generated with fewer tokens and less back-and-forth.",
+      "source": "./",
+      "strict": true
+    }
+  ]
+}

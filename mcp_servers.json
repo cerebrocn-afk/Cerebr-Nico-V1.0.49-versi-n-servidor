@@ -1,0 +1,89 @@
+{
+  "_leeme": "CerebroNico — Servidores MCP (Model Context Protocol) que el puente Python (:5000) conecta por stdio y expone como herramientas. «id»: prefijo de sus herramientas (<id>_<herramienta> en GET /tools). «comando»+«args»: se lanzan SIN shell; el binario debe estar en binarios_permitidos de puente-permitidos.json (python/python3/py se resuelven al intérprete del propio puente). Las rutas relativas de «args» se resuelven desde la carpeta de la app. «timeout»: segundos por llamada RPC (5-120). Tras editar este fichero: POST /api/mcp/sincronizar (o reiniciar el puente). enabled=false desactiva sin borrar la entrada.",
+  "_flujo": "scripts/mcp_fetch.py → GET :5000/tools → registerExternalPack (server.ts, pack «puente-mcp» de tools.config.json) → tool-calling del modelo → POST :5000/tools/call → JSON-RPC stdio → fetch_url / extraer_enlaces / buscar_web / descargar_archivo. buscar_web (investigar) y descargar_archivo (descargar) EXIGEN confirmar:true: sin confirmar devuelven REQUIRE_CONFIRMACION para que el agente pida orden al usuario ANTES de salir a la red.",
+  "servidores": [
+    {
+      "id": "web",
+      "label": "Red: navegar, investigar y descargar (recursos públicos, bajo confirmación)",
+      "comando": "python",
+      "args": [
+        "scripts/mcp_fetch.py"
+      ],
+      "enabled": true,
+      "timeout": 30
+    },
+    {
+      "id": "context7",
+      "label": "Context7: docs actualizadas de librerías (API key opcional, sin ella rate limits bajitos)",
+      "comando": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "enabled": true,
+      "timeout": 30
+    },
+    {
+      "id": "unblocked",
+      "label": "Unblocked: contexto organizacional — código, PRs, issues, docs (OAuth en el navegador la 1ª vez que se usa)",
+      "comando": "npx",
+      "args": [
+        "-y",
+        "@anthropic-ai/mcp-remote",
+        "https://getunblocked.com/api/mcpsse"
+      ],
+      "enabled": false,
+      "timeout": 30
+    },
+    {
+      "id": "webflow",
+      "label": "Webflow: diseño y gestión de sitios vía IA (OAuth en el navegador la 1ª vez que se usa)",
+      "comando": "npx",
+      "args": [
+        "-y",
+        "webflow-mcp-server"
+      ],
+      "enabled": false,
+      "timeout": 30
+    },
+    {
+      "id": "cloudflare_docs",
+      "label": "Cloudflare Docs: buscar y leer la documentación de Cloudflare desde el chat (requiere cuenta/token; se enciende a mano)",
+      "comando": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://docs.mcp.cloudflare.com/mcp"
+      ],
+      "enabled": false,
+      "timeout": 45
+    },
+    {
+      "id": "cloudflare_browser",
+      "label": "Cloudflare Browser Rendering: abrir páginas reales y leerlas (capturas, texto; requiere cuenta/token; se enciende a mano)",
+      "comando": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://browser.mcp.cloudflare.com/mcp"
+      ],
+      "enabled": false,
+      "timeout": 60
+    },
+    {
+      "id": "cloudflare_api",
+      "label": "Cloudflare API: consultar y operar la cuenta de Cloudflare (el de MÁS alcance: encender solo a sabiendas)",
+      "comando": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.cloudflare.com/mcp",
+        "--header",
+        "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
+      ],
+      "enabled": false,
+      "timeout": 60
+    }
+  ],
+  "_cloudflare": "Cloudflare (v1.0.28): tres servidores remotos por Streamable HTTP, APAGADOS de fábrica. Para encender uno: poner enabled:true y, o bien CN_MCP_CLOUDFLARE_API_TOKEN en el entorno, o dejar que mcp-remote abra el navegador para el OAuth la primera vez. No guardar el token en este archivo: la entrada lo lee del entorno (${CLOUDFLARE_API_TOKEN})."
+}

@@ -1,0 +1,27 @@
+# requirements.txt — LO QUE ESTA CASA PIDE A pip AL ARRANCAR: NADA.
+# ============================================================================
+# 🐞 «¿POR QUÉ EL SERVIDOR SE CAE?» — v1.0.23
+# ----------------------------------------------------------------------------
+# Este archivo declaraba fastapi, uvicorn[standard], python-dotenv y pydantic.
+# Ninguno se usa en el arranque normal: los tres daemons de la casa
+# (scripts\cerebro_motor.py :5103, scripts\hindsight_daemon.py :5100,
+# scripts\creador_daemon.py :5102) y el puente (agent_bridge_5000.py :5000)
+# son 100% biblioteca estándar — `http.server.ThreadedHTTPServer`, json, urllib,
+# threading. Lo único raro es zlib/struct/hashlib/zipfile, que son stdlib.
+#
+# `runtime\python-embed\python.exe` (el intérprete que elige el lanzador) NO
+# trae pip. Con estas cuatro líneas escritas, cualquier diagnóstico de arranque
+# informaba «faltan fastapi, uvicorn, python-dotenv, pydantic» y desviaba la
+# investigación hacia un `pip install` imposible, mientras la causa real (una
+# ruta relativa resuelta contra el cwd equivocado) quedaba tapada.
+# `autonomia.py deps` lee ESTE archivo: con cero líneas reales, el arranque
+# informa cero faltantes y no asusta a nadie. Es la regla que ya congela
+# tests/autonomia_test.py: «requirements.txt de raíz pide CERO paquetes».
+#
+# Los requisitos de los componentes LEGACY siguen donde deben estar, junto a
+# su componente: core-agent\requirements.txt (y app\requirements.txt en las
+# instalaciones viejas). Ahí fastapi/uvicorn sí son ciertos.
+#
+# Si alguna vez se suma un pack que de verdad necesite pip, se declara AQUÍ
+# con su comentario de por qué — y se deja de poder usar python-embed sin
+# aprovisionar pip primero. Eso es una decisión, no un descuido silencioso.

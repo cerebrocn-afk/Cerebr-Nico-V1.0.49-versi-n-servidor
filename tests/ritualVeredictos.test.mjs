@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import vm from 'node:vm';
+const raiz=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const texto=fs.readFileSync(path.join(raiz,'scripts/validar.mjs'),'utf8');
+const inicio=texto.indexOf('function extraer(salida, suites)');
+const fin=texto.indexOf('// ─── Ejecución',inicio);
+assert.ok(inicio>=0 && fin>inicio);
+const ctx={marcasSueltas:[]};vm.createContext(ctx);vm.runInContext(texto.slice(inicio,fin),ctx);
+let pass=0,fail=0;
+function test(n,salida,ok,mal){try{const r=ctx.extraer(salida,'fixture');assert.equal(r.ok,ok);assert.equal(r.mal,mal);pass++;console.log('✓ '+n);}catch(e){fail++;console.log('✗ '+n+' — '+e.message);}}
+test('N/M OK completo', 'censoSuites: 1/1 OK',1,0);
+test('N/M OK parcial nunca se vuelve verde','censoSuites: 7/9 OK',7,2);
+test('FAIL del veredicto se cuenta','VEREDICTO edicionServidor: 24 PASS · 2 FAIL',24,2);
+test('FAIL cero del veredicto','VEREDICTO edicionServidor: 26 PASS · 0 FAIL',26,0);
+test('fallos sembrados no son resultados','PASS tras 3 fallos de red el circuito se abre\n═══ RESULTADO: 94 correctas · 0 fallidas ═══',94,0);
+test('fallidas reales mandan','═══ RESULTADO: 94 correctas · 3 fallidas ═══',94,3);
+test('sin formato no se inventa recuento','Un proceso terminó sin resultados.',0,0);
+test('ratio en verde incompleto','rutasAtomicas: 7/9 en verde',7,2);
+test('correctas explícitas y marcas mantienen el resultado','✓ A\n✓ B\n3 correctas · 0 fallidas',3,0);
+console.log(`VEREDICTO ritualVeredictos: ${pass} PASS · ${fail} FAIL`);process.exitCode=fail?1:0;

@@ -1,0 +1,6 @@
+headroomlabs-ai/headroom	Python	73980	2026-09-27	Apache-2.0	activo	Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 20% fewer tokens for coding agents, 60-95%
+Graphify-Labs/graphify	Python	121971	2026-09-28	Apache-2.0	activo	Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill fo
+Egonex-AI/Understand-Anything	TypeScript	84405	2026-09-28	MIT	activo	Graphs that teach > graphs that impress. Turn any code into an interactive knowledge graph you can explore, search, and 
+MemPalace/mempalace	Python	59325	2026-09-25	MIT	activo	The best-benchmarked open-source AI memory system. And it's free.
+sickn33/agentic-awesome-skills	Python	47011	2026-09-28	MIT	activo	AAS Core is the local, agent-first control plane for complete catalog discovery, agent-owned selection, stack validation
+multica-ai/andrej-karpathy-skills	-	215598	2026-04-20	-	activo	A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfa

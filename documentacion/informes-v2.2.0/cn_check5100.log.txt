@@ -1,0 +1,87 @@
+PUERTO 5100: CERRADO (timed out)
+HEALTH: FALLO (<urlopen error [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión>)
+--- PROCESOS PYTHON ---
+
+
+
+
+CommandLine="C:\Users\BirdBox\Downloads\CerebroNico-IDE-v2.0.0\app\runtime\python-embed\python.exe"  scripts\creador_daemon.py --port 5102  
+
+ProcessId=1152
+
+
+
+
+
+CommandLine=C:\Users\BirdBox\Downloads\CerebroNico-IDE-v2.0.0\app\runtime\python-embed\python.exe C:\Users\BirdBox\Downloads\CerebroNico-IDE-v2.0.0\app\agent_bridge_5000.py
+
+ProcessId=12264
+
+
+
+
+
+CommandLine=python C:\Cerebronico\Desktop\cn_check5100.py
+
+ProcessId=9144
+
+
+
+
+
+
+
+
+--- LOGS ---
+ARCHIVO: C:\Cerebronico\logs\arranque\creador.log (35548 bytes)
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+[cerebronico-creador] 127.0.0.1 "GET /health HTTP/1.1" 200 -
+
+
+ARCHIVO: C:\Cerebronico\logs\arranque\prueba_bat.log (1202 bytes)
+[INFO] Raiz de datos: C:\Cerebronico
+
+============================================================
+  CerebroNico IDE - Arranque completo - bajo consumo
+============================================================
+
+[INFO] Verificando si Ollama ya esta corriendo en :11434...
+[OK] Ollama ya esta corriendo en :11434.
+[AVISO] El motor no lo arranco este BAT, entonces OLLAMA_NUM_PARALLEL,
+  OLLAMA_MAX_LOADED_MODELS y OLLAMA_CONTEXT_LENGTH de abajo NO le llegaron.
+  Para aplicarselos: sali de la app de Ollama, fijalas en Variables de
+  entorno de tu cuenta (Panel de control) y volve a abrirla - hereda el
+  entorno al nacer, nunca despues. La IDE manda num_ctx en cada pedido, que
+  si le llega; lo que no le llega es el default global del server.
+[TIP] Para liberar RAM ya mismo usa el boton Expulsar de la
+      pestana Puertos en la IDE, sin tocar la consola.
+
+[INFO] Inventario de modelos locales (detalle en la pestana Modelos de la IDE):
+[OK] 49 modelo(s) local(es) disponibles en :11434.
+
+[INFO] Interprete Python para los packs: "C:\Users\BirdBox\Downloads\CerebroNico-IDE-v2.0.0\app\runtime\python-embed\python.exe"
+[INFO] Autonomia: saneando puertos propios ocupados...
+

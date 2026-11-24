@@ -1,0 +1,402 @@
+/**
+ * tests/rutasSistema.test.ts — EL MAPA DE RUTAS QUE TODO MODELO RECIBE (v1.86.3)
+ * =============================================================================
+ * Por qué existe esta suite. Mario pidió que el mapa de rutas «esté claro para
+ * cualquier modelo, así puede manejar bien el IDE». Un pedido así NO se cierra
+ * escribiendo un .md: se cierra garantizando tres cosas, y acá se prueban:
+ *
+ *   1. QUE EL MAPA SEA PURO Y SU COSTO, VERDADERO. `CHARS_MAPA_RUTAS` es el número
+ *      que `abordaje.ts` suma a su presupuesto. Si miente, el `excedido` que se
+ *      reporta miente con él.
+ *   2. QUE NO HAYA AFIRMACIONES INVENTADAS. Cada ruta del mapa se contrasta con la
+ *      fuente citada en su cabecera (el .bat, los daemon .py, bovedaLocal,
+ *      cargadorEspejos, PORTS, raizDatos, projectPorter). Este punto ya mató dos
+ *      errores míos: una variable de entorno que el motor no lee (`CEREBRONICO_DATOS`)
+ *      y un nivel `.proyectos/<nombre>` que solo existe cuando NO hay `PROJECT_DIR`.
+ *   3. QUE EL MAPA LLEGUE ENTERO AL MODELO. En todo canal, en toda densidad de
+ *      leyes, con presupuesto de 10 caracteres o ilimitado. Y si un día llega un
+ *      abordaje con texto y sin mapa, eso es PROBLEMA, no aviso.
+ *
+ * Más: anti-deriva con `RUTAS-DEL-SISTEMA.md` (el doc humano no puede contarse
+ * distinto al bloque del modelo) y verificación de que las carpetas nombradas
+ * existen en el árbol real. Un mapa que dibuja una carpeta que no está es peor que
+ * ningún mapa: el modelo le cree.
+ *
+ * Se corre con:  npx tsx tests/rutasSistema.test.ts   (o `npm run validar`)
+ */
+import { existsSync, readFileSync } from "node:fs";
+
+// v2.1.0 — el techo del monolito es UNA sola verdad: contrato-rutas.json.
+// Un literal aquí es la clase de defecto que la casa ya cazó en v1.50.0
+// (superficieRutas.test.ts lee el contrato desde entonces).
+function techoMonolito(): number {
+  const c = JSON.parse(readFileSync("contrato-rutas.json", "utf8"));
+  return Number(c.presupuesto_lineas ?? c.server_lineas ?? 0);
+}
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import {
+  CARPETAS_CLAVE,
+  CARPETAS_DE_DATOS,
+  CHARS_MAPA_RUTAS,
+  ENTORNOS_CLAVE,
+  PUERTOS_CLAVE,
+  REGLA_DE_RUTA,
+  RUTA_ESPEJOS_PERSONALIZADOS,
+  raizBovedaDelSistema,
+  raizDatosPorDefecto,
+  textoDeRutasSistema,
+} from "../src/engine/rutasSistema";
+import {
+  MAPA_DE_RUTAS,
+  charsDetalleDe,
+  construirAbordaje,
+  planDeAbordaje,
+  presupuestoAbordaje,
+} from "../src/engine/abordaje";
+import { CONTRATO_DE_ACCION, ENGINE_LAWS, PROVEEDORES_SIN_CICLO_DE_TEXTO } from "../src/engine/manuals";
+import { CARPETAS_DE_ESTADO } from "../src/engine/raizDatos";
+import { PORTS, IDE_BRAND } from "../src/constants";
+import { registerBuiltinPacks, getAllToolNames, getToolSpec } from "../src/engine/toolRegistry";
+
+// La moraleja de §7 de este mismo mapa: la conversión se hace con fileURLToPath.
+const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const leer = (rel: string): string => {
+  try {
+    return readFileSync(path.join(RAIZ, rel), "utf-8");
+  } catch {
+    return "";
+  }
+};
+
+let correctas = 0;
+const fallos: string[] = [];
+const comprobar = (que: string, condicion: unknown, detalle?: string) => {
+  if (condicion) {
+    correctas++;
+    console.log(`  \u2713 ${que}`);
+  } else {
+    fallos.push(que + (detalle ? ` — ${detalle}` : ""));
+    console.log(`  \u2717 ${que}${detalle ? ` — ${detalle}` : ""}`);
+  }
+};
+const seccion = (t: string) => console.log(`\n${t}`);
+
+// ── Catálogo real (no una lista de adorno): las herramientas del registro ────
+registerBuiltinPacks();
+const NOMES = getAllToolNames();
+const SPECS = NOMES.map((n) => ({ name: n, description: getToolSpec(n)?.description }));
+const DETALLE = charsDetalleDe(NOMES, SPECS);
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§1 · PUREZA: mismas opciones → mismos bytes, y el costo es el real");
+// ════════════════════════════════════════════════════════════════════════════
+const [MAY, MIN, PAR] = IDE_BRAND.SEMVER.split(".").map(Number);
+comprobar(`la versión del espejo es ≥ 1.86.3 (este mapa nace ahí)`, MAY > 1 || (MAY === 1 && (MIN > 86 || (MIN === 86 && PAR >= 3))), `IDE_BRAND.SEMVER=${IDE_BRAND.SEMVER}`);
+comprobar("MAPA_DE_RUTAS === textoDeRutasSistema() (función pura, sin estado)", MAPA_DE_RUTAS === textoDeRutasSistema());
+comprobar("CHARS_MAPA_RUTAS === longitud real del bloque", CHARS_MAPA_RUTAS === MAPA_DE_RUTAS.length, `${CHARS_MAPA_RUTAS} vs ${MAPA_DE_RUTAS.length}`);
+comprobar("dos llamadas consecutivas devuelven exactamente los mismos bytes", textoDeRutasSistema() === textoDeRutasSistema());
+comprobar("el bloque abre con el título que el modelo busca", MAPA_DE_RUTAS.startsWith("RUTAS DEL SISTEMA"));
+comprobar("con SO sin determinar nombra LAS DOS raíces (adivinar una es el defecto)", MAPA_DE_RUTAS.includes("C:\\Cerebronico") && MAPA_DE_RUTAS.includes("<instalación>/.proyectos"));
+comprobar("so='unix' no menciona C:\\Cerebronico (no lo mando a buscar en C:)", !textoDeRutasSistema({ so: "unix" }).includes("C:\\Cerebronico"));
+comprobar("so='windows' sí da C:\\Cerebronico como raíz", textoDeRutasSistema({ so: "windows" }).includes("C:\\Cerebronico"));
+comprobar("raizDatos concreta manda sobre el texto (el camino REAL de la máquina)", textoDeRutasSistema({ raizDatos: "D:\\datos\\cn" }).includes("D:\\datos\\cn"));
+comprobar("raizApp concreta reemplaza 'app/'", textoDeRutasSistema({ raizApp: "C:\\CN-IDE" }).includes("Instalación del IDE: C:\\CN-IDE —"));
+comprobar("raíz de datos por defecto: Windows y el resto son distintos", raizDatosPorDefecto("windows") === "C:\\Cerebronico" && raizDatosPorDefecto("unix") === "<instalación>/.proyectos");
+comprobar("la bóveda sale de la fuente canónica (C:\\CN · ~/CN)", raizBovedaDelSistema("windows") === "C:\\CN" && raizBovedaDelSistema("unix") === "~/CN");
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§2 · CONTENIDO: lo que un modelo necesita para no operar a ciegas");
+// ════════════════════════════════════════════════════════════════════════════
+for (const p of PUERTOS_CLAVE) {
+  comprobar(`puerto ${p.puerto} nombrado con su dueño (${p.servicio})`, MAPA_DE_RUTAS.includes(`${p.puerto}=${p.servicio}`));
+}
+// v2.1.7 · el motor del cerebro (:5103) es un órgano propio desde que el saber
+// vive fuera de la instalación. Siete, no seis: el contrato se actualiza cuando
+// aparece un puerto real, no se deja mintiendo para que el número cuadre.
+comprobar("los siete puertos propios están declarados", PUERTOS_CLAVE.length === 7);
+comprobar("el preview se declara 3500 y el 3000 queda prohibido a ojo descubierto", /3500=sandbox\/preview \(jamás 3000\)/.test(MAPA_DE_RUTAS));
+for (const e of ENTORNOS_CLAVE) {
+  comprobar(`variable ${e.v} explicada (${e.hace.slice(0, 26)}…)`, MAPA_DE_RUTAS.includes(`${e.v} → ${e.hace}`));
+}
+// v2.1.7 · cinco variables, y ese número es un TECHO deliberado: el mapa debe
+// caber en <3000 chars. CN_CEREBRO_MOTOR, CN_CEREBRO_DB y HINDSITE_API_URL se
+// documentan en RUTAS-DEL-SISTEMA.md; meterlas acá rompía el presupuesto.
+comprobar("las cinco variables verificadas están en el bloque", ENTORNOS_CLAVE.length === 5);
+comprobar("regla fileURLToPath presente, con node:url y la prohibición explícita", MAPA_DE_RUTAS.includes("fileURLToPath") && MAPA_DE_RUTAS.includes("node:url") && MAPA_DE_RUTAS.includes("new URL(...).pathname"));
+comprobar("la regla dice QUÉ produce el error (/C:/ → \\C:\\), no solo «cuidado»", MAPA_DE_RUTAS.includes("/C:/") && MAPA_DE_RUTAS.includes("\\C:\\..."));
+comprobar("ordena imprimir la ruta antes de afirmar «no existe»", REGLA_DE_RUTA.includes("imprimí la ruta resuelta"));
+comprobar("distingue instalación de proyecto (el error que borra trabajo ajeno)", MAPA_DE_RUTAS.includes("NUNCA es el proyecto del usuario"));
+comprobar("declara que dist/ se regenera y no se edita a mano", MAPA_DE_RUTAS.includes("no se edita a mano"));
+comprobar("las carpetas de estado se marcan como NO-proyecto", /estado que se migra entre versiones.*NO es un proyecto/.test(MAPA_DE_RUTAS));
+comprobar("cerebro/ (la .con-ciencia) está en el mapa y marcada como no-proyecto", MAPA_DE_RUTAS.includes("\ncerebro/ ") || (MAPA_DE_RUTAS.includes("cerebro/") && MAPA_DE_RUTAS.includes(".con-ciencia")));
+// v2.1.2 · la ruta de espejos DEJA de ser el literal con `~`: derivaba de la home
+// mientras el cargador lee PROJECT_ROOT/.cerebronico/espejos (server.ts:4995).
+// Ahora se exige que sea la DERIVADA de la raíz de datos y que el mapa la nombre.
+comprobar("los espejos personalizados tienen su ruta DERIVADA de la raíz de datos", MAPA_DE_RUTAS.includes(RUTA_ESPEJOS_PERSONALIZADOS) && !RUTA_ESPEJOS_PERSONALIZADOS.includes("~") && RUTA_ESPEJOS_PERSONALIZADOS.includes(".cerebronico"));
+comprobar("el mapa cabe en un turno pequeño (< 3000 chars)", CHARS_MAPA_RUTAS < 3000, `${CHARS_MAPA_RUTAS} chars`);
+
+// ── v1.86.4 · EL ALCANCE DE LAS HERRAMIENTAS, en el mapa que todo modelo recibe ──
+// Sesión 1793147384797: con el pack cargado, una voz del enjambre dijo «no
+// tengo acceso a archivos». El mapa debe nombrar a cada órgano lo suyo.
+const lineaAlcance = MAPA_DE_RUTAS.split("\n").find((l) => l.includes("Alcance de las herramientas")) || "";
+comprobar("hay una línea de alcance de las herramientas", lineaAlcance.length > 0);
+comprobar("dice que las voces del enjambre reciben SOLO texto (sin tools)", /voces del enjambre reciben SOLO texto/.test(lineaAlcance), lineaAlcance);
+comprobar("manda a quien toca el disco al Modo Agente PC del chat", /Modo Agente PC/.test(lineaAlcance), lineaAlcance);
+comprobar("nombra las herramientas del puente", ["fs_read", "fs_write", "fs_list", "fs_delete", "fs_mkdir", "exec"].every((h) => lineaAlcance.includes(h)), lineaAlcance);
+comprobar("el alcance apunta al puente :5000 y al sandbox :3500 medidos de PORTS", lineaAlcance.includes(`:${PORTS.BRIDGE}`) && lineaAlcance.includes(`:${PORTS.SANDBOX}`), lineaAlcance);
+comprobar("prohíbe el «no tengo acceso» como respuesta", /nunca «no tengo acceso»/.test(lineaAlcance), lineaAlcance);
+comprobar("ordena no confundir los órganos", /No confundas los órganos/.test(lineaAlcance), lineaAlcance);
+
+// ── EL NIVEL: la afirmación que más fácil se escribe mal ─────────────────────
+// Con PROJECT_DIR puesto, el proyecto es HIJA DIRECTA de la raíz de datos; el
+// prefijo `.proyectos/` solo aparece cuando rige el default. Afirmar solo una de
+// las dos formas crea un nivel fantasma: «escribí el archivo y no aparece».
+seccion("§2b · EL NIVEL DEL PROYECTO (aquí me equivoqué una vez y queda el candado)");
+const lineaNivel = MAPA_DE_RUTAS.split("\n").find((l) => l.trim().startsWith("Un archivo de trabajo")) || "";
+comprobar("hay una línea que dice DÓNDE va un archivo de trabajo", lineaNivel.length > 0);
+comprobar("esa línea apunta a <raíz de datos>/<nombre del proyecto>/", lineaNivel.includes("<raíz de datos>/<nombre del proyecto>/"));
+comprobar("y aclara que con el default se lee .proyectos/<nombre>/", lineaNivel.includes(".proyectos/<nombre>/"));
+comprobar("no afirma que .proyectos/<nombre> sea el único destino", !/va a <raíz de datos>\/\.proyectos\/<nombre>\/\./.test(lineaNivel));
+comprobar("la carpeta de proyecto se declara hija directa de la raíz", /HIJA DIRECTA de la raíz de datos/.test(MAPA_DE_RUTAS));
+comprobar("el mapa NO inventa CEREBRONICO_DATOS como raíz que lee el motor", !MAPA_DE_RUTAS.includes("CEREBRONICO_DATOS"));
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§3 · ANTI-FABRICACIÓN: cada afirmación tiene su fuente en el código");
+// ════════════════════════════════════════════════════════════════════════════
+const srcConstants = leer("src/constants.ts");
+const ValoresPorts = Object.values(PORTS) as number[];
+comprobar("los puertos del mapa son valores de `PORTS` (una sola verdad)", PUERTOS_CLAVE.every((p) => ValoresPorts.includes(p.puerto)));
+comprobar("no hay puerto duplicado ni fuera de PORTS", new Set(PUERTOS_CLAVE.map((p) => p.puerto)).size === PUERTOS_CLAVE.length);
+comprobar("src/constants.ts declara los siete puertos que viajan en el mapa", ["IDE", "SANDBOX", "BRIDGE", "MEMORY", "CREATOR", "CEREBRO", "OLLAMA"].every((k) => srcConstants.includes(`${k}: ${(PORTS as any)[k]}`)));
+
+const bat = leer("iniciar_todo_windows.bat");
+comprobar("el lanzador fija C:\\Cerebronico (fuente del default de Windows)", bat.includes("CEREBRONICO_DATOS=C:\\Cerebronico"));
+comprobar("el lanzador pasa ese valor a PROJECT_DIR (no a otra variable)", bat.includes('set "PROJECT_DIR=%CEREBRONICO_DATOS%"'));
+comprobar("el lanzador fija CN_HINDSITE_MIRROR y CN_CREADOR_ROOT (el mapa las nombra)", bat.includes("CN_HINDSITE_MIRROR") && bat.includes("CN_CREADOR_ROOT"));
+
+const raizDatos = leer("src/engine/raizDatos.ts");
+comprobar("el motor lee PROJECT_DIR (no CEREBRONICO_DATOS)", raizDatos.includes("PROJECT_DIR") && !raizDatos.includes("CEREBRONICO_DATOS"));
+comprobar(
+  "el default del motor es la raiz estable (C:\\Cerebronico / ~/Cerebronico), NO cwd/.proyectos",
+  // v2.0.1 (server.ts:673-685): arrancando por npm run dev o por el .exe sin
+  // PROJECT_DIR, cwd es app\ y el motor escribia su kb.json en
+  // app\.proyectos\.cerebro-db\, partiendo el almacenamiento en dos. El default
+  // paso a la raiz estable; .proyectos sobrevive SOLO como respaldo cuando el
+  // cwd ya esta dentro de esa raiz.
+  leer("server.ts").includes('path.join(path.parse(process.cwd()).root, "Cerebronico")') &&
+    leer("server.ts").includes('return dentroDeLaApp ? path.join(estable, ".proyectos") : estable;')
+);
+comprobar("un PROJECT_DIR en blanco no cuenta y el mapa lo dice tal cual", raizDatos.includes('!== ""') && MAPA_DE_RUTAS.includes("vacía o ausente"));
+comprobar("CARPETAS_DE_ESTADO es la fuente de las carpetas de estado del mapa", CARPETAS_DE_DATOS.some((c) => c.ruta.includes(CARPETAS_DE_ESTADO[0]) && c.ruta.includes(CARPETAS_DE_ESTADO[1])));
+comprobar("la guarda-raíz existe y rechaza la raíz que contiene a la app", raizDatos.includes("rechazarRaizAncestroApp") && raizDatos.includes("GUARDA-RAÍZ v1"));
+comprobar("decidirMigracion no toca un destino que ya tiene estado", raizDatos.includes("destinoTieneEstado") && raizDatos.includes("no se toca nada"));
+
+const boveda = leer("src/engine/bovedaLocal.ts");
+comprobar("bovedaLocal: C:\\CN en win32 y CN_BOVEDA_RAIZ como override", boveda.includes('return "C:\\\\CN"') && boveda.includes("CN_BOVEDA_RAIZ"));
+comprobar("cargadorEspejos lee ~/.cerebronico/espejos/manifest.json", leer("src/engine/reflejo/cargadorEspejos.ts").includes("~/.cerebronico/espejos/manifest.json"));
+comprobar("el puente :5000 lee CN_PROJECT_DIR (si no, el almacenamiento se parte en dos)", leer("agent_bridge_5000.py").includes('os.environ.get("CN_PROJECT_DIR"'));
+comprobar("creador_daemon lee CN_CREADOR_ROOT", leer("scripts/creador_daemon.py").includes("CN_CREADOR_ROOT"));
+comprobar("hindsight_daemon lee CN_HINDSITE_MIRROR", leer("scripts/hindsight_daemon.py").includes("CN_HINDSITE_MIRROR"));
+
+// El nivel del proyecto se sostiene en dos sitios: el resolutor y su llamada.
+const porter = leer("src/engine/projectPorter.ts");
+const server = leer("server.ts");
+comprobar("resolverRaizProyecto existe y evalúa la base o una subcarpeta suya", /export function resolverRaizProyecto\s*\(\s*base: string/.test(porter) && porter.includes("anidada")); // v1.97.0 · la valla comparaba la FIRMA LITERAL con su `)` final; el resolutor ahora admite un colector opcional (listarProyectosServibles reutiliza la misma caminata en vez de duplicar el criterio de "qué es un proyecto"). Se comprueba el contrato de verdad: existe, recibe `base` y sabe si es anidada.
+comprobar("server.ts lo llama sobre PROJECT_ROOT (por eso el proyecto es hija directa)", /resolverRaizProyectoEn\(PROJECT_ROOT\)/.test(server));
+comprobar("server.ts pasa la raíz resuelta al abordaje (mapa CON el camino real)", /raizDatos:\s*PROJECT_ROOT/.test(server));
+comprobar(
+  "server.ts pasa TAMBIÉN la raíz de la instalación, y solo si es de verdad la app",
+  /raizApp:\s*fs\.existsSync\(path\.join\(process\.cwd\(\), "package\.json"\)\)\s*\?\s*process\.cwd\(\)\s*:\s*""/.test(
+    server
+  ),
+  "sin este cable el modelo lee «app/» en abstracto en vez del camino vivo"
+);
+comprobar(
+  "el cable no vuelve a romper el techo del monolito (las dos raíces caben en UNA línea)",
+  (server.match(/^\s*raizDatos:/gm) || []).length === 1 &&
+  server.split("\n").length <= techoMonolito(),
+  `server.ts tiene ${server.split("\n").length} líneas (contrato: ${techoMonolito()})`
+);
+comprobar(
+  "abordaje.ts admite raizApp y se la pasa a textoDeRutasSistema (el cable no se corta a mitad)",
+  /raizApp\?:\s*string/.test(leer("src/engine/abordaje.ts")) &&
+    /textoDeRutasSistema\(\{[^}]*raizApp/.test(leer("src/engine/abordaje.ts"))
+);
+comprobar("cerebro/ vive bajo la raíz de datos (como dice el mapa)", leer("src/engine/cerebroOrgano.ts").includes('path.join(raizDatos, "cerebro")'));
+comprobar("abordaje.ts inyecta el mapa después del estándar en sus dos ramas", (leer("src/engine/abordaje.ts").match(/\$\{CONTRATO_DE_ACCION\}\\n\\n\$\{mapaRutas\}/g) || []).length === 2);
+comprobar("abordaje.ts suma el costo del mapa al fijo del presupuesto", leer("src/engine/abordaje.ts").includes("COSTO_MAPA_RUTAS"));
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§4 · EL ÁRBOL REAL: ninguna ruta del mapa puede ser un fantasma");
+// ════════════════════════════════════════════════════════════════════════════
+for (const c of CARPETAS_CLAVE) {
+  for (const parte of c.ruta.split(" y ")) {
+    const limpia = parte.replace(/\/$/, "");
+    // v1.92.0 · LA VALLA MIDE LA INVARIANTE, NO EL EMPAQUE. `dist/` la produce
+    // `npm run build` y `scripts/entregar.ts` la excluye del ZIP a propósito (un
+    // binario viejo dentro del paquete es peor que ninguno), así que exigir el
+    // directorío en el árbol recién descomprimido ponía el gate en rojo sin que
+    // el mapa tuviera ningún fantasma. Se acepta la carpeta O el guion que la
+    // genera declarado en el package.json: si nadie la produce, sigue en rojo.
+    if (c.generada) {
+      const pkgTexto = leer("package.json");
+      const seRegenera = existsSync(path.join(RAIZ, "scripts", "verificar-artefactos.mjs")) &&
+        /dist/.test(pkgTexto) && /"build"/.test(pkgTexto);
+      comprobar(`${parte} está en el árbol o la genera el build (carpeta declarada)`, existsSync(path.join(RAIZ, limpia)) || seRegenera);
+      continue;
+    }
+    comprobar(`existe ${parte} en el árbol de la instalación`, existsSync(path.join(RAIZ, limpia)));
+  }
+}
+comprobar("dist/ está marcada como generada (nadie la exige como fuente)", CARPETAS_CLAVE.some((c) => c.ruta === "dist/" && c.generada === true));
+comprobar("package.json y server.ts están donde el mapa dice", existsSync(path.join(RAIZ, "package.json")) && existsSync(path.join(RAIZ, "server.ts")));
+comprobar("cada carpeta clave tiene su descripción en una línea (sin huecos)", CARPETAS_CLAVE.every((c) => c.ruta.length > 1 && c.es.length > 12));
+comprobar("cada carpeta de datos dice qué es y dónde va", CARPETAS_DE_DATOS.every((c) => c.ruta.length > 1 && c.es.length > 12));
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§5 · ANTI-DERIVA: RUTAS-DEL-SISTEMA.md cuenta lo mismo que el módulo");
+// ════════════════════════════════════════════════════════════════════════════
+const doc = leer("RUTAS-DEL-SISTEMA.md");
+const docSinBackticks = doc.replace(/`/g, "");
+comprobar("el documento existe y no está vacío", doc.length > 1500, `${doc.length} chars`);
+const tokensDoc: string[] = [
+  ...CARPETAS_CLAVE.flatMap((c) => c.ruta.split(" y ")),
+  ...CARPETAS_DE_DATOS.map((c) => c.ruta),
+  ...ENTORNOS_CLAVE.map((e) => e.v),
+  ...PUERTOS_CLAVE.map((p) => String(p.puerto)),
+  ...CARPETAS_DE_ESTADO.map((c) => `${c}/`),
+  raizDatosPorDefecto("windows"),
+  raizDatosPorDefecto("unix"),
+  raizBovedaDelSistema("windows"),
+  raizBovedaDelSistema("unix"),
+  RUTA_ESPEJOS_PERSONALIZADOS,
+  "fileURLToPath",
+  ".proyectos",
+];
+const ausentes = tokensDoc.filter((t) => !docSinBackticks.includes(t));
+comprobar(`el doc menciona las ${tokensDoc.length} rutas/variables/puertos que el mapa enseña`, ausentes.length === 0, `faltan: ${ausentes.join(", ")}`);
+comprobar("el doc declara que el canónico es el módulo, no él", doc.includes("src/engine/rutasSistema.ts"));
+comprobar("el doc distingue este mapa de SUPERFICIE_RUTAS.md (rutas HTTP)", doc.includes("SUPERFICIE_RUTAS.md"));
+comprobar("el doc cubre la guarda-raíz y su incidente real", doc.includes("GUARDA-RAÍZ") && doc.includes("ModuleScope.findVariable"));
+comprobar("el doc responde la pregunta del nivel con fuente y línea", doc.includes("projectPorter.ts:93") && doc.includes("server.ts:1270"));
+comprobar("el doc nombra la suite que lo custodia", doc.includes("rutasSistema.test.ts"));
+comprobar("el doc no contiene la clave filtrada ni en texto corrido", !/[0-9a-f]{24,}/i.test(doc));
+
+// ════...
+seccion("§6 · EL MAPA LLEGA ENTERO AL MODELO (todo canal, toda densidad)");
+// ════...
+const conHerr = (presupuesto: number, extras: Record<string, unknown> = {}) =>
+  construirAbordaje({
+    nombres: NOMES,
+    specs: SPECS,
+    provider: "zai",
+    presupuesto,
+    mcp: { presente: false, nombres: [] },
+    ...extras,
+  } as Parameters<typeof construirAbordaje>[0]);
+
+for (const presupuesto of [10, 200, 800, 1900, 6000, 200000]) {
+  const a = conHerr(presupuesto);
+  comprobar(`presupuesto ${presupuesto}: el mapa viaja íntegro y sin recortar`, a.texto.includes(MAPA_DE_RUTAS) && a.mapaRutasChars === CHARS_MAPA_RUTAS);
+  comprobar(`presupuesto ${presupuesto}: los ${NOMES.length} nombres siguen en el índice`, a.herramientasEnIndice === a.herramientasTotales);
+}
+{
+  const minima = conHerr(10);
+  comprobar("a presupuesto 10 las leyes caen a títulos pero el mapa NO", minima.leyes === "titulos" && minima.texto.includes(MAPA_DE_RUTAS));
+  comprobar("y el exceso se DECLARA en vez de mutilar el catálogo", minima.excedido && minima.excesoChars > 0);
+  const iMapa = minima.texto.indexOf(MAPA_DE_RUTAS);
+  comprobar("el mapa va JUSTO después del estándar (orden estable)", minima.texto.indexOf(CONTRATO_DE_ACCION) === 0 && iMapa === CONTRATO_DE_ACCION.length + 2);
+  comprobar("y no queda pegado ni cortado: lo sigue un salto de párrafo", minima.texto.slice(iMapa + MAPA_DE_RUTAS.length, iMapa + MAPA_DE_RUTAS.length + 2) === "\n\n");
+}
+{
+  const sinHerr = construirAbordaje({ nombres: [], specs: [], provider: "cualquiera", presupuesto: 200000 });
+  comprobar("canal texto con 0 herramientas: el mapa también viaja (sin manos hay que saber dónde se está)", sinHerr.canal === "texto" && sinHerr.texto.includes(MAPA_DE_RUTAS));
+  const proveedorCerrado = [...PROVEEDORES_SIN_CICLO_DE_TEXTO][0];
+  const ninguno = construirAbordaje({ nombres: [], specs: [], provider: proveedorCerrado, presupuesto: 200000 });
+  comprobar(`canal "ninguno" (${proveedorCerrado}): EXCEPCIÓN DECLARADA — sin texto y sin mapa`, ninguno.texto === "" && ninguno.mapaRutasChars === 0 && ninguno.canal === "ninguno");
+}
+{
+  const real = conHerr(200000, { raizDatos: "C:\\Cerebronico" });
+  comprobar("con raizDatos del servidor, el modelo recibe el camino real", real.texto.includes("Raíz de datos (ahí se escribe): la fija PROJECT_DIR → C:\\Cerebronico.") && real.mapaRutasChars === textoDeRutasSistema({ raizDatos: "C:\\Cerebronico" }).length);
+  comprobar("y una raíz concreta no dispara el costo del bloque", Math.abs(real.mapaRutasChars - CHARS_MAPA_RUTAS) <= 200, `${real.mapaRutasChars} vs ${CHARS_MAPA_RUTAS}`);
+  const larga = conHerr(200000, { raizDatos: "C:\\Users\\Mario\\Documents\\Trabajo\\CerebróNico\\datos\\con\\mas\\nivel" });
+  comprobar("una raíz larguísima también viaja entera (se excede y se declara, no se corta)", larga.texto.includes(textoDeRutasSistema({ raizDatos: "C:\\Users\\Mario\\Documents\\Trabajo\\CerebróNico\\datos\\con\\mas\\nivel" })));
+}
+{
+  const conMcp = construirAbordaje({
+    nombres: NOMES,
+    specs: SPECS,
+    provider: "zai",
+    presupuesto: 200000,
+    mcp: { presente: true, nombres: NOMES.slice(0, 2) },
+    bloquesOpcionales: ["MANOS: pc_exec en tu PC, run_command en el sandbox."],
+  } as Parameters<typeof construirAbordaje>[0]);
+  comprobar("con MCP y bloques P3, el mapa sigue intacto y el bloque entra", conMcp.texto.includes(MAPA_DE_RUTAS) && conMcp.bloquesOmitidos === 0);
+}
+{
+  const plan = planDeAbordaje({
+    modeloEfectivo: "glm-4.5-air",
+    provider: "zai",
+    perfil: { tier: "small", nubeRapida: true },
+    getTools: () => NOMES.map((n) => ({ function: { name: n } })),
+    ejecutables: NOMES,
+    descripcionDe: (n: string) => getToolSpec(n)?.description,
+    raizDatos: "C:\\Cerebronico",
+  });
+  const charsReal = textoDeRutasSistema({ raizDatos: "C:\\Cerebronico" }).length;
+  comprobar(`plan real: «rutas ✓ ${charsReal}» en el parte (lo que lee el log de arranque)`, plan.parte.includes(`rutas ✓ ${charsReal}`), plan.parte);
+  comprobar("plan real: todo abordaje con texto trae mapa (invariante de planDeAbordaje)", plan.abordaje.texto === "" || plan.abordaje.mapaRutasChars > 0);
+  comprobar("plan real: el suelo declarado paga el mapa sin disfrazarlo de gratis", plan.presupuesto.suelo >= CONTRATO_DE_ACCION.length + CHARS_MAPA_RUTAS);
+  const sinRaiz = planDeAbordaje({
+    modeloEfectivo: "glm-4.5-air",
+    provider: "zai",
+    perfil: { tier: "small", nubeRapida: true },
+    getTools: () => NOMES.map((n) => ({ function: { name: n } })),
+    ejecutables: NOMES,
+    descripcionDe: (n: string) => getToolSpec(n)?.description,
+  });
+  comprobar("sin raizDatos viaja el mapa genérico (nunca se omite por falta de dato)", sinRaiz.abordaje.mapaRutasChars === CHARS_MAPA_RUTAS);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§7 · PRESUPUESTO: el costo del mapa está dentro del suelo declarado");
+// ════════════════════════════════════════════════════════════════════════════
+const leyesEnteras = ENGINE_LAWS.map((l) => `- ${l.title}: ${l.body}`).join("\n");
+const leyesTitulos = ENGINE_LAWS.map((l) => `- ${l.title}`).join("\n");
+const NIVEL = (perfil: Record<string, unknown>) =>
+  presupuestoAbordaje(perfil, NOMES.length, { longitudNombres: NOMES.join("").length, charsDetalle: DETALLE });
+for (const [nombre, perfil] of [["nube rápida", { nubeRapida: true }], ["local ≤8B", { tier: "small" }], ["grande", {}]] as const) {
+  const p = NIVEL(perfil as Record<string, unknown>);
+  comprobar(`${nombre}: el suelo de títulos cubre estándar + mapa + P0 + leyes`, p.sueloTitulos >= CONTRATO_DE_ACCION.length + CHARS_MAPA_RUTAS + leyesTitulos.length);
+  comprobar(`${nombre}: con herramientas activas el suelo no es cero`, p.suelo > 0 && p.recomendado >= p.suelo);
+}
+{
+  const grande = NIVEL({});
+  comprobar(`grande: el suelo de leyes enteras paga el mapa (${grande.suelo} chars)`, grande.suelo >= CONTRATO_DE_ACCION.length + CHARS_MAPA_RUTAS + leyesEnteras.length);
+  const completo = conHerr(200000);
+  comprobar(`el bloque real (${completo.chars}) cabe en el presupuesto recomendado (${grande.recomendado})`, completo.chars <= grande.recomendado, `+${completo.chars - grande.recomendado}`);
+  const micro = presupuestoAbordaje({ tier: "micro" }, NOMES.length, { longitudNombres: NOMES.join("").length, charsDetalle: DETALLE });
+  comprobar("micro/tiny: 0 presupuesto y 0 abordaje (el contrato no se les manda)", micro.suelo === 0 && micro.recomendado === 0);
+  const sinHerr = construirAbordaje({ nombres: [], specs: [], provider: "cualquiera", presupuesto: micro.recomendado || 1900 });
+  comprobar("micro con 0 herramientas: sigue llegando el mapa (el canal texto no depende del tier)", sinHerr.mapaRutasChars === CHARS_MAPA_RUTAS);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+seccion("§8 · HIGIENE: lo que jamás puede aparecer en un bloque que se inyecta");
+// ════...
+comprobar("sin claves ni secretos: nada parece un token de API", !/[0-9a-f]{20,}/i.test(MAPA_DE_RUTAS) && !/sk-[a-z0-9-]{8,}/i.test(MAPA_DE_RUTAS));
+comprobar("sin rastro de la máquina de desarrollo", !MAPA_DE_RUTAS.includes("/root/.accio") && !MAPA_DE_RUTAS.includes("ide-build"));
+comprobar("sin dobles separadores producidos por el ensamblado", !MAPA_DE_RUTAS.includes("app//") && !MAPA_DE_RUTAS.includes(".proyectos//") && !MAPA_DE_RUTAS.includes("//.proyectos"));
+comprobar("sin marcadores de plantilla sin completar", !/\b(TODO|FIXME|XXX|placeholder)\b/.test(MAPA_DE_RUTAS));
+comprobar("sin líneas vacías coladas entre los renglones del mapa", MAPA_DE_RUTAS.split("\n").every((l) => l.trim() !== ""));
+comprobar("el bloque no termina en separador suelto (viaja completo)", !/[·:,-]$/.test(MAPA_DE_RUTAS.trimEnd()));
+
+// ════════════════════════════════════════════════════════════════════════════
+console.log(`\ntests/rutasSistema: ${correctas} correctas, ${fallos.length} en rojo  ·  mapa ${CHARS_MAPA_RUTAS} chars`);
+if (fallos.length) {
+  console.log("ROJOS:");
+  for (const f of fallos) console.log(`  · ${f}`);
+}
+process.exit(fallos.length ? 1 : 0);

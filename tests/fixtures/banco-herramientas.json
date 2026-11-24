@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "descripcion": "Banco de elección de herramientas (P0 de la propuesta v1.0.31). Cada caso es un pedido real de usuario con UNA herramienta que lo resuelve. La métrica que decide es acierto@1 CONDICIONAL a visibilidad: si la esperada no estaba en el catálogo del turno, el caso es imposible y se cuenta aparte.",
+  "casos": [
+    { "id": "pl-01", "categoria": "plan", "perfil": "nube", "prompt": "Armá un plan de 3 etapas para migrar el arranque a otro puerto y andá tachando", "esperada": "set_plan" },
+    { "id": "pl-02", "categoria": "plan", "perfil": "local7b", "prompt": "Terminé la etapa 2: compiló sin errores, dejalo anotado", "esperada": "update_task", "aceptables": ["set_plan"] },
+    { "id": "pl-03", "categoria": "plan", "perfil": "nube", "prompt": "No sé por dónde empezar con esto, ordename los pasos antes de tocar nada", "esperada": "set_plan" },
+
+    { "id": "le-01", "categoria": "lectura", "perfil": "local7b", "prompt": "¿Qué hay en la carpeta del proyecto?", "esperada": "list_files" },
+    { "id": "le-02", "categoria": "lectura", "perfil": "local7b", "prompt": "Mostrame el package.json entero", "esperada": "read_file", "aceptables": ["read_file_range"] },
+    { "id": "le-03", "categoria": "lectura", "perfil": "local7b", "prompt": "Leeme las líneas 200 a 260 de server.ts, no lo quiero entero", "esperada": "read_file_range" },
+    { "id": "le-04", "categoria": "lectura", "perfil": "nube", "prompt": "¿Dónde está definida la función que arma el prompt del sistema?", "esperada": "find_symbol" },
+    { "id": "le-05", "categoria": "lectura", "perfil": "local7b", "prompt": "Buscá en todo el proyecto dónde se menciona CN_GRACIA_ARRANQUE_S", "esperada": "search_in_files" },
+
+    { "id": "ed-01", "categoria": "edicion", "perfil": "local7b", "prompt": "Creá src/nuevo.ts con un export const VACIO = null", "esperada": "write_file" },
+    { "id": "ed-02", "categoria": "edicion", "perfil": "local7b", "prompt": "En ese archivo cambiá VACIO por 0, es un solo valor", "esperada": "edit_file" },
+    { "id": "ed-03", "categoria": "edicion", "perfil": "local7b", "prompt": "Agregá al final del README una sección de licencia, no me toques lo de arriba", "esperada": "append_file", "aceptables": ["edit_file"] },
+    { "id": "ed-04", "categoria": "edicion", "perfil": "local7b", "prompt": "Hacé la carpeta docs/guias", "esperada": "make_dir" },
+    { "id": "ed-05", "categoria": "edicion", "perfil": "nube", "prompt": "Qué cambiaste recién en esos tres archivos, mostrámelo", "esperada": "revisar_cambios", "aceptables": ["git_diff"] },
+    { "id": "ed-06", "categoria": "edicion", "perfil": "nube", "prompt": "Eso que rompiste recién, deshacelo y dejalo como estaba", "esperada": "deshacer_cambios" },
+    { "id": "ed-07", "categoria": "edicion", "perfil": "local7b", "prompt": "Borrá el archivo temporal que creaste, ya no sirve", "esperada": "delete_file" },
+
+    { "id": "ej-01", "categoria": "ejecucion", "perfil": "local7b", "prompt": "Corré npm run build y decime si compila", "esperada": "run_command" },
+    { "id": "ej-02", "categoria": "ejecucion", "perfil": "local7b", "prompt": "Pasá las pruebas del motor y contame cuántas fallan", "esperada": "run_tests" },
+    { "id": "ej-03", "categoria": "ejecucion", "perfil": "nube", "prompt": "Abrime una consola que quede viva y entrá a python a probar dos cosas seguidas", "esperada": "terminal_abrir" },
+    { "id": "ej-04", "categoria": "ejecucion", "perfil": "local7b", "prompt": "En esa consola contestá que sí a la instalación y mostrame qué salió", "esperada": "terminal_enviar", "aceptables": ["terminal_leer"] },
+    { "id": "ej-05", "categoria": "ejecucion", "perfil": "local7b", "prompt": "Mirá si el servidor de desarrollo ya terminó de arrancar, sin escribirle nada", "esperada": "terminal_leer" },
+    { "id": "ej-06", "categoria": "ejecucion", "perfil": "local7b", "prompt": "Cerrá la consola que abriste, ya no la necesito", "esperada": "terminal_cerrar" },
+    { "id": "ej-07", "categoria": "ejecucion", "perfil": "local7b", "prompt": "¿Cuántas consolas quedaron abiertas?", "esperada": "terminal_listar" },
+
+    { "id": "gi-01", "categoria": "git", "perfil": "local7b", "prompt": "En qué rama estoy y qué quedó sin commitear", "esperada": "git_status", "aceptables": ["git_diff"] },
+    { "id": "gi-02", "categoria": "git", "perfil": "local7b", "prompt": "Mostrame exactamente qué líneas cambiaron en server.ts", "esperada": "git_diff" },
+    { "id": "gi-03", "categoria": "git", "perfil": "nube", "prompt": "Guardá un punto de restauración con el mensaje 'antes de tocar el arranque'", "esperada": "git_commit" },
+
+    { "id": "pc-01", "categoria": "pc", "perfil": "local7b", "prompt": "Qué hay en mi Escritorio", "esperada": "pc_list_dir", "servicios": ["pc"] },
+    { "id": "pc-02", "categoria": "pc", "perfil": "local7b", "prompt": "Guardame un notas.txt en Descargas con lo que resumiste", "esperada": "pc_write_file", "servicios": ["pc"] },
+    { "id": "pc-03", "categoria": "pc", "perfil": "local7b", "prompt": "Leeme el informe que tengo en el Escritorio", "esperada": "pc_read_file", "servicios": ["pc"] },
+    { "id": "pc-04", "categoria": "pc", "perfil": "nube", "prompt": "Borrá ese archivo de prueba del Escritorio, el que acabo de crear", "esperada": "pc_delete", "servicios": ["pc"] },
+    { "id": "pc-05", "categoria": "pc", "perfil": "nube", "prompt": "Cuánta memoria libre le queda a la máquina ahora mismo", "esperada": "recursos_maquina", "servicios": ["pc"] },
+    { "id": "pc-06", "categoria": "pc", "perfil": "nube", "prompt": "Qué versión de Windows y cuántos núcleos tiene este equipo", "esperada": "pc_info", "servicios": ["pc"] },
+
+    { "id": "si-01", "categoria": "sistema", "perfil": "local7b", "prompt": "Qué modelos tengo cargados en memoria ahora", "esperada": "ollama_estado", "servicios": ["ollama"] },
+    { "id": "si-02", "categoria": "sistema", "perfil": "local7b", "prompt": "Sacá de la RAM el modelo grande, que me está calentando la notebook", "esperada": "ollama_expulsar", "servicios": ["ollama"] },
+    { "id": "si-03", "categoria": "sistema", "perfil": "nube", "prompt": "Liberá todos los modelos que estén residentes", "esperada": "ollama_expulsar", "servicios": ["ollama"] },
+
+    { "id": "re-01", "categoria": "red", "perfil": "nube", "prompt": "Buscá en internet qué cambió en la API de Ollama y también si hay una versión nueva de Vite: todo en una", "esperada": "abrir_red", "servicios": ["red"] },
+    { "id": "re-02", "categoria": "red", "perfil": "nube", "prompt": "Traeme el texto de esta documentación: https://vitejs.dev/guide/build.html", "esperada": "fetch_url", "servicios": ["red"] },
+
+    { "id": "me-01", "categoria": "memoria", "perfil": "nube", "prompt": "Anotá que el puerto del puente se cambió a 5100 por decisión del usuario", "esperada": "cerebro_recordar" },
+    { "id": "me-02", "categoria": "memoria", "perfil": "nube", "prompt": "¿Ya habíamos decidido algo sobre el arranque del puente? Buscalo antes de tocar", "esperada": "cerebro_consultar" },
+
+    { "id": "do-01", "categoria": "documentos", "perfil": "local7b", "prompt": "Hacé un PDF con el informe que te dicté", "esperada": "generar_pdf" },
+    { "id": "do-02", "categoria": "documentos", "perfil": "local7b", "prompt": "Pasame eso en Word que lo tengo que editar", "esperada": "generar_docx", "aceptables": ["generar_pdf"] },
+    { "id": "do-03", "categoria": "documentos", "perfil": "local7b", "prompt": "Armame una planilla con estas columnas y filas", "esperada": "generar_xlsx" },
+
+    { "id": "da-01", "categoria": "datos", "perfil": "local7b", "prompt": "Convertí este JSON a CSV y decime qué se pierde en el camino", "esperada": "convertir_formato" },
+    { "id": "da-02", "categoria": "datos", "perfil": "nube", "prompt": "Pasá este TOML a YAML sin inventar campos", "esperada": "convertir_formato" },
+
+    { "id": "vi-01", "categoria": "vista", "perfil": "local7b", "prompt": "Abrime el preview de la página que acabás de crear", "esperada": "abrir_previsualizador" },
+    { "id": "vi-02", "categoria": "vista", "perfil": "nube", "prompt": "Mové el archivo que subí al sandbox para poder editarlo", "esperada": "promover_archivo_sandbox", "aceptables": ["ingresar_archivo_workspace"] },
+    { "id": "vi-03", "categoria": "vista", "perfil": "nube", "prompt": "Quiero un complemento nuevo que cuente palabras, forjalo", "esperada": "forjar_complemento" },
+    { "id": "vi-04", "categoria": "vista", "perfil": "nube", "prompt": "Preguntale al espejo de textos cuántas palabras tiene esto", "esperada": "consultar_espejo" }
+  ]
+}

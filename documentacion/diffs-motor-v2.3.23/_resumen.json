@@ -1,0 +1,227 @@
+[
+ {
+  "rel": "src/engine/conciencia.ts",
+  "lineas_arbol": 368,
+  "lineas_zip": 607,
+  "mas": 533,
+  "menos": 294,
+  "solo_zip": [
+   "AGENTS_MD_KB_ENTRY",
+   "BUCLE_DETALLE_BAJO_DEMANDA",
+   "BUCLE_INDICE_KB_ENTRY",
+   "HechosDelEntorno",
+   "InstantaneaConciencia",
+   "capasDeConciencia"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "bucleAutonomo.test.ts",
+   "capasSkills.test.ts",
+   "cierreDeuda71b.test.ts",
+   "concienciaArtista.test.ts",
+   "concienciaCache.test.ts",
+   "concienciaSandbox.test.ts",
+   "concienciaVector.test.ts",
+   "hechosEntorno.test.ts",
+   "permisos.test.ts",
+   "rutaTrabajo.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/manuals.ts",
+  "lineas_arbol": 263,
+  "lineas_zip": 531,
+  "mas": 426,
+  "menos": 158,
+  "solo_zip": [
+   "CanalAccion"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "abordaje.test.ts",
+   "contratoAccion.test.ts",
+   "herramientasParaTodos.test.ts",
+   "parteAbordaje.test.ts",
+   "rutasSistema.test.ts",
+   "sandboxContrato.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/motorContexto.ts",
+  "lineas_arbol": 1022,
+  "lineas_zip": 1180,
+  "mas": 890,
+  "menos": 732,
+  "solo_zip": [
+   "CapaContexto",
+   "ContextoEnsamblado",
+   "ContextoProyecto",
+   "EstadisticasLectura",
+   "FicheroLeido",
+   "InsumoContexto",
+   "ModeloProyecto"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "motorCertezaValidacionBucleContexto.test.ts",
+   "motorCertezaX5.test.ts",
+   "motorContexto.test.ts",
+   "ordenDeObra.test.ts",
+   "ouroboros.test.ts",
+   "perfilParches.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/kbMotor.ts",
+  "lineas_arbol": 470,
+  "lineas_zip": 477,
+  "mas": 441,
+  "menos": 434,
+  "solo_zip": [],
+  "solo_arbol": [],
+  "suites": [
+   "motor-estructura.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/knowledgeBase.ts",
+  "lineas_arbol": 423,
+  "lineas_zip": 505,
+  "mas": 352,
+  "menos": 270,
+  "solo_zip": [
+   "KbEntry",
+   "KbHit",
+   "KbTable",
+   "ToolArgIssue",
+   "ToolSchema",
+   "semillaParcheada"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "motor-datos.test.ts",
+   "motor-estructura.test.ts",
+   "perfilParches.test.ts",
+   "resiliencia.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/parchesSemilla.ts",
+  "lineas_arbol": 299,
+  "lineas_zip": 376,
+  "mas": 305,
+  "menos": 228,
+  "solo_zip": [
+   "InformeParches",
+   "OperacionParche",
+   "OperacionSemilla",
+   "PerfilParches",
+   "RechazoParche",
+   "ResultadoParche"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "parchesSemilla.test.ts",
+   "perfilParches.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/dependenciasProyecto.ts",
+  "lineas_arbol": 282,
+  "lineas_zip": 356,
+  "mas": 244,
+  "menos": 170,
+  "solo_zip": [
+   "AuditoriaInstalacion",
+   "AuditoriaPaquetes",
+   "DiscoDeAuditoria",
+   "EntornoProyecto",
+   "SaludPaquete"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "dependenciasProyecto.test.ts",
+   "grafoProyecto.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/importChecker.ts",
+  "lineas_arbol": 282,
+  "lineas_zip": 304,
+  "mas": 188,
+  "menos": 166,
+  "solo_zip": [
+   "CheckFile",
+   "MissingImport"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "grafoProyecto.test.ts",
+   "validadorAST.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/grafoProyecto.ts",
+  "lineas_arbol": 168,
+  "lineas_zip": 231,
+  "mas": 177,
+  "menos": 114,
+  "solo_zip": [
+   "Arista",
+   "GrafoProyecto",
+   "ImpactoResumen",
+   "TipoArista"
+  ],
+  "solo_arbol": [],
+  "suites": [
+   "grafoProyecto.test.ts",
+   "motorContexto.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/recetarioUI.ts",
+  "lineas_arbol": 150,
+  "lineas_zip": 194,
+  "mas": 150,
+  "menos": 106,
+  "solo_zip": [],
+  "solo_arbol": [],
+  "suites": []
+ },
+ {
+  "rel": "src/engine/kbArquitectura.ts",
+  "lineas_arbol": 205,
+  "lineas_zip": 226,
+  "mas": 202,
+  "menos": 181,
+  "solo_zip": [],
+  "solo_arbol": [],
+  "suites": [
+   "configEstructurada.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/kbCodigo.ts",
+  "lineas_arbol": 493,
+  "lineas_zip": 536,
+  "mas": 492,
+  "menos": 449,
+  "solo_zip": [],
+  "solo_arbol": [],
+  "suites": [
+   "espejo.test.ts",
+   "motor-datos.test.ts",
+   "motor-estructura.test.ts"
+  ]
+ },
+ {
+  "rel": "src/engine/kbPoderX50.ts",
+  "lineas_arbol": 113,
+  "lineas_zip": 141,
+  "mas": 139,
+  "menos": 111,
+  "solo_zip": [],
+  "solo_arbol": [],
+  "suites": []
+ }
+]

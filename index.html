@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ============================================================
+         v0.9 — EL ICONO DE LA INTERFAZ (el que FALTABA)
+         ------------------------------------------------------------
+         Hasta ahora no había ni una etiqueta `icon` aquí. Consecuencia real:
+         la pestaña del navegador y el acceso directo mostraban el icono
+         genérico, y el producto era el único sitio de la pantalla sin su
+         propia marca. Es literalmente «el rincón bien visible» en pequeño.
+         Los tres se declaran porque cada navegador usa uno distinto:
+           · .ico  → Chromium/Firefox en escritorio (y el icono de la pestaña)
+           · .png  → navegadores modernos y pantallas de alta densidad
+           · apple-touch-icon → iOS/macOS al guardar en el escritorio
+         ============================================================ -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/icono-cerebronico.png" />
+    <link rel="apple-touch-icon" href="/icono-cerebronico.png" />
+    <meta name="theme-color" content="#05070d" />
+    <!-- v2.3.1 — El título estático lo pisa main.tsx con IDE_BRAND al arrancar,
+         pero mientras carga (y en la pestaña del navegador de una captura) es LO
+         ÚNICO que se ve: un «V2.1» aquí es exactamente la mentira que la regla
+         de fuente única quiere matar.
+         v8.0.1 — Auditoría de la discrepancia «cabecera V8.0.0 / menú CN
+         V1.0.3»: aquí vivían CUATRO literales de versión más (title, description,
+         og:title, og:description), cada uno con una versión distinta (v1.0, v1.0,
+         v1.0, v2.3). Ninguno se ve dentro del IDE, pero los tres últimos son los
+         que ven Google, WhatsApp y Discord al compartir enlace: la versión más
+         pública del proyecto era la más vieja. Quedan alineados a la fuente
+         única. -->
+    <title>CerebróNico V1.0.55</title>
+    <meta name="description" content="CerebróNico V1.0.55 — Entorno de desarrollo con IA local (Ollama) y cloud, sandbox en vivo, puente PC, motor de planes con imágenes gratis, 50 entidades del consejo (10 espejos), complementos cn.*, forja de plugins desde el chat, fondo animado y métrica real de inferencia. Relevo local automático: si la nube se cae, un modelo local termina el turno. Creador web con 32 herramientas: construye, inserta imágenes, audita y ENTREGA (ZIP determinista, despliegue verificado, hreflang). Documentos reales: genera PDF, Word (.docx) y Excel (.xlsx) que abren de verdad (sin dependencias nuevas, releídos con lectores terceros). Orden de obra: el motor lista los archivos antes de crear y verifica la obra en disco. Instalador autónomo: no requiere Python. Por Mario Nicolas Quintero." />
+    <meta property="og:title" content="CerebróNico V1.0.55" />
+    <meta property="og:description" content="CerebróNico V1.0.55 — Entorno de desarrollo con IA local (Ollama), sandbox en vivo, puente PC, motor de planes con imágenes gratis y soporte OpenAI/Gemini/OpenRouter. Relevo local automático ante cortes de la nube. Creador web: 32 herramientas con entrega verificable. Orden de obra: lista de archivos antes de crear y certeza resuelta en disco. Instalador autónomo: no requiere Python. Por Mario Nicolas Quintero." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- BLANCO v1 — Las Google Fonts eran RENDER-BLOCKING: sin internet (o con la
+         conexión colgada) el navegador esperaba la hoja de estilos antes de pintar
+         NADA: pantalla blanca pura hasta el timeout. Con media="print" el enlace ya
+         no bloquea la primera pintura y la fuente se aplica cuando llega. Si no
+         llega, el CSS de la app tiene fallback de sistema y la interfaz se ve igual. -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+    <script>
+      (function() {
+        // Suppress expected HMR / Vite WebSocket disconnection notices in sandboxed preview
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event && (event.reason ? (event.reason.message || String(event.reason)) : '');
+          if (
+            typeof reason === 'string' &&
+            (reason.indexOf('WebSocket') !== -1 ||
+             reason.indexOf('failed to connect to websocket') !== -1 ||
+             reason.indexOf('vite') !== -1)
+          ) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        });
+
+        window.addEventListener('error', function(event) {
+          var msg = event && (event.message || '');
+          if (
+            typeof msg === 'string' &&
+            (msg.indexOf('WebSocket') !== -1 ||
+             msg.indexOf('failed to connect to websocket') !== -1)
+          ) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        });
+
+        try {
+          // Prevent "Cannot set property fetch of #<Window> which has only a getter" in sandboxed iframes
+          var rawFetch = window.fetch ? window.fetch.bind(window) : undefined;
+          var currentFetch = rawFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch;
+            },
+            set: function(fn) {
+              if (typeof fn === 'function') {
+                currentFetch = fn;
+              }
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          // Gracefully fallback
+        }
+      })();
+    </script>
+
+    <!-- ============================================================
+         v1.6.29 — RED DE SEGURIDAD DE ESCALA (no se puede quedar sin salida)
+         ------------------------------------------------------------
+         Con el tamaño global al máximo o el aspecto de la paleta al 220 %, el
+         desplegable MENÚ CN (w-72 = 18 rem) crecía más alto que la ventana y
+         llevaba `overflow-hidden` SIN altura máxima: «Paleta de colores» y
+         «Configuración PRO» caían fuera de la pantalla y eran inalcanzables —
+         y sin llegar a la paleta no hay forma de bajar el tamaño.
+         Estas dos piezas son la salida (van acá porque el cliente se sirve
+         compilado; el arreglo de fondo del Header.tsx es aparte):
+           1. CSS: el desplegable gana altura máxima + scroll.
+           2. Rescate: Ctrl + Alt + 0, o  ?cn-escala=reset  en la URL.
+         ============================================================ -->
+    <style>
+      header[data-cn="cabecera"] .absolute.left-0.top-full.mt-1.w-72 {
+        max-height: calc(100vh - 6rem) !important;
+        overflow-y: auto !important;
+        overscroll-behavior: contain;
+      }
+    </style>
+    <script>
+      (function () {
+        var CLAVES = ["codigo0_app_font_size", "cn.aspecto.v1"];
+        function rescatar(origen) {
+          try {
+            CLAVES.forEach(function (k) {
+              localStorage.removeItem(k);
+            });
+          } catch (e) {
+            /* sin localStorage: se recarga igual */
+          }
+          console.log("[CerebroNico] Escala restablecida (" + origen + ").");
+          location.replace(location.pathname);
+        }
+        try {
+          if (/[?&]cn-escala=reset/.test(location.search)) {
+            rescatar("URL");
+            return;
+          }
+        } catch (e) {
+          /* sin location: seguimos con el teclado */
+        }
+        window.addEventListener(
+          "keydown",
+          function (e) {
+            if (e.ctrlKey && e.altKey && (e.key === "0" || e.code === "Digit0" || e.keyCode === 48)) {
+              e.preventDefault();
+              rescatar("Ctrl+Alt+0");
+            }
+          },
+          true
+        );
+      })();
+    </script>
+    <!-- v1.6.30 — Limpiar el sandbox sin botón: Ctrl + Alt + L → /api/fs/clear-all
+         (borra los restos de sesiones anteriores y conserva node_modules y el
+         estado). Es la salida cuando el árbol quedó mezclado y el build murió
+         con «"X" is not exported by Y». Después: «Arrancar ahora». -->
+    <script>
+      (function () {
+        function limpiar(origen) {
+          fetch("/api/fs/clear-all", { method: "POST", headers: { "Content-Type": "application/json" } })
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (d) {
+              console.log("[CerebroNico] Sandbox limpiado (" + origen + ").", d);
+              alert(
+                "Sandbox limpiado (" + origen + ").\n" +
+                  "Borrados: " + (d.deleted || 0) + " archivo(s) · Preservados: " + (d.preserved || 0) + " (node_modules y estado).\n" +
+                  "Ahora pulsá «Arrancar ahora»: el sync vuelve a escribir el proyecto desde el editor."
+              );
+            })
+            .catch(function (e) {
+              alert("No se pudo limpiar el sandbox: " + e);
+            });
+        }
+        window.addEventListener(
+          "keydown",
+          function (e) {
+            if (e.ctrlKey && e.altKey && (e.key === "l" || e.key === "L" || e.code === "KeyL")) {
+              e.preventDefault();
+              limpiar("Ctrl+Alt+L");
+            }
+          },
+          true
+        );
+      })();
+    </script>
+    <!-- ============================================================
+         BLANCO v2 (v1.70.4) — UNA SOLA PANTALLA HASTA QUE LA INTERFAZ MONTE
+         ------------------------------------------------------------
+         El v1 pintaba tarjetas propias a los 12 s y a los 30 s: con disco
+         lento el usuario veía TRES pantallas distintas antes del splash real
+         (negro → «está cargando» → «no terminó de cargar» → «arrancando
+         motor»). Pedido de Mario, 25/10: que la pantalla sea SIEMPRE la del
+         motor, desde el primer milisegundo, y el vigilante pase a segundo
+         plano. Este watchdog (vanilla, sin React, sin dependencias) ahora:
+           1. Pinta AL INSTANTE el pre-arranque con la misma cara del
+              BootSplash real (cerebro, anillos, título cian): es LO ÚNICO
+              que se ve hasta que React monta.
+           2. Sigue registrando en silencio cada recurso que falla y cada
+              promesa rechazada — el vigilante observa, no interrumpe.
+           3. A los 30 s, si #root sigue vacío, NO cambia de pantalla: agrega
+              el diagnóstico y los pasos de rescate DENTRO de la misma
+              tarjeta del motor.
+           4. En cuanto #root tiene hijos, el pre-arranque se desvanece
+              (200 ms) y BootSplash toma el control sin corte visible.
+         En producción (dist/EXE) esto dura un pestañeo: los bundles salen
+         precompilados; la pantalla larga es del `npm run dev` con la caché
+         de Vite fría (transformando 231 archivos al vuelo).
+         ============================================================ -->
+    <style>
+      @keyframes cn-v-girar { to { transform: rotate(360deg); } }
+      @keyframes cn-v-latir { 0%,100% { opacity: .35; } 50% { opacity: .9; } }
+      @keyframes cn-v-punto { 0%,80%,100% { opacity: .2; } 40% { opacity: 1; } }
+    </style>
+    <script>
+      (function () {
+        var NEGRO = "#03060c";
+        var AVISOS = [];
+        var pre = null;
+        try {
+          document.documentElement.style.background = NEGRO;
+          document.addEventListener("DOMContentLoaded", function () {
+            try { document.body.style.background = NEGRO; } catch (e) {}
+            pintarPre();
+          });
+        } catch (e) {}
+        function registrarRecursoFalla(ev) {
+          var t = ev && ev.target;
+          if (!t || !(t.src || t.href)) return;
+          var url = String(t.src || t.href);
+          var linea = "No se pudo cargar: " + url.replace(location.origin, "");
+          if (AVISOS.indexOf(linea) === -1) AVISOS.push(linea);
+        }
+        window.addEventListener("error", registrarRecursoFalla, true);
+        window.addEventListener("unhandledrejection", function (ev) {
+          var m = ev && ev.reason && (ev.reason.message || String(ev.reason));
+          if (m && AVISOS.indexOf("Promesa rechazada: " + m) === -1) AVISOS.push("Promesa rechazada: " + m);
+        });
+        function pintarPre() {
+          if (pre || !document.body) return;
+          pre = document.createElement("div");
+          pre.id = "cn-pre-arranque";
+          pre.setAttribute("data-cn", "vigia-arranque");
+          pre.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:" + NEGRO + ";color:#e4e4e7;font-family:'Segoe UI',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;transition:opacity .2s;";
+          pre.innerHTML =
+            '<div style="text-align:center;max-width:620px;padding:24px">' +
+              '<div style="position:relative;width:180px;height:180px;margin:0 auto">' +
+                '<div style="position:absolute;inset:0;border-radius:50%;border:2px dashed rgba(34,211,238,.55);animation:cn-v-girar 16s linear infinite"></div>' +
+                '<div style="position:absolute;inset:14%;border-radius:50%;border:1.5px solid rgba(125,211,252,.4);border-top-color:rgba(34,211,238,.95);animation:cn-v-girar 5s linear infinite reverse"></div>' +
+                '<svg viewBox="0 0 24 24" style="position:absolute;inset:28%;width:44%;height:44%;filter:drop-shadow(0 0 12px rgba(34,211,238,.9))"><path fill="none" stroke="#d9f9ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 5.5a3 3 0 0 0-5.9-.7A3.2 3.2 0 0 0 3.6 8c0 .6.2 1.2.5 1.7A3.3 3.3 0 0 0 3 12.4c0 1 .4 1.9 1.2 2.5-.1.3-.2.6-.2 1A3.2 3.2 0 0 0 7.2 19c.6 1 1.8 1.6 3 1.5V5.5Z"/><path fill="none" stroke="#7dd3fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12 5.5a3 3 0 0 1 5.9-.7A3.2 3.2 0 0 1 20.4 8c0 .6-.2 1.2-.5 1.7a3.3 3.3 0 0 1 1.1 2.7c0 1-.4 1.9-1.2 2.5.1.3.2.6.2 1A3.2 3.2 0 0 1 16.8 19c-.6 1-1.8 1.6-3 1.5V5.5Z"/></svg>' +
+              '</div>' +
+              '<h1 style="margin:22px 0 6px;font-size:clamp(24px,3vw,34px);font-weight:900;letter-spacing:-.02em;background:linear-gradient(90deg,#a5f3fc,#22d3ee 45%,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent">CerebroNico arrancando motor</h1>' +
+              '<p style="margin:0;font-size:12.5px;color:#a1a1aa;font-family:monospace">preparando la interfaz · la primera vez el compilador despierta las dependencias y puede tardar un poco</p>' +
+              '<div style="margin-top:14px;font-size:18px;letter-spacing:6px;color:#22d3ee">' +
+                '<span style="animation:cn-v-punto 1.2s infinite">·</span><span style="animation:cn-v-punto 1.2s .2s infinite">·</span><span style="animation:cn-v-punto 1.2s .4s infinite">·</span>' +
+              '</div>' +
+              '<div id="cn-pre-diag"></div>' +
+            '</div>';
+          document.body.appendChild(pre);
+        }
+        function quitarPre() {
+          if (!pre) return;
+          pre.style.opacity = "0";
+          var p = pre; pre = null;
+          setTimeout(function () { try { if (p.parentNode) p.parentNode.removeChild(p); } catch (e) {} }, 260);
+        }
+        function rootVacio() {
+          var r = document.getElementById("root");
+          return !r || r.childElementCount === 0;
+        }
+        function observar() {
+          var r = document.getElementById("root");
+          if (!r) { setTimeout(observar, 400); return; }
+          try {
+            var mo = new MutationObserver(function () {
+              if (r.childElementCount > 0) { quitarPre(); mo.disconnect(); }
+            });
+            mo.observe(r, { childList: true });
+          } catch (e) {}
+        }
+        observar();
+        // El vigilante sigue en segundo plano: si la interfaz no montó, el
+        // diagnóstico vive DENTRO de esta misma pantalla.
+        // v1.84.3 (Mario 27/10: «dale más tiempo al timeout de carga, la app no
+        // alcanza a cargar») — dos tiempos, no uno: si algún recurso FALLÓ de
+        // verdad (AVISOS tiene carne: un 404, un módulo que no llegó) la
+        // alarma sale a los 30 s, como siempre. Si no falló NADA y #root sigue
+        // vacío, eso no es daño: es la PRIMERA compilación de Vite pidiendo
+        // el grafo entero en un disco lento; alarmar a los 30 s asustaba al
+        // usuario con «Pasos de rescate» mientras el motor todavía estaba a
+        // tiempo. Sin fallos, el diagnóstico espera hasta los 90 s.
+        function pintarDiag() {
+          if (!rootVacio() || !pre) return;
+          if (!AVISOS.length) AVISOS.push("Ningún módulo de /src/* llegó al navegador (el server responde pero la interfaz no montó).");
+          var d = document.getElementById("cn-pre-diag");
+          if (!d) return;
+          d.innerHTML =
+            '<div style="margin-top:20px;text-align:left;background:#0b1220;border:1px solid #1e293b;border-radius:10px;padding:12px;font-size:11.5px;font-family:monospace;color:#fca5a5;max-height:150px;overflow:auto">' +
+              AVISOS.slice(0, 8).map(function (x) { return "· " + x.replace(/</g, "&lt;"); }).join("<br>") +
+            '</div>' +
+            '<div style="text-align:left;font-size:12px;color:#cbd5e1;line-height:1.9;margin-top:12px">' +
+              '<b>Pasos de rescate (en la carpeta del proyecto):</b><br>' +
+              '1. Cerra la app y borra la caché del compilador: <code style="color:#22d3ee">rmdir /s /q node_modules\.vite</code><br>' +
+              '2. Si hace poco hiciste <code style="color:#22d3ee">npm install</code>, aprueba los scripts bloqueados: <code style="color:#22d3ee">npm install-scripts approve esbuild</code><br>' +
+              '3. Verifica el árbol sin arriesgar nada: <code style="color:#22d3ee">npm run verificar</code> (si algo quedó roto, <code style="color:#22d3ee">npm run revertir</code>)' +
+            '</div>' +
+            '<button id="cn-vigia-reintentar" style="margin-top:16px;padding:10px 28px;border-radius:10px;border:0;cursor:pointer;font-size:13px;font-weight:600;background:linear-gradient(135deg,#06b6d4,#3b82f6);color:#fff">Reintentar ahora</button>' +
+            '<div style="font-size:10.5px;color:#52525b;margin-top:8px">Este diagnóstico lo pone el vigilante (BLANCO v2) dentro de la misma pantalla de arranque; desaparece solo cuando la interfaz monta.</div>';
+          var btn = document.getElementById("cn-vigia-reintentar");
+          if (btn) btn.onclick = function () { location.reload(); };
+        }
+        setTimeout(function () {
+          if (!rootVacio() || !pre) return;
+          if (AVISOS.length) { pintarDiag(); return; }
+          // sin un solo recurso caído, lo que hay es compilación lenta:
+          // el diagnóstico (y su botón de recarga) esperan hasta los 90 s.
+          setTimeout(pintarDiag, 60000);
+        }, 30000);
+      })();
+      </script>
+  </head>
+  <body class="bg-[#0b0f17] text-zinc-100 overflow-hidden select-text antialiased font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

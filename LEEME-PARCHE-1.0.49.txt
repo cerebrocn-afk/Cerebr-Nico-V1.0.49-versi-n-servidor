@@ -1,0 +1,14 @@
+CerebroNico IDE 1.0.49 — parche de arranque (se aplica SOBRE la 1.0.48)
+
+1) Descomprimir este ZIP en la raíz del proyecto (donde está package.json),
+   sobrescribiendo. No toca node_modules ni dist.
+2) npm run build
+3) npm run dist
+4) Instalar el .exe nuevo (o abrir dist_electron\win-unpacked\CerebróNico.exe).
+
+Si vuelve a fallar, la pantalla de diagnóstico ya trae:
+  - el comando exacto con el que se lanzó el servidor,
+  - el resultado de la prueba del intérprete,
+  - el código de salida del hijo y cuántos bytes escribió,
+  - la ruta del registro: %USERPROFILE%\Cerebronico\registros\arranque-electron.log
+Mandá ese archivo y lo que imprima el comando de tres líneas que muestra la ficha.

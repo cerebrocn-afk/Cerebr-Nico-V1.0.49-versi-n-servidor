@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "rutas": [],
+  "procesos": [
+    {
+      "id": "proc-1-400000",
+      "nombre": "nucleo-agentico-fase6",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "verde: inventarioEntidades (53) + cicloDecision (41) + multiagenteRelevo (41) + aduanaForja (50)",
+      "origen": "FASE 6 del plano de la perfección, cerrada en v1.85.0",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-2-400000",
+      "nombre": "sandbox-con-cerebro-fase7",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "verde: concienciaSandbox (61) + explicarDecision (34); contrato «ninguna cita sin ruta» con plaga sembrada que sí rompe",
+      "origen": "FASE 7 del plano, cerrada en v1.86.0 · 7.1B CERRADA (retirada del plano declarándola, 06/11/2026, v2.3.21): medido sobre el árbol publicado, ningún server estático ni de preview llama a /api/conciencia — el endpoint sólo vive en server/routers/concienciaSandbox.ts, que es su lugar. La costura se la comieron los parches v1.62.x del sandbox sin bajar la bandera. Evidencia y anti-regreso en tests/cierreDeuda71b.test.ts (registrada en npm run validar).",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-3-400000",
+      "nombre": "relevo-por-diseno",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "criterio en src/engine/relevoFavoritos.ts (tope 2 + informe honesto), cable en App.tsx (onError + onDone + relevoContinuacionRef), puerta auto_relay en el panel. Evidencia: suites relevoPorDiseno + relevoFavoritos",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-4-400000",
+      "nombre": "respuesta-ecleutica",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "criterio puro en src/engine/enjambreEclectico.ts (voz de respaldo declarada; confianza escalada con cuántas contestaron), llamadas paralelas en server/enjambreLlamadas.ts, sentencia en server/routers/enjambre.ts, cara en cerebro/auto. Evidencia: suite enjambreEclectico (9)",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-5-400000",
+      "nombre": "ranura-sin-marcas",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "nombre único en src/engine/ranuraUnificada.ts; export tolerante por FORMATO, comando distinto de clave, avisos nombrados; ninguna clave en el paquete. Evidencia: suites ranuraUnificada (4) + sin-claves",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-6-400000",
+      "nombre": "gobernante-fase3",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "criterio puro src/engine/gobernante.ts (clamp 2..n-1..8; RAM >70% sostenido degrada a 1 worker), aplicado por el PlanRunner vía cpuBaseAdaptativa; cuota del cloud_verifier congelada; visibilidad en /api/brain/runner + PlanificationPanel. Evidencia: suite gobernante (7)",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-7-400000",
+      "nombre": "superficie-fase4",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "registro puro contratoSuperficie.ts + fixture versionado + Avanzado.tsx; explorador y chat-input plegados, modo limpio en App. Evidencia: suite superficie (6)",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-8-400000",
+      "nombre": "entrega-fase5",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "npm run entregar / entregar:verificar sobre funciones puras entregaRitual.ts; el paquete de ESTA versión se embaló con el comando. Evidencia: suite entregaAutoverificada (5), incluye la prueba del plano con EL SCRIPT REAL y 1 byte podrido",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    },
+    {
+      "id": "proc-9-400000",
+      "nombre": "organo-vectorizado-fase2",
+      "comando": "node scripts/validar.mjs",
+      "veredicto": "criterio puro vectorCerebro.ts (coseno, 0.7/0.3 ajustable, ventana contra reloj); cerebroOrgano.enrutarHibrido con embedder inyectado + sidecar vectores.json; sesiones indexadas; turno y búsqueda cableados con degradación registrada. Evidencia: suites concienciaVector (7) + censoSuites (1)",
+      "origen": "trasladado del md escrito a mano: el JSON estaba vacío y el render los borraba (v1.86.0)",
+      "ts": 1793102400000
+    }
+  ]
+}

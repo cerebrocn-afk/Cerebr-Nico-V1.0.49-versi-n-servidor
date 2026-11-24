@@ -1,0 +1,25 @@
+MANIFIESTO CerebroNico-IDE-v2.0.0
+Generado: 2026-10-31T23:46:18
+Origen:   C:\Users\BirdBox\Downloads\CerebroNico-IDE-v2.0.0\app
+Archivos: 2304
+Bytes:    95851528
+
+EXCLUIDOS: .cache, .git, .mypy_cache, .next, .nuxt, .parcel-cache, .proyectos, .pytest_cache, .turbo, .venv, __pycache__, build, coverage, dist, node_modules, out, proyectos, venv
+
+PARTES:
+  CerebroNico-IDE-v2.0.0-parte1-de-4.zip  574 archivos  12799198 bytes
+    sha256: 088bed5d26d1526247c903155247df851315c1240c641963683abb9852986642
+  CerebroNico-IDE-v2.0.0-parte2-de-4.zip  45 archivos  14334820 bytes
+    sha256: 93bcdf2f5000fa956164f71252b3032ab9885f36fc22a61417ce9e285cb77f04
+  CerebroNico-IDE-v2.0.0-parte3-de-4.zip  496 archivos  17598993 bytes
+    sha256: c182bbd1bc45deee08a1f9876f45731ddc85524058ba58d17d289eef3f1024a3
+  CerebroNico-IDE-v2.0.0-parte4-de-4.zip  1189 archivos  9711450 bytes
+    sha256: 583aaf674f1d1386c6f5c3a45495275df835daf6fc5ecfe3d70c8678c767be06
+
+RECONSTRUIR (PowerShell):
+  cd C:\ruta\destino
+  foreach ($p in 1..4) { Expand-Archive -Path "CerebroNico-IDE-v2.0.0-parte$p-de-4.zip" -DestinationPath . -Force }
+
+DESPUES DE DESCOMPRIMIR:
+  npm install   (regenera node_modules)
+  npm run build (regenera dist)

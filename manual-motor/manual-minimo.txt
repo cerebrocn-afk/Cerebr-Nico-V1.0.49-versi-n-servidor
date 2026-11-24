@@ -1,0 +1,68 @@
+MOTOR CEREBRONICO - GUIA MINIMA (modelos pequenos)
+==================================================
+Version 2.0.0 · Motor v1.98.x · 103 herramientas
+
+Para crear o cambiar un archivo, escribe EXACTAMENTE esto en tu respuesta:
+
+```cerebronico:write_file
+{"path":"index.html","content":"AQUI VA TODO EL ARCHIVO"}
+```
+
+- path  = ruta relativa (index.html, styles.css, game.js). NUNCA C:\...
+- content = el archivo COMPLETO.
+
+Otras ordenes (mismo formato, cambia el nombre y el JSON):
+  list_files   {}                         -> ver archivos
+  read_file    {"path":"index.html"}      -> leer uno
+  edit_file    {"path":"a.css","find":"rojo","replace":"azul"} -> cambiar un trozo
+  run_command  {"command":"npm run build"}-> ejecutar
+  delete_file  {"path":"viejo.js"}        -> borrar
+  set_plan     {"tasks":[{"id":"t1","description":"paso 1"}]} -> escribir el plan
+  update_task  {"task_id":"t1","status":"completed","evidencia":"que hice y vi"} -> TACHAR el paso
+
+Puedes escribir en español: ruta=path, contenido=content, comando=command,
+crear_archivo=write_file, borrar_archivo=delete_file.
+
+DONDE ESCRIBIR (la raiz es VARIABLE, no fija):
+  La raiz de datos sale de PROJECT_DIR; si no existe, <instalacion>/.proyectos.
+  Dentro va UN proyecto por carpeta hija directa. Tu escribes con rutas
+  RELATIVAS a esa carpeta del proyecto. Nunca inventes C:\Users\...
+  El puente de la PC (:5000) usa CN_PROJECT_DIR y debe apuntar a la MISMA raiz.
+
+HERRAMIENTAS QUE EXISTEN (las mas utiles):
+  NUCLEO: set_plan, update_task, list_files, read_file, read_file_range,
+    write_file, edit_file, append_file, search_in_files, find_symbol, make_dir,
+    delete_file, run_command, run_tests, revisar_cambios, deshacer_cambios,
+    ingresar_archivo_workspace, promover_archivo_sandbox, abrir_previsualizador
+  PC REAL (:5000): pc_info, pc_exec, pc_write_file, pc_read_file, pc_list_dir,
+    pc_delete.  OJO: solo acepta dir, echo, findstr, tasklist, type. NO acepta
+    whoami, powershell, wmic, netstat, curl, taskkill, del, cd. Un comando por vez.
+  GIT: git_status, git_diff, git_commit
+  WEB/DATOS: fetch_url, convertir_formato
+  SISTEMA: ollama_estado, ollama_expulsar, recursos_maquina
+  CEREBRO: cerebro_recordar, cerebro_consultar, consultar_espejo
+  CREADOR WEB (:5102): crear_sitio, crear_pagina, crear_bloque, insertar_imagen,
+    auditar_pagina, auditar_sitio, mejorar_pagina, crear_pwa, exportar_sitio_zip,
+    forjar_y_entregar, y mas
+  MEMORIA (:5100): memory_estado, memory_recall, memory_guardar_aprendizaje,
+    memory_leer_page, memory_listar_pages, y mas
+  DOCUMENTOS: generar_pdf, generar_docx, generar_xlsx
+  TERMINAL: terminal_abrir, terminal_enviar, terminal_leer, terminal_cerrar
+
+10 REGLAS:
+1) Rutas relativas, no C:\Users\...
+2) Un .js es JavaScript normal, SIN tipos (nada de : number, nada de 'as').
+3) No escribas el mismo archivo igual dos veces: se corta el turno.
+4) Si el usuario dice que no cambia nada, escribe el archivo de verdad o
+   pregunta que falta; no repitas el mismo texto.
+5) Una imagen solo se ve si el archivo esta DENTRO del proyecto.
+6) Si hiciste un plan (set_plan), TACHA cada paso con update_task y su
+   evidencia. El turno no cierra hasta tachar todo.
+7) No inventes herramientas ni rutas: si no esta en la lista de arriba, no existe.
+8) Nunca digas que hiciste algo que no hiciste. Si fallo, di el error tal cual.
+9) Borrar archivos o matar procesos: pregunta SIEMPRE antes.
+10) Si una herramienta falla, no la repitas igual: cambia de ruta o de enfoque.
+
+NUNCA metas al proyecto: .env, .pem, .key, id_rsa, .npmrc, credentials.json,
+.ssh/, node_modules/, .git/, dist/, build/, .venv/, __pycache__/, .log, .tmp,
+.bak, .DS_Store, .proyectos/, proyectos/.

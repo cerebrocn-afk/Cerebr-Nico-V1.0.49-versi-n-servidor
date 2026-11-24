@@ -1,0 +1,108 @@
+/**
+ * tests/rutasEspejosDerivadas.test.ts — LA VALLA DEL PROMPT QUE MENTÍA (v2.1.2)
+ * ==============================================================================
+ * POR QUÉ EXISTE
+ * --------------
+ * `rutasSistema.ts` le decía al modelo «Espejos personalizados:
+ * ~/.cerebronico/espejos/» mientras el servidor leía
+ * `PROJECT_ROOT/.cerebronico/espejos` (server.ts:4995). En la máquina de Mario
+ * coincidían por casualidad (PROJECT_ROOT = C:\Cerebronico y HOME no intervenía).
+ * En cualquier otra instalación el modelo mandaba al usuario a la home, el
+ * cargador no miraba ahí nunca, y el síntoma era idéntico al ya visto: carpeta
+ * «vacía» y nadie se queja.
+ *
+ * Que la constante no la importara nadie no la volvía inofensiva: la volvía
+ * INVIJILABLE. Esta valla la vuelve vigilable.
+ *
+ * QUÉ EXIGE
+ * ---------
+ * 1. `raizEspejosPersonalizados()` deriva de la raíz de datos: con
+ *    `C:\Cerebronico` devuelve `C:\Cerebronico\.cerebronico\espejos\`.
+ * 2. La constante exportada NO es el literal con `~`.
+ * 3. El texto del prompt NO contiene `~/.cerebronico/espejos`.
+ * 4. La ruta derivada coincide con la que usa el servidor
+ *    (`path.join(PROJECT_ROOT, ".cerebronico", "espejos")`).
+ */
+import * as assert from "node:assert";
+import * as path from "node:path";
+import {
+  raizEspejosPersonalizados,
+  RUTA_ESPEJOS_PERSONALIZADOS,
+  textoDeRutasSistema,
+} from "../src/engine/rutasSistema";
+
+const casos: Array<{ nombre: string; fn: () => void }> = [];
+const prueba = (nombre: string, fn: () => void) => casos.push({ nombre, fn });
+
+prueba("raizEspejosPersonalizados deriva de la raíz de datos (Windows)", () => {
+  const r = raizEspejosPersonalizados("windows", "C:\\Cerebronico");
+  assert.strictEqual(r, "C:\\Cerebronico\\.cerebronico\\espejos\\", "derivó: " + r);
+});
+
+prueba("raizEspejosPersonalizados deriva de la raíz de datos (unix)", () => {
+  const r = raizEspejosPersonalizados("unix", "/home/mario/CN");
+  assert.strictEqual(r, "/home/mario/CN/.cerebronico/espejos/", "derivó: " + r);
+});
+
+prueba("raizEspejosPersonalizados sin raíz explícita usa la del SO", () => {
+  assert.strictEqual(
+    raizEspejosPersonalizados("windows"),
+    "C:\\Cerebronico\\.cerebronico\\espejos\\",
+    "sin raíz explícita debe caer en la raíz de datos por defecto",
+  );
+});
+
+prueba("la constante exportada NO es el literal con ~ (el bug de la v2.1.1)", () => {
+  assert.ok(
+    !RUTA_ESPEJOS_PERSONALIZADOS.includes("~"),
+    "RUTA_ESPEJOS_PERSONALIZADOS todavía contiene `~`: " + RUTA_ESPEJOS_PERSONALIZADOS,
+  );
+  assert.ok(
+    RUTA_ESPEJOS_PERSONALIZADOS.includes(".cerebronico"),
+    "debe apuntar a .cerebronico: " + RUTA_ESPEJOS_PERSONALIZADOS,
+  );
+});
+
+prueba("el texto del prompt NO dice ~/.cerebronico/espejos", () => {
+  const texto = textoDeRutasSistema({ so: "windows", raizDatos: "C:\\Cerebronico" });
+  assert.ok(
+    !texto.includes("~/.cerebronico/espejos"),
+    "el prompt sigue mandando al usuario a la home",
+  );
+  assert.ok(
+    texto.includes("C:\\Cerebronico\\.cerebronico\\espejos"),
+    "el prompt debe nombrar la ruta real derivada de la raíz de datos",
+  );
+});
+
+prueba("la ruta derivada coincide con la del servidor (server.ts:4995)", () => {
+  // El servidor hace: path.join(PROJECT_ROOT, ".cerebronico", "espejos")
+  const projectRoot = "C:\\Cerebronico";
+  const delServidor = path.join(projectRoot, ".cerebronico", "espejos");
+  const delMapa = raizEspejosPersonalizados("windows", projectRoot).replace(/[\\/]+$/, "");
+  assert.strictEqual(
+    delMapa,
+    delServidor,
+    "el mapa y el cargador deben apuntar al MISMO sitio. mapa=" + delMapa + " servidor=" + delServidor,
+  );
+});
+
+prueba("con SO desconocido el prompt nombra las DOS raíces (no adivina una)", () => {
+  const texto = textoDeRutasSistema({ so: "desconocido" });
+  assert.ok(texto.includes("C:\\Cerebronico\\.cerebronico\\espejos"), "falta la de Windows");
+  assert.ok(texto.includes(".cerebronico/espejos"), "falta la de unix");
+});
+
+let fallos = 0;
+for (const c of casos) {
+  try {
+    c.fn();
+    console.log("  \u2713 " + c.nombre);
+  } catch (e: any) {
+    fallos++;
+    console.log("  \u2717 " + c.nombre);
+    console.log("    " + String(e?.message).split("\n").slice(0, 6).join("\n"));
+  }
+}
+console.log(`\nrutasEspejosDerivadas: ${casos.length - fallos}/${casos.length} OK`);
+if (fallos) process.exit(1);

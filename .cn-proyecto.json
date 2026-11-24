@@ -1,0 +1,14 @@
+{
+  "nombre": "juez-ley-uy",
+  "raiz": "C:/Cerebronico/.proyectos/juez-ley-uy",
+  "espejo_servido": "C:/Cerebronico/juez-ley-uy",
+  "servir_en": 3500,
+  "rol": "fuente-edicion",
+  "entrada": "index.html",
+  "tipo": "app-express",
+  "arranque": "node server.js",
+  "puerto_propio": 4100,
+  "verificado": "2026-11-15",
+  "procedimiento": "C:/Cerebronico/RUTAS-Y-PROCEDIMIENTO.md",
+  "nota": "FUENTE DE EDICIÓN. Aquí se escribe. El :3500 sirve el espejo 'espejo_servido'. El :3000 es el IDE y NUNCA sirve obra. El puerto propio del proyecto es 4100. El procedimiento completo (crear -> plan -> escribir conjunto -> servir -> verificar) está en 'procedimiento'."
+}

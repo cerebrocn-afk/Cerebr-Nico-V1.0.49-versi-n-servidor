@@ -1,0 +1,1692 @@
+{
+  "que_es": "Contrato de superficie HTTP del servidor (Fase 2). GENERADO por scripts/superficie.mjs: no editar a mano.",
+  "generado": "2026-11-20",
+  "server_lineas": 12277,
+  "presupuesto_lineas": 12277,
+  "techo_absoluto_lineas": 13800,
+  "total": 210,
+  "rutas_en_monolito": 79,
+  "rutas_extraidas": 131,
+  "rutas": [
+    {
+      "metodo": "GET",
+      "ruta": "/api/quirofano/estado",
+      "linea": 2777,
+      "dominio": "quirofano",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/artefacto/explicar",
+      "linea": 2832,
+      "dominio": "artefacto",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/quirofano/revisar",
+      "linea": 2847,
+      "dominio": "quirofano",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/quirofano/deshacer",
+      "linea": 2856,
+      "dominio": "quirofano",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/engine/kb",
+      "linea": 4628,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/convertir",
+      "linea": 4708,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/imagen",
+      "linea": 4729,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/engine/imagen/vista",
+      "linea": 4851,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/engine/imagen/estado",
+      "linea": 4873,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/reflejo",
+      "linea": 4883,
+      "dominio": "reflejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/reflejo/estado",
+      "linea": 4891,
+      "dominio": "reflejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/consejo/estado",
+      "linea": 4911,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/consejo/entidad",
+      "linea": 4923,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/consejo/turbo",
+      "linea": 4952,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/consejo/espejos",
+      "linea": 4957,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/espejos/leyes",
+      "linea": 4993,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/espejos/salud",
+      "linea": 5003,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/salud/dormir",
+      "linea": 5012,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/salud/reset",
+      "linea": 5027,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/equipo",
+      "linea": 5042,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/boveda/estado",
+      "linea": 5062,
+      "dominio": "boveda",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/boveda/configurar",
+      "linea": 5075,
+      "dominio": "boveda",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/boveda/preparar",
+      "linea": 5088,
+      "dominio": "boveda",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/boveda/indice",
+      "linea": 5118,
+      "dominio": "boveda",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/entrada/auditar",
+      "linea": 5133,
+      "dominio": "entrada",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/orquestar",
+      "linea": 5140,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/orquestar/:familia",
+      "linea": 5214,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/consejo/espejos",
+      "linea": 5268,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/espejos/personalizados",
+      "linea": 5319,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/instalar",
+      "linea": 5334,
+      "dominio": "espejos",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/desinstalar",
+      "linea": 5446,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/leyes/aprender",
+      "linea": 5463,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos/leyes/desactivar",
+      "linea": 5528,
+      "dominio": "espejos",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/conductor",
+      "linea": 5559,
+      "dominio": "conductor",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/convertir-verificar",
+      "linea": 5624,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/engine/kb/stats",
+      "linea": 5654,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/kb/learn",
+      "linea": 5665,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/kb/entry",
+      "linea": 5677,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/guard",
+      "linea": 5695,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/engine/sync",
+      "linea": 5707,
+      "dominio": "engine",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/engine/symbols",
+      "linea": 5723,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/engine/tools",
+      "linea": 5744,
+      "dominio": "engine",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/ollama/warmup",
+      "linea": 5754,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/sandbox/flatten-root",
+      "linea": 5837,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/sandbox/verify-preview",
+      "linea": 6100,
+      "dominio": "sandbox",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/extensions/forjar",
+      "linea": 6229,
+      "dominio": "extensions",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/fondo/meta",
+      "linea": 6261,
+      "dominio": "fondo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/fondo",
+      "linea": 6266,
+      "dominio": "fondo",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/fondo",
+      "linea": 6293,
+      "dominio": "fondo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "DELETE",
+      "ruta": "/api/fondo",
+      "linea": 6303,
+      "dominio": "fondo",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/puente/medir",
+      "linea": 6336,
+      "dominio": "puente",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/contenedor/inspeccionar",
+      "linea": 6466,
+      "dominio": "contenedor",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/proyecto/espejo",
+      "linea": 6537,
+      "dominio": "proyecto",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/coreo",
+      "linea": 6582,
+      "dominio": "coreo",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/extensions",
+      "linea": 6584,
+      "dominio": "extensions",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/extensions/:id/enable",
+      "linea": 6597,
+      "dominio": "extensions",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/extensions/:id/disable",
+      "linea": 6610,
+      "dominio": "extensions",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "DELETE",
+      "ruta": "/api/extensions/:id",
+      "linea": 6619,
+      "dominio": "extensions",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/extensions/install",
+      "linea": 6647,
+      "dominio": "extensions",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/extensions/invocations",
+      "linea": 6723,
+      "dominio": "extensions",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/extensions/invocations/:id/result",
+      "linea": 6739,
+      "dominio": "extensions",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/extensions/*",
+      "linea": 6758,
+      "dominio": "raiz",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/sandbox/start",
+      "linea": 6989,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/sandbox/stop",
+      "linea": 8268,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/sandbox/inject-image",
+      "linea": 8321,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/sandbox/zip",
+      "linea": 8371,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/sandbox/zip-info",
+      "linea": 8372,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/sandbox/logs",
+      "linea": 8397,
+      "dominio": "sandbox",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/exec",
+      "linea": 8468,
+      "dominio": "exec",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/fs/write",
+      "linea": 8544,
+      "dominio": "fs",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/fs/clear-all",
+      "linea": 8628,
+      "dominio": "fs",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/fs/nuclear-wipe",
+      "linea": 8762,
+      "dominio": "fs",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/fs/sync",
+      "linea": 8938,
+      "dominio": "fs",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/fs/read",
+      "linea": 9201,
+      "dominio": "fs",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/fs/tree",
+      "linea": 9216,
+      "dominio": "fs",
+      "guarda": true,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/ai/stream",
+      "linea": 9498,
+      "dominio": "ai",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/bridge/restart",
+      "linea": 12010,
+      "dominio": "bridge",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/tools/packs/recargar",
+      "linea": 12019,
+      "dominio": "tools",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "*",
+      "linea": 12161,
+      "dominio": "raiz",
+      "guarda": false,
+      "archivo": "server.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/aprender",
+      "linea": 300,
+      "dominio": "aprender",
+      "guarda": false,
+      "archivo": "server/aprendizajeVivo.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/aprender/estado",
+      "linea": 313,
+      "dominio": "aprender",
+      "guarda": false,
+      "archivo": "server/aprendizajeVivo.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/autoLlamado",
+      "linea": 98,
+      "dominio": "autoLlamado",
+      "guarda": false,
+      "archivo": "server/routers/autoLlamado.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/autoLlamado",
+      "linea": 111,
+      "dominio": "autoLlamado",
+      "guarda": false,
+      "archivo": "server/routers/autoLlamado.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/autoLlamado/cierre",
+      "linea": 118,
+      "dominio": "autoLlamado",
+      "guarda": false,
+      "archivo": "server/routers/autoLlamado.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/autoLlamado/cancelar",
+      "linea": 156,
+      "dominio": "autoLlamado",
+      "guarda": false,
+      "archivo": "server/routers/autoLlamado.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/automejora",
+      "linea": 51,
+      "dominio": "automejora",
+      "guarda": false,
+      "archivo": "server/routers/automejora.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/automejora/pregunta",
+      "linea": 70,
+      "dominio": "automejora",
+      "guarda": false,
+      "archivo": "server/routers/automejora.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/automejora/autorizar",
+      "linea": 81,
+      "dominio": "automejora",
+      "guarda": false,
+      "archivo": "server/routers/automejora.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/automejora/puerta",
+      "linea": 102,
+      "dominio": "automejora",
+      "guarda": false,
+      "archivo": "server/routers/automejora.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/brain/runner",
+      "linea": 447,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/scale",
+      "linea": 476,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/tramo",
+      "linea": 489,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/brain/plans",
+      "linea": 509,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/plan",
+      "linea": 545,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/perfeccion",
+      "linea": 630,
+      "dominio": "perfeccion",
+      "guarda": true,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/perfeccion",
+      "linea": 665,
+      "dominio": "perfeccion",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/plan/:id/retry-tarea",
+      "linea": 687,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/brain/plan/:id",
+      "linea": 697,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/plan/:id/cancel",
+      "linea": 705,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/plan/:id/resume",
+      "linea": 712,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "DELETE",
+      "ruta": "/api/brain/plan/:id",
+      "linea": 725,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/plan/:id/delete",
+      "linea": 726,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/brain",
+      "linea": 729,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/state",
+      "linea": 744,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/decision",
+      "linea": 751,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/lesson",
+      "linea": 770,
+      "dominio": "brain",
+      "guarda": true,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/scan",
+      "linea": 782,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/brain/history",
+      "linea": 795,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/rollback",
+      "linea": 800,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/brain/compact",
+      "linea": 808,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/brain/prompt",
+      "linea": 813,
+      "dominio": "brain",
+      "guarda": false,
+      "archivo": "server/routers/brain.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/verifier/status",
+      "linea": 49,
+      "dominio": "verifier",
+      "guarda": false,
+      "archivo": "server/routers/calidad.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/verifier/config",
+      "linea": 58,
+      "dominio": "verifier",
+      "guarda": false,
+      "archivo": "server/routers/calidad.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/verifier/check",
+      "linea": 79,
+      "dominio": "verifier",
+      "guarda": false,
+      "archivo": "server/routers/calidad.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/governor",
+      "linea": 98,
+      "dominio": "governor",
+      "guarda": false,
+      "archivo": "server/routers/calidad.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/capacidades",
+      "linea": 46,
+      "dominio": "capacidades",
+      "guarda": false,
+      "archivo": "server/routers/capacidades.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/capacidades/testigo-3d",
+      "linea": 77,
+      "dominio": "capacidades",
+      "guarda": false,
+      "archivo": "server/routers/capacidades.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/capacidades/comparar-fotogramas",
+      "linea": 121,
+      "dominio": "capacidades",
+      "guarda": false,
+      "archivo": "server/routers/capacidades.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/capacidades/generar-escena-3d",
+      "linea": 153,
+      "dominio": "capacidades",
+      "guarda": false,
+      "archivo": "server/routers/capacidades.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/carpeta/estado",
+      "linea": 283,
+      "dominio": "carpeta",
+      "guarda": false,
+      "archivo": "server/routers/carpetaProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/carpeta/explorar",
+      "linea": 289,
+      "dominio": "carpeta",
+      "guarda": false,
+      "archivo": "server/routers/carpetaProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/carpeta/vincular",
+      "linea": 321,
+      "dominio": "carpeta",
+      "guarda": false,
+      "archivo": "server/routers/carpetaProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/carpeta/vincular-zip",
+      "linea": 358,
+      "dominio": "carpeta",
+      "guarda": false,
+      "archivo": "server/routers/carpetaProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/carpeta/desvincular",
+      "linea": 407,
+      "dominio": "carpeta",
+      "guarda": false,
+      "archivo": "server/routers/carpetaProyecto.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/conciencia",
+      "linea": 75,
+      "dominio": "conciencia",
+      "guarda": true,
+      "archivo": "server/routers/concienciaSandbox.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/conciencia",
+      "linea": 90,
+      "dominio": "conciencia",
+      "guarda": true,
+      "archivo": "server/routers/concienciaSandbox.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/conciencia/manifiesto",
+      "linea": 110,
+      "dominio": "conciencia",
+      "guarda": true,
+      "archivo": "server/routers/concienciaSandbox.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/conciencia/manifiesto",
+      "linea": 133,
+      "dominio": "conciencia",
+      "guarda": true,
+      "archivo": "server/routers/concienciaSandbox.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/health/deep",
+      "linea": 344,
+      "dominio": "health",
+      "guarda": false,
+      "archivo": "server/routers/diagnostico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/ollama/perf",
+      "linea": 460,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server/routers/diagnostico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/ollama/models",
+      "linea": 483,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server/routers/diagnostico.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/diagnostico/autocurar",
+      "linea": 550,
+      "dominio": "diagnostico",
+      "guarda": false,
+      "archivo": "server/routers/diagnostico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/cerebro/embedder",
+      "linea": 502,
+      "dominio": "cerebro",
+      "guarda": false,
+      "archivo": "server/routers/embedderCerebro.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/cerebro/embedder/calentar",
+      "linea": 511,
+      "dominio": "cerebro",
+      "guarda": false,
+      "archivo": "server/routers/embedderCerebro.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/enjambre/estado",
+      "linea": 108,
+      "dominio": "enjambre",
+      "guarda": false,
+      "archivo": "server/routers/enjambre.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/enjambre/consultar",
+      "linea": 121,
+      "dominio": "enjambre",
+      "guarda": true,
+      "archivo": "server/routers/enjambre.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/enjambre/evaluar",
+      "linea": 340,
+      "dominio": "enjambre",
+      "guarda": true,
+      "archivo": "server/routers/enjambre.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/espejos-servidor",
+      "linea": 30,
+      "dominio": "espejos-servidor",
+      "guarda": false,
+      "archivo": "server/routers/espejosServidor.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/espejos-servidor/categoria/:id",
+      "linea": 35,
+      "dominio": "espejos-servidor",
+      "guarda": false,
+      "archivo": "server/routers/espejosServidor.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos-servidor/seleccionar",
+      "linea": 45,
+      "dominio": "espejos-servidor",
+      "guarda": false,
+      "archivo": "server/routers/espejosServidor.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/espejos-servidor/ejecutar",
+      "linea": 50,
+      "dominio": "espejos-servidor",
+      "guarda": false,
+      "archivo": "server/routers/espejosServidor.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/tools/packs/estado",
+      "linea": 56,
+      "dominio": "tools",
+      "guarda": false,
+      "archivo": "server/routers/estadoPacksMcp.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/mcp/recargar",
+      "linea": 74,
+      "dominio": "mcp",
+      "guarda": false,
+      "archivo": "server/routers/estadoPacksMcp.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/sandbox/status",
+      "linea": 83,
+      "dominio": "sandbox",
+      "guarda": false,
+      "archivo": "server/routers/estadoSandbox.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/export/targets",
+      "linea": 109,
+      "dominio": "export",
+      "guarda": false,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/export/android/prepare",
+      "linea": 150,
+      "dominio": "export",
+      "guarda": true,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/export/android/proyecto",
+      "linea": 244,
+      "dominio": "export",
+      "guarda": true,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/export/android/build",
+      "linea": 359,
+      "dominio": "export",
+      "guarda": true,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/export/android/provision",
+      "linea": 387,
+      "dominio": "export",
+      "guarda": true,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/export/android/provision",
+      "linea": 408,
+      "dominio": "export",
+      "guarda": false,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/export/android/build/:id",
+      "linea": 413,
+      "dominio": "export",
+      "guarda": false,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/export/android/apk",
+      "linea": 429,
+      "dominio": "export",
+      "guarda": false,
+      "archivo": "server/routers/exportacion.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/features",
+      "linea": 57,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/features/toggle",
+      "linea": 62,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/features/templates",
+      "linea": 77,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/features/git/log",
+      "linea": 82,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/features/git/commit",
+      "linea": 87,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/features/git/rollback",
+      "linea": 96,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/features/deep-index",
+      "linea": 107,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/features/propuestas/estado",
+      "linea": 127,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/features/propuestas/olvidar",
+      "linea": 132,
+      "dominio": "features",
+      "guarda": false,
+      "archivo": "server/routers/features.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/tts/voices",
+      "linea": 94,
+      "dominio": "tts",
+      "guarda": false,
+      "archivo": "server/routers/geminiTts.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/tts/gemini",
+      "linea": 98,
+      "dominio": "tts",
+      "guarda": false,
+      "archivo": "server/routers/geminiTts.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/gemini/models",
+      "linea": 109,
+      "dominio": "gemini",
+      "guarda": false,
+      "archivo": "server/routers/modelos.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/openrouter/models",
+      "linea": 153,
+      "dominio": "openrouter",
+      "guarda": false,
+      "archivo": "server/routers/modelos.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/openai/models",
+      "linea": 205,
+      "dominio": "openai",
+      "guarda": false,
+      "archivo": "server/routers/modelos.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/zai/models",
+      "linea": 278,
+      "dominio": "zai",
+      "guarda": false,
+      "archivo": "server/routers/modelos.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/cloud/models",
+      "linea": 322,
+      "dominio": "cloud",
+      "guarda": false,
+      "archivo": "server/routers/modelos.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/custom/models",
+      "linea": 411,
+      "dominio": "custom",
+      "guarda": false,
+      "archivo": "server/routers/modelos.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/consejo/decidir",
+      "linea": 86,
+      "dominio": "consejo",
+      "guarda": true,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/consejo/trazas",
+      "linea": 99,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/consejo/trazas/:id",
+      "linea": 107,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/consejo/aduana",
+      "linea": 114,
+      "dominio": "consejo",
+      "guarda": false,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/consejo/aduana",
+      "linea": 116,
+      "dominio": "consejo",
+      "guarda": true,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/multiagente/estado",
+      "linea": 132,
+      "dominio": "multiagente",
+      "guarda": false,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/multiagente/equipo",
+      "linea": 146,
+      "dominio": "multiagente",
+      "guarda": true,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/explicar",
+      "linea": 191,
+      "dominio": "explicar",
+      "guarda": false,
+      "archivo": "server/routers/nucleoAgentico.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/ollama/ps",
+      "linea": 43,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server/routers/ollamaControl.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/ollama/expulsar",
+      "linea": 48,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server/routers/ollamaControl.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/ollama/preferencia",
+      "linea": 67,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server/routers/ollamaControl.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/ollama/preferencia",
+      "linea": 88,
+      "dominio": "ollama",
+      "guarda": false,
+      "archivo": "server/routers/ollamaControl.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/persistencia/estado",
+      "linea": 68,
+      "dominio": "persistencia",
+      "guarda": false,
+      "archivo": "server/routers/persistencia.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/persistencia/guardar",
+      "linea": 79,
+      "dominio": "persistencia",
+      "guarda": false,
+      "archivo": "server/routers/persistencia.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/puente/requisitos",
+      "linea": 26,
+      "dominio": "puente",
+      "guarda": false,
+      "archivo": "server/routers/puenteDependencias.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/puente/plan",
+      "linea": 32,
+      "dominio": "puente",
+      "guarda": false,
+      "archivo": "server/routers/puenteDependencias.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/quirofano/interruptor",
+      "linea": 211,
+      "dominio": "quirofano",
+      "guarda": false,
+      "archivo": "server/routers/quirofanoInterruptor.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/quirofano/interruptor",
+      "linea": 215,
+      "dominio": "quirofano",
+      "guarda": true,
+      "archivo": "server/routers/quirofanoInterruptor.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/rutas/contexto",
+      "linea": 47,
+      "dominio": "rutas",
+      "guarda": false,
+      "archivo": "server/routers/rutasProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/proyecto/abrir",
+      "linea": 84,
+      "dominio": "proyecto",
+      "guarda": false,
+      "archivo": "server/routers/rutasProyecto.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/proyecto/actual",
+      "linea": 103,
+      "dominio": "proyecto",
+      "guarda": false,
+      "archivo": "server/routers/rutasProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/proyecto/cerrar",
+      "linea": 119,
+      "dominio": "proyecto",
+      "guarda": false,
+      "archivo": "server/routers/rutasProyecto.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/rutas/clasificar",
+      "linea": 130,
+      "dominio": "rutas",
+      "guarda": false,
+      "archivo": "server/routers/rutasProyecto.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/subagents",
+      "linea": 33,
+      "dominio": "subagents",
+      "guarda": false,
+      "archivo": "server/routers/subagentes.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/arranque/estado",
+      "linea": 573,
+      "dominio": "arranque",
+      "guarda": false,
+      "archivo": "server/routers/supervisorArranque.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/arranque/interruptores",
+      "linea": 574,
+      "dominio": "arranque",
+      "guarda": false,
+      "archivo": "server/routers/supervisorArranque.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/arranque/pasar",
+      "linea": 576,
+      "dominio": "arranque",
+      "guarda": false,
+      "archivo": "server/routers/supervisorArranque.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/arranque/interruptor",
+      "linea": 582,
+      "dominio": "arranque",
+      "guarda": false,
+      "archivo": "server/routers/supervisorArranque.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/telemetry/ports",
+      "linea": 244,
+      "dominio": "telemetry",
+      "guarda": false,
+      "archivo": "server/routers/telemetria.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/telemetry/refresh",
+      "linea": 275,
+      "dominio": "telemetry",
+      "guarda": false,
+      "archivo": "server/routers/telemetria.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/system/stats",
+      "linea": 290,
+      "dominio": "system",
+      "guarda": false,
+      "archivo": "server/routers/telemetria.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/trabajo",
+      "linea": 24,
+      "dominio": "trabajo",
+      "guarda": false,
+      "archivo": "server/routers/trabajo.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/trabajo/manual",
+      "linea": 40,
+      "dominio": "trabajo",
+      "guarda": false,
+      "archivo": "server/routers/trabajo.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/trabajo/plan",
+      "linea": 51,
+      "dominio": "trabajo",
+      "guarda": false,
+      "archivo": "server/routers/trabajo.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/trabajo/inventario",
+      "linea": 60,
+      "dominio": "trabajo",
+      "guarda": false,
+      "archivo": "server/routers/trabajo.ts"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/api/rag/status",
+      "linea": 50,
+      "dominio": "rag",
+      "guarda": false,
+      "archivo": "server/routers/vectorRag.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/rag/toggle",
+      "linea": 55,
+      "dominio": "rag",
+      "guarda": false,
+      "archivo": "server/routers/vectorRag.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/rag/model",
+      "linea": 66,
+      "dominio": "rag",
+      "guarda": false,
+      "archivo": "server/routers/vectorRag.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/rag/index",
+      "linea": 74,
+      "dominio": "rag",
+      "guarda": false,
+      "archivo": "server/routers/vectorRag.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/rag/search",
+      "linea": 98,
+      "dominio": "rag",
+      "guarda": false,
+      "archivo": "server/routers/vectorRag.ts"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/api/rag/clear",
+      "linea": 106,
+      "dominio": "rag",
+      "guarda": false,
+      "archivo": "server/routers/vectorRag.ts"
+    }
+  ]
+}

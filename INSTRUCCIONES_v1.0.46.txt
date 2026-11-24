@@ -1,0 +1,40 @@
+PARCHE 1.0.46 — falta node_modules\electron\dist\electron.exe
+=============================================================
+
+QUE PASA (no es el antivirus)
+  electron-builder ya esta instalado (26.15.3). Lo que falta es el BINARIO de
+  Electron. Lo descarga el postinstall del paquete `electron`, y tu npm (12.2.0)
+  lo bloqueo por lista blanca:
+     npm warn install-scripts 3 packages had install scripts blocked ...
+  Ademas tu `npm install` dijo `up to date`: como electron ya figuraba instalado,
+  npm no volvio a lanzar su script. Carpeta si, dist\ no.
+
+COMO APLICARLO (sobre la carpeta cerebronico-ide-v1.0.45)
+  1. Descomprime este ZIP ENCIMA de la carpeta (conserva rutas).
+  2. Doble clic en:  empaquetar-windows.bat
+     Hace, en orden:
+       - npm install-scripts approve electron
+       - npm rebuild electron --foreground-scripts   (aqui baja el binario)
+       - si sigue sin aparecer y existe C:\ELECTRON\electron.exe, usa
+         ELECTRON_OVERRIDE_DIST_PATH=C:\ELECTRON y -c.electronDist=C:\ELECTRON
+       - node scripts/archivar-cerebro-db.mjs
+       - node scripts/sin-claves.mjs
+       - node scripts/verificar-artefactos.mjs
+       - npm run build
+       - npx electron-builder --win --x64
+  3. Al final imprime el .exe de dist_electron.
+
+SI EL PASO 2 NO BAJA EL BINARIO
+  - Red: set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ y repite.
+  - O descomprime electron-v44.9.3-win32-x64.zip en C:\ELECTRON de forma que
+    quede C:\ELECTRON\electron.exe. Aviso: debe ser la MISMA version 44.9.3;
+    si C:\ELECTRON es otra version, mejor dejar que npm baje la 44.9.3.
+
+QUE CAMBIA
+  · scripts/verificar-artefactos.mjs -> Comprobacion EB: acepta un Electron en
+    disco (ELECTRON_OVERRIDE_DIST_PATH o build.electronDist); si no hay ninguno,
+    aborta y dice como arreglarlo.
+  · empaquetar-windows.bat -> reparacion + empaquetado en una pasada.
+  · package.json / package-lock.json / index.html / src/constants.ts / CHANGELOG.md
+    -> version 1.0.46.
+  · tests/empaquetadoDist.test.ts -> 33 comprobaciones (siguen verdes).

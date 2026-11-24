@@ -1,0 +1,19 @@
+# requirements.txt · core-agent — ÁMBITO: LEGACY (agente FastAPI opcional)
+# =======================================================================
+# Este archivo NO lo lee el arranque de la IDE. `autonomia.py deps` lee SOLO
+# el requirements.txt de la RAÍZ, que pide CERO paquetes (v1.0.23): los tres
+# daemons (:5100/:5102/:5103) y el puente :5000 son 100% biblioteca estándar.
+#
+# Lo de acá es para el agente FastAPI legacy que se compila con
+# `build_backend.bat` → CerebroNicoAgent.exe. Ese binario SÍ embebe su runtime
+# y el usuario final no instala nada (compilar_exe_windows.bat lo dice). Fuera
+# de ese camino, esta lista no hace falta.
+#
+# Regla de la casa: si un paquete de acá falta, el síntoma es del agente legacy,
+# nunca del arranque. No se copia a la raíz «por si acaso»: eso fue justo lo
+# que hacía que el diagnóstico de arranque mintiera con faltantes imposibles
+# sobre un `python-embed` que ni siquiera trae pip.
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+python-dotenv==1.2.3
+pydantic==2.13.5

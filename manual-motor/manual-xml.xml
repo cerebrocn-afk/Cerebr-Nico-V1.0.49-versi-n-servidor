@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Manual del motor CerebroNico en XML, para modelos que prefieren etiquetas.
+     Version 3.0.0 · Motor v1.98.x · 103 herramientas · generado desde manual-json.json
+     FUENTE DE VERDAD: manual-json.json. Este archivo se DERIVA de el; no se edita a mano. -->
+<manual-motor version="3" motor="CerebroNico IDE" herramientas="103">
+
+  <como-llamar>
+    <nativo>Si tienes tool_calls nativas, usalas por el protocolo con el nombre EXACTO.</nativo>
+    <texto>Si no, emite la llamada como texto. Formato pseudo-XML aceptado:</texto>
+    <ejemplo><![CDATA[
+<dots_function_call>
+  <write_file>{"path":"index.html","content":"<!doctype html>..."}</write_file>
+</dots_function_call>
+    ]]></ejemplo>
+    <tambien>Valla con ruta: ```html file="index.html" ... ```  |  ```cerebronico:write_file + JSON```</tambien>
+    <regla>Una accion por turno. Si no recibiste resultado, NO la hiciste: no lo afirmes.</regla>
+  </como-llamar>
+
+  <rutas-de-trabajo>
+    <raiz-datos>PROJECT_DIR si existe; si no, &lt;instalacion&gt;/.proyectos</raiz-datos>
+    <proyecto>&lt;raiz-datos&gt;/&lt;nombre-del-proyecto&gt;/ - hija directa, una por proyecto</proyecto>
+    <estado-migrable>&lt;raiz-datos&gt;/.cerebro-db/ y &lt;raiz-datos&gt;/.cerebronico/</estado-migrable>
+    <conciencia>&lt;raiz-datos&gt;/cerebro/ - indice.json + notas .md por tema</conciencia>
+    <creador>&lt;raiz-datos&gt;/.creador/ - sitios + exportaciones</creador>
+    <papelera>&lt;raiz-datos&gt;/.cerebro-papelera/ - lo borrado, recuperable</papelera>
+    <instalacion>&lt;instalacion&gt;/app/ - src, server, dist, runtime, scripts, manual-motor, docs</instalacion>
+    <variable nombre="PROJECT_DIR">raiz de datos del motor (Node/TS)</variable>
+    <variable nombre="CN_PROJECT_DIR">la misma raiz para el puente Python :5000 - si no coinciden, el almacenamiento se parte en dos</variable>
+    <variable nombre="CN_CREADOR_ROOT">donde guarda sus sitios el creador web :5102</variable>
+    <variable nombre="CN_BOVEDA_RAIZ">donde cae la boveda de claves (C:\CN en Windows, ~/CN en el resto)</variable>
+    <variable nombre="CN_EMBED_MODEL">modelo de embeddings; por defecto snowflake-arctic-embed:33m (384 dim)</variable>
+    <regla>Un archivo de trabajo NUNCA va en la raiz del IDE ni en la raiz del disco: va a &lt;raiz-datos&gt;/&lt;proyecto&gt;/</regla>
+  </rutas-de-trabajo>
+
+  <puertos>
+    <puerto numero="3000">IDE</puerto>
+    <puerto numero="3500">sandbox / preview (jamas 3000)</puerto>
+    <puerto numero="5000">puente Python a la PC</puerto>
+    <puerto numero="5100">memoria (hindsight)</puerto>
+    <puerto numero="5102">creador de sitios</puerto>
+    <puerto numero="11434">Ollama local (opcional)</puerto>
+  </puertos>
+
+  <catalogo-herramientas total="103">
+  <familia nombre="core" herramientas="20">
+    <herramienta nombre="set_plan">
+        <arg>tasks</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="update_task">
+        <arg>task_id</arg>
+        <arg>status</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="list_files">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="read_file">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="read_file_range">
+        <arg>path</arg>
+        <arg>start</arg>
+        <arg>end</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="write_file">
+        <arg>path</arg>
+        <arg>content</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="edit_file">
+        <arg>path</arg>
+        <arg>find</arg>
+        <arg>replace</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="append_file">
+        <arg>path</arg>
+        <arg>content</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="search_in_files">
+        <arg>query</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="find_symbol">
+        <arg>name</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="make_dir">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="delete_file">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="run_command">
+        <arg>command</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="run_tests">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="revisar_cambios">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="deshacer_cambios">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="ingresar_archivo_workspace">
+        <arg>path</arg>
+        <arg>content</arg>
+        <arg>origen</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="promover_archivo_sandbox">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="abrir_previsualizador">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="forjar_complemento">
+        <arg>receta</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="pc" herramientas="13">
+    <herramienta nombre="pc_info">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="pc_exec">
+        <arg>command</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="pc_write_file">
+        <arg>path</arg>
+        <arg>content</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="pc_read_file">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="pc_list_dir">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="pc_delete">
+        <arg>path</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="fs_read">
+        <arg>path</arg>
+      
+      <descripcion>Lee un archivo de la PC real (via puente :5000). path absoluto o atajo (Desktop/, Documents/, ~).</descripcion>
+    </herramienta>
+    <herramienta nombre="fs_write">
+        <arg>path</arg>
+        <arg>content</arg>
+      
+      <descripcion>Escribe un archivo de TEXTO en la PC real. Para binarios (PDF, PNG, ZIP) usar fs_write_b64: el texto literal corrompe el binario.</descripcion>
+    </herramienta>
+    <herramienta nombre="fs_write_b64">
+        <arg>path</arg>
+        <arg>data_b64</arg>
+      
+      <descripcion>Escribe un archivo BINARIO en la PC decodificando base64 sin saltos de linea. Devuelve bytes reales escritos.</descripcion>
+    </herramienta>
+    <herramienta nombre="fs_list">
+        <arg>path</arg>
+      
+      <descripcion>Lista un directorio de la PC real.</descripcion>
+    </herramienta>
+    <herramienta nombre="fs_delete">
+        <arg>path</arg>
+      
+      <descripcion>Elimina UN archivo de la PC. No destruye: lo mueve a .cerebro-papelera/ y devuelve recuperable:true.</descripcion>
+    </herramienta>
+    <herramienta nombre="fs_mkdir">
+        <arg>path</arg>
+      
+      <descripcion>Crea un directorio en la PC real.</descripcion>
+    </herramienta>
+    <herramienta nombre="exec">
+        <arg>command</arg>
+      
+      <descripcion>Ejecuta un comando permitido en la PC real via el puente :5000. Sujeta a lista blanca y al guardian de metacaracteres.</descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="git" herramientas="3">
+    <herramienta nombre="git_status">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="git_diff">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="git_commit">
+        <arg>message</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="web_datos" herramientas="2">
+    <herramienta nombre="fetch_url">
+        <arg>url</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="convertir_formato">
+        <arg>texto</arg>
+        <arg>desde</arg>
+        <arg>hacia</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="sistema" herramientas="3">
+    <herramienta nombre="ollama_estado">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="ollama_expulsar">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="recursos_maquina">
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="cerebro" herramientas="3">
+    <herramienta nombre="cerebro_recordar">
+        <arg>tema</arg>
+        <arg>titulo</arg>
+        <arg>texto</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="cerebro_consultar">
+        <arg>consulta</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="consultar_espejo">
+        <arg>llamadas</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="creador_web" herramientas="32">
+    <herramienta nombre="estado_creador">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="plantillas_disponibles">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="listar_sitios">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="previsualizar_sitio">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_sitio">
+        <arg>nombre</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_sitio_multipagina">
+        <arg>nombre</arg>
+        <arg>paginas</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_pagina">
+        <arg>sitio</arg>
+        <arg>ruta</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_bloque">
+        <arg>sitio</arg>
+        <arg>bloque</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_archivo">
+        <arg>sitio</arg>
+        <arg>ruta</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="insertar_imagen">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_pwa">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="crear_og_image">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="componente_modo_oscuro">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="componente_consentimiento">
+        <arg>sitio</arg>
+        <arg>politica_url</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="formulario_destino">
+        <arg>sitio</arg>
+        <arg>accion</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="generar_schema_jsonld">
+        <arg>sitio</arg>
+        <arg>tipo</arg>
+        <arg>nombre</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="generar_hreflang">
+        <arg>sitio</arg>
+        <arg>idiomas</arg>
+        <arg>base_url</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="auditar_pagina">
+        <arg>archivo</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="auditar_sitio">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="auditar_contraste">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="mejorar_pagina">
+        <arg>archivo</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="mejorar_hasta_estable">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="preflight_rendimiento">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="forjar_desde_brief">
+        <arg>brief</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="forjar_y_entregar">
+        <arg>brief</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="plan_de_construccion">
+        <arg>nombre</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="planificar_ruta_trabajo">
+        <arg>orden</arg>
+        <arg>artefactos</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="ejecutar_ruta_paralelo">
+        <arg>orden</arg>
+        <arg>artefactos</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="exportar_sitio_zip">
+        <arg>sitio</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="desplegar_carpeta">
+        <arg>sitio</arg>
+        <arg>destino</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="verificar_despliegue">
+        <arg>sitio</arg>
+        <arg>destino</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="listar_exportaciones">
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="memoria" herramientas="19">
+    <herramienta nombre="memory_estado">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_recall">
+        <arg>query</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_guardar_aprendizaje">
+        <arg>contenido</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_leer_page">
+        <arg>page_id</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_listar_pages">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_guardar_page">
+        <arg>page_id</arg>
+        <arg>name</arg>
+        <arg>source_query</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_borrar_page">
+        <arg>page_id</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_reflect">
+        <arg>query</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_ingest">
+        <arg>title</arg>
+        <arg>content</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_aprender_de_error">
+        <arg>contexto</arg>
+        <arg>error</arg>
+        <arg>causa</arg>
+        <arg>correccion</arg>
+        <arg>verificacion</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_repasar">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_indexar_proyecto">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_conflictos">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_exportar">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_importar">
+        <arg>nombre</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="memory_olvidar">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="listar_skills">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="leer_skill">
+        <arg>skill</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="skill_buscar">
+        <arg>query</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="documentos" herramientas="3">
+    <herramienta nombre="generar_pdf">
+        <arg>path</arg>
+        <arg>contenido</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="generar_docx">
+        <arg>path</arg>
+        <arg>contenido</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="generar_xlsx">
+        <arg>path</arg>
+        <arg>hojas</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+
+  <familia nombre="terminal" herramientas="5">
+    <herramienta nombre="terminal_abrir">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="terminal_enviar">
+        <arg>id</arg>
+        <arg>data</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="terminal_leer">
+        <arg>id</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="terminal_listar">
+      <descripcion></descripcion>
+    </herramienta>
+    <herramienta nombre="terminal_cerrar">
+        <arg>id</arg>
+      
+      <descripcion></descripcion>
+    </herramienta>
+  </familia>
+  </catalogo-herramientas>
+
+  <espejos>
+    <uso>consultar_espejo con {"llamadas":[{espejo,datos}]} - lotes de hasta 8, determinista ~1 ms</uso>
+    <espejo nombre="espejo.matematicos">estadistica|resolver|matrices|bases|mcd_mcm|interes</espejo>
+    <espejo nombre="espejo.artes">contraste|daltonismo|gradiente</espejo>
+    <espejo nombre="espejo.codigos">dependencias|firmas|duplicados</espejo>
+    <espejo nombre="espejo.lenguajes">frecuencias|convertir|diff</espejo>
+    <espejo nombre="espejo.planificadores">ordenar|lotes</espejo>
+    <espejo nombre="espejo.disenios">escala|breakpoints</espejo>
+    <espejo nombre="espejo.cientificos">tam_amostral|ic</espejo>
+    <espejo nombre="espejo.cuantico">entrelazamiento</espejo>
+  </espejos>
+
+  <nunca-anadir>
+    <secretos>.env, .pem, .key, .p12, id_rsa, .npmrc, .netrc, credentials.json, .aws/, .ssh/, terraform.tfstate</secretos>
+    <artefactos>node_modules/, .git/, dist/, build/, out/, coverage/, .venv/, __pycache__/, target/, .cache/</artefactos>
+    <efimeros>.log, .tmp, .bak, .swp, .DS_Store, .pid</efimeros>
+    <espejo-sandbox>.proyectos/, proyectos/</espejo-sandbox>
+    <regla>Pregunta antes de anadir material grafico, datos o extensiones desconocidas.</regla>
+  </nunca-anadir>
+
+</manual-motor>

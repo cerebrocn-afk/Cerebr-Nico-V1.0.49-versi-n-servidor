@@ -1,0 +1,93 @@
+# ============================================================================
+# build.files — ESPEJO LEGIBLE de package.json → build.files
+#
+# ATENCIÓN: este archivo NO lo lee electron-builder. La fuente de verdad es
+# la clave "build" de package.json. Este documento existe para revisar de un
+# vistazo QUÉ ENTRA en el .exe y qué queda fuera, sin abrir el JSON.
+#
+# Si editas aquí y no editas package.json, el paquete NO cambia.
+# Verificación: node scripts/verificar-artefactos.mjs
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# 1. NÚCLEO DE LA APLICACIÓN
+# ---------------------------------------------------------------------------
+dist/**/*                    # frontend compilado por Vite + dist/server.mjs (esbuild)
+electron-main.cjs            # proceso principal de Electron
+package.json                 # manifiesto de la app
+node_modules/**/*            # dependencias de producción
+
+# ---------------------------------------------------------------------------
+# 2. PUENTE PC (:5000) — backend FastAPI
+# ---------------------------------------------------------------------------
+agent_bridge_5000.py         # lanzador del puente
+app/**/*                     # backend FastAPI (main.py, routers/, utils/)
+requirements.txt             # dependencias Python del puente
+
+# Datos de usuario que NUNCA viajan (el .exe nace vacío de saber):
+!app/.cerebro-db/**
+!app/.cerebronico/**
+!app/.proyectos/**
+!app/.revisiones/**
+!app/memoria_history/**
+!app/.cerebro-papelera/**
+!app/**/*.log
+!app/**/*.tmp
+!app/**/*.bak
+
+# ---------------------------------------------------------------------------
+# 3. CEREBRO Y HEMISFERIOS — los tres daemons Python
+# ---------------------------------------------------------------------------
+scripts/cerebro_motor.py     # motor del cerebro :5103 (hechos, páginas, consolidación)
+scripts/hindsight_daemon.py  # hemisferios :5100 (memoria, recall, reflect)
+scripts/creador_daemon.py    # creador web :5102 (sitios, bloques, auditoría)
+scripts/mcp_fetch.py         # puente MCP de descargas
+
+# ---------------------------------------------------------------------------
+# 4. AUTONOMÍA Y VIGILANCIA
+# ---------------------------------------------------------------------------
+autonomia.py                        # estado, puertos, saneo, dependencias
+scripts/vigilante_autonomo.py       # vigilante en segundo plano
+scripts/analizar_autonomia.py       # analizador de autonomía
+
+# ---------------------------------------------------------------------------
+# 5. CONFIGURACIÓN Y CONTRATOS
+# ---------------------------------------------------------------------------
+tools.config.json            # catálogo de herramientas del motor
+puente-permitidos.json       # raíces autorizadas del puente :5000
+mcp_servers.json             # servidores MCP declarados
+metadata.json                # metadatos de la instalación
+
+# ---------------------------------------------------------------------------
+# 6. CONOCIMIENTO Y MANUALES
+# ---------------------------------------------------------------------------
+skills/**/*                 # 200+ skills instaladas (SKILL.md + references/)
+prompts/**/*                # prompts del bucle autónomo
+cerebro.md                  # acta del cerebro
+memoria.md                  # acta de memoria
+
+# ============================================================================
+# extraResources — van FUERA del asar, copiados tal cual
+# ============================================================================
+# runtime/python-embed  →  python-embed   (intérprete Python embebido, stdlib completa)
+# dist/*.exe            →  dist           (binarios auxiliares)
+# scripts/{hindsight_daemon,creador_daemon,cerebro_motor}.py  →  services/
+# tools.config.json     →  tools.config.json
+
+# ============================================================================
+# LO QUE **NO** ENTRA (y es correcto que no entre)
+# ============================================================================
+# src/            código TypeScript fuente — se compila a dist/
+# server/         rutas HTTP fuente — se compilan a dist/server.mjs
+# server.ts       entrada del servidor — se compila a dist/server.mjs
+# tests/          pruebas — no se distribuyen
+# scripts/*.mjs   herramientas de desarrollo (validar, quirófano, superficie…)
+# docs/ documentacion/ ejemplos/   documentación para el desarrollador
+# .git/ node_modules/.cache/ __pycache__/   artefactos y cachés
+# *.bak-* MANIFIESTO_SHA256_*.txt   respaldos históricos
+#
+# Los espejos PERSONALIZADOS (~/.cerebronico/espejos/) no viajan: se crean
+# en la máquina del usuario. El embedding (snowflake-arctic-embed) depende de
+# Ollama :11434, que NO se empaqueta: en una instalación limpia el recall
+# arranca en BM25 puro hasta que el usuario instale el modelo.
+# ============================================================================

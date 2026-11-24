@@ -1,0 +1,203 @@
+--- a/server.ts
++++ b/server.ts
+@@ -21,6 +21,7 @@
+   trimIncomingPrompt,
+   parseParamsB,
+   keepAliveExplicito,
++  modoLivianoLocal,
+   type ModelProfile,
+ } from "./src/engine/modelTiers";
+ // v1.44.0 — HERRAMIENTAS EN LA NUBE: traducción de tools al SDK de Gemini y
+@@ -61,7 +62,8 @@
+ import { registerModelDiscoveryRoutes, resolverModelosGeminiVigentes } from "./server/routers/modelos";
+ import { fetchCloud } from "./server/fetchCloud";
+ // v1.44.0 — DIRECTRIZ anti-herramienta-fantasma y anti-bucle 'hazlo/no puedo'.
+-import { directrizEjecucionReal } from "./src/engine/ejecucionFantasma";
++// v1.57.1 — + guardaSinHerramientas(): honestidad obligatoria en TODO turno sin tools.
++import { directrizEjecucionReal, guardaSinHerramientas } from "./src/engine/ejecucionFantasma";
+ // v1.45.0 — CICLO DE HERRAMIENTAS OpenAI-compat (Z.ai/GLM, Groq, OpenRouter,
+ // Custom…): helpers PUROS para ensamblar las tool_calls fragmentadas del stream
+ // y construir el transcript. La orquestación (red + executeToolCall) vive abajo.
+@@ -11440,16 +11442,13 @@
+       // Solución: cuando el usuario elige a mano un modelo chico en un equipo
+       // con poca RAM, se le habla como en la terminal — system de UNA línea,
+       // SIN herramientas y con contexto mínimo. Es el mismo recetario que ya
+-      // usa el relevo automático (relevoLocalTrasFalloNube). Se puede forzar o
+-      // apagar con CN_LOCAL_LIVIANO=1 / =0; por defecto se activa solo en
+-      // modelos micro/tiny o equipos de ≤8 GB.
++      // usa el relevo automático (relevoLocalTrasFalloNube).
++      // v1.57.1 · sin-manos-no-narras — la decisión se fue a modelTiers en
++      // modoLivianoLocal(): un modelo de NUBE nunca está liviano (su cómputo no
++      // toca esta máquina; la IIFE vieja le apagaba las tools a NEMESIS en PCs de
++      // ≤8 GB) y el env CN_LOCAL_LIVIANO=1/=0 sigue mandando sobre todo.
+       // ============================================================
+-      const localLiviano = (() => {
+-        const forz = String(process.env.CN_LOCAL_LIVIANO ?? "").trim();
+-        if (forz === "1") return true;
+-        if (forz === "0") return false;
+-        return RAM_GB <= 8 || profile.tier === "micro" || profile.tier === "tiny";
+-      })();
++      const localLiviano = modoLivianoLocal(profile, RAM_GB);
+       const sysLivianoLocal =
+         `Eres el asistente de CerebroNico. Respondé de forma clara, breve y útil, en el mismo idioma del usuario. ` +
+         `Hoy es ${fechaDelSistema}, ${horaDelSistema}.`;
+@@ -11480,23 +11479,15 @@
+             "- Ejecuta paso a paso y actualiza el estado con update_task (pending | in_progress | completed).\n" +
+             "- Para retoques usa edit_file (buscar/reemplazar), no reescribas el archivo entero.\n" +
+             "- ANTES de declarar terminada una mejora, CIERRA con revisar_cambios (el Quirófano juzga sintaxis, API pública e imports) y run_tests. Si algo sale rojo, corrige y vuelve a verificar: no des nada por bueno en rojo.";
+-        } else if (profile.tier === "micro" || profile.tier === "tiny") {
+-          // Se lo decimos explícitamente: así no intenta inventar tool-calls ni
+-          // se queda "pensando" en un formato que no puede emitir.
+-          // v2.0 — Refuerzo contra el fallo más grave de un modelo diminuto:
+-          // INVENTAR acciones. Caso real reportado: un gemma3:270m respondió con
+-          // un nombre de herramienta inexistente ("pc_quick_action") y una ruta
+-          // con error, como si de verdad hubiese ejecutado algo en el PC. Nada
+-          // de eso ocurrió: el motor no ejecutó nada porque este modelo no tiene
+-          // herramientas. Ahora se le prohíbe explícitamente simular.
+-          sysContent +=
+-            "\n\n[MODO SIN HERRAMIENTAS — LEE ESTO]\n" +
+-            "Este modelo NO tiene herramientas disponibles: no puede leer ni escribir archivos, no puede ejecutar comandos, no puede mirar el PC ni el sandbox.\n" +
+-            "- PROHIBIDO escribir que ejecutaste algo, que leíste un archivo o que encontraste un error. No lo hiciste.\n" +
+-            "- PROHIBIDO inventar nombres de herramientas (por ejemplo pc_quick_action) o rutas de archivo.\n" +
+-            "- Si te piden una acción, responde en UNA frase: «Con este modelo no puedo ejecutar acciones; cambia a un modelo de 4B o más (o a GLM-4.7-Flash) para que lo haga el motor».\n" +
+-            "- Responde en texto directo y breve (máximo 6 líneas)." +
+-            "\n\nSi el usuario te pide una dirección o una ruta y no la tienes en el contexto, no la inventes: dilo.";
++        } else {
++          // v1.57.1 · sin-manos-no-narras — LA GUARDA CUBRE EL AGUJERO, NO AL MODELO.
++          // Antes solo hablaba si tier micro/tiny: un modelo nube renombrado que
++          // caía sin tools por la RAM del equipo quedaba en limbo — sin herramientas
++          // Y sin orden de admitirlo — y narraba ✔ falsos (sesión 2026-10-12, 29
++          // mensajes). Ahora se aplica a TODO turno con activeTools.length === 0,
++          // incluido el system de una línea del modo liviano. El texto vive en
++          // src/engine/ejecucionFantasma.ts (guardaSinHerramientas).
++          sysContent += "\n\n" + guardaSinHerramientas();
+         }
+ 
+         // ============================================================
+--- a/src/engine/modelTiers.ts
++++ b/src/engine/modelTiers.ts
+@@ -268,6 +268,28 @@
+   return ahorro === "0" ? "5m" : ahorro;
+ }
+ 
++/**
++ * v1.57.1 · sin-manos-no-narras — ¿Este turno debe correr en MODO LIVIANO local?
++ * ============================================================================
++ * La IIFE vieja en server.ts respondía con `RAM_GB <= 8 || tier micro/tiny`, y
++ * eso dejaba sin herramientas a CUALQUIER modelo Ollama en un equipo de ≤8 GB,
++ * incluso a los de la nube (que no consumen RAM local). Caso real: NEMESIS:latest
++ * (alias de gpt-oss:120b-cloud) en una PC de 8 GB → activeTools = [] → el bucle
++ * de agente jamás corrió y el modelo se puso a NARRAR ejecuciones falsas.
++ *
++ * Regla nueva: un modelo REMOTO (nube) NUNCA está liviano — aunque el equipo sea
++ * chico, su cómputo no toca esta máquina. El env CN_LOCAL_LIVIANO (=1/=0) sigue
++ * mandando sobre todo, igual que antes. Lógica pura: el llamador pasa el perfil,
++ * la RAM medida y el valor del env (si se omite `forzado`, se lee del proceso).
++ */
++export function modoLivianoLocal(perfil: ModelProfile, ramGb: number, forzado?: string): boolean {
++  const f = String(forzado ?? process.env.CN_LOCAL_LIVIANO ?? "").trim();
++  if (f === "1") return true;
++  if (f === "0") return false;
++  if (perfil.remote) return false;
++  return ramGb <= RAM_LIMITADA_GB || perfil.tier === "micro" || perfil.tier === "tiny";
++}
++
+ /** Extrae el tamaño declarado en el nombre del modelo, si lo hay. */
+ export function parseParamsB(modelName: string): number | null {
+   if (!modelName) return null;
+--- a/src/engine/ejecucionFantasma.ts
++++ b/src/engine/ejecucionFantasma.ts
+@@ -101,3 +101,33 @@
+ 
+   return lineas.join("\n");
+ }
++
++/**
++ * v1.57.1 · sin-manos-no-narras — LA GUARDA DE HONESTIDAD PARA TURNOS SIN TOOLS.
++ * ==============================================================================
++ * La guarda vieja vivía como literal dentro de server.ts y SOLO se aplicaba si
++ * `profile.tier === "micro" || "tiny"`. Un modelo nube renombrado (NEMESIS) que
++ * caía en el modo liviano por la RAM del equipo quedaba en un limbo: sin
++ * herramientas Y sin orden de admitirlo. Resultado (sesión real 2026-10-12, 29
++ * mensajes): el modelo completaba el guion de agente que aprendió y narraba
++ * «✔ guardado en index.html», «✔ ejecuté list_files»… mientras el disco no
++ * cambiaba nada.
++ *
++ * La cura es cubrir el AGUJERO, no al modelo: el texto se aplica a TODO turno
++ * con `activeTools.length === 0`, sin importar el tramo, y también al system de
++ * una línea del modo liviano. Prohíbe narrar ejecuciones, inventar rutas y
++ * listas de «acciones realizadas», y ordena declarar que el código entregado es
++ * TEXTO. Sin red, sin disco: texto puro (tests/ejecucionFantasma.test.ts [5]).
++ */
++export function guardaSinHerramientas(): string {
++  return [
++    "[MODO SIN HERRAMIENTAS — LEE ESTO]",
++    "Este modelo NO tiene herramientas disponibles este turno: no puede leer ni escribir archivos, no puede ejecutar comandos, no puede mirar el PC ni el sandbox.",
++    "- PROHIBIDO escribir que ejecutaste algo, que leíste un archivo, que guardaste código o que encontraste un error. No lo hiciste.",
++    "- PROHIBIDO inventar nombres de herramientas (por ejemplo pc_quick_action), rutas de archivo o listas de «acciones realizadas» con ✔ u otros sellos de éxito.",
++    "- Todo código que entregues es TEXTO: dilo explícitamente («esto es texto; hay que pegarlo o guardarlo a mano») y nunca afirmes que ya está en el editor o en el disco.",
++    "- Si te piden una acción, responde en UNA frase: «Con este modelo no puedo ejecutar acciones; activa un modelo con herramientas (o el Modo Agente PC) para que lo haga el motor».",
++    "- Responde en texto directo y breve.",
++    "Si el usuario te pide una dirección o una ruta y no la tienes en el contexto, no la inventes: dilo.",
++  ].join("\n");
++}
+--- a/tests/bajoConsumo.test.ts
++++ b/tests/bajoConsumo.test.ts
+@@ -24,6 +24,7 @@
+   keepAliveBajoConsumo,
+   keepAliveExplicito,
+   getModelProfile,
++  modoLivianoLocal,
+   DIMINUTO_PARAMS_B,
+   PESADO_PARAMS_B,
+   RAM_LIMITADA_GB,
+@@ -207,6 +208,23 @@
+ comprobar(`la semilla es una semver válida (${semilla})`, /^\d+\.\d+\.\d+$/.test(semilla));
+ comprobar("package.json viaja con la misma versión", JSON.parse(leer("package.json")).version === semilla);
+ 
++// ════════════════════════════════════════════════════════════════════════════
++seccion("10 · sin-manos-no-narras: la nube NUNCA está liviana (v1.57.1)");
++// ════════════════════════════════════════════════════════════════════════════
++// Raíz del fallo (sesión exportada 2026-10-12): la IIFE de server.ts apagaba las
++// tools por `RAM_GB <= 8` a CUALQUIER modelo Ollama — incluso a NEMESIS, alias de
++// gpt-oss:120b-cloud, que no consume RAM local. Sin tools y sin la guarda de
++// honestidad (que antes solo hablaba a micro/tiny), el modelo narraba ✔ falsos.
++const pNem = getModelProfile("NEMESIS:latest", 8);
++comprobar("★ NEMESIS:latest es nube por alias (→ gpt-oss:120b-cloud)", pNem.remote === true && pNem.tier === "cloud", `remote=${pNem.remote} tier=${pNem.tier}`);
++comprobar("★ en PC de 8 GB la nube NO entra en modo liviano: keeps sus tools", modoLivianoLocal(pNem, 8) === false);
++comprobar("el diminuto local en 8 GB sigue liviano (el ahorro de v1.56.3 vive)", modoLivianoLocal(getModelProfile("qwen2.5:0.5b", 8), 8) === true);
++comprobar("local grande en equipo de 16 GB no está liviano (solo micro/tiny o ≤8)", modoLivianoLocal(getModelProfile("qwen2.5:7b", 16), 16) === false);
++comprobar("CN_LOCAL_LIVIANO=1 manda hasta sobre la nube", modoLivianoLocal(pNem, 8, "1") === true);
++comprobar("CN_LOCAL_LIVIANO=0 manda sobre el diminuto", modoLivianoLocal(getModelProfile("qwen2.5:0.5b", 8), 8, "0") === false);
++const srvLiv = leer("server.ts");
++comprobar("server.ts usa modoLivianoLocal y la guarda ya no filtra por tier", /const localLiviano = modoLivianoLocal\(profile, RAM_GB\)/.test(srvLiv) && !srvLiv.includes('RAM_GB <= 8 || profile.tier === "micro"') && /guardaSinHerramientas\(\)/.test(srvLiv));
++
+ console.log(`\n═══ BAJO CONSUMO v1.16.4: ${correctas} correctas · ${fallos.length} fallidas ═══`);
+ for (const f of fallos) console.log("  FALLO →", f);
+ process.exit(fallos.length ? 1 : 0);
+--- a/tests/ejecucionFantasma.test.ts
++++ b/tests/ejecucionFantasma.test.ts
+@@ -15,7 +15,7 @@
+  *
+  * Lógica pura. Corre sin node_modules.
+  */
+-import { directrizEjecucionReal } from "../src/engine/ejecucionFantasma";
++import { directrizEjecucionReal, guardaSinHerramientas } from "../src/engine/ejecucionFantasma";
+ 
+ let pasan = 0;
+ let fallan = 0;
+@@ -45,5 +45,14 @@
+ const sinRed = directrizEjecucionReal({ herramientas: [], pcMode: false, red: false });
+ comprobar("sin red: no promete descargas", /sin salida a la red|no prometas/i.test(sinRed));
+ 
++console.log("\n[5] guardaSinHerramientas: honestidad en TODO turno sin tools (v1.57.1)");
++const g = guardaSinHerramientas();
++comprobar("declara que el turno no tiene herramientas", /NO tiene herramientas disponibles este turno/i.test(g));
++comprobar("prohíbe narrar ejecuciones falsas", /PROHIBIDO escribir que ejecutaste/i.test(g));
++comprobar("prohíbe listas de «acciones realizadas» con ✔", /acciones realizadas/i.test(g) && g.includes("✔"));
++comprobar("prohíbe inventar rutas y herramientas", /PROHIBIDO inventar/i.test(g) && /pc_quick_action/i.test(g));
++comprobar("ordena declarar que el código entregado es TEXTO", /TEXTO/i.test(g) && /pegarlo|guardarlo/i.test(g));
++comprobar("vale para cualquier tramo: no habla de micro ni tiny", !/micro|tiny/i.test(g) && g.length > 300);
++
+ console.log(`\n\u2500\u2500\u2500 ejecucionFantasma: ${pasan} \u2713  ${fallan} \u2717 \u2500\u2500\u2500`);
+ if (fallan > 0) { console.error("FALLOS:\n- " + fallos.join("\n- ")); process.exit(1); }

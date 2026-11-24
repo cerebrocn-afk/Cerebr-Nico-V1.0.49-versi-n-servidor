@@ -1,0 +1,42 @@
+PARCHE 1.0.45 — «electron-builder no se reconoce»
+=================================================
+
+QUE ERA
+  package.json no declaraba electron ni electron-builder. El package-lock.json
+  si los tenia (44.9.3 y 26.15.3), pero el lock no instala: `npm install` sigue a
+  package.json y poda lo que no esta declarado. Sin node_modules\.bin\
+  electron-builder.cmd, cmd contesta «no se reconoce como un comando interno o
+  externo» y el .exe no se compila.
+
+COMO APLICARLO (sobre la carpeta cerebronico-ide-v1.0.44)
+  1. Descomprime este ZIP ENCIMA de C:\Users\BirdBox\Downloads\cerebronico-ide-v1.0.44
+     (conserva las rutas: package.json, src\, scripts\, tests\, index.html).
+  2. En esa carpeta:
+       npm install
+     Debe descargar electron 44.9.3 y electron-builder 26.15.3 (~120 MB la
+     primera vez; si la red corta, reintenta con: npm install --fetch-timeout=600000).
+  3. Comprueba que responde:
+       npx electron-builder --version
+     Esperado: 26.15.3
+  4. npm run build
+  5. npm run dist
+
+QUE CAMBIA
+  · package.json        -> devDependencies: electron 44.9.3, electron-builder 26.15.3
+                           version 1.0.45
+  · package-lock.json   -> version 1.0.45 (las entradas de electron ya estaban
+                           con integrity, quedan en sincronia: sirve npm ci)
+  · scripts/verificar-artefactos.mjs -> Comprobacion EB: si falta
+                           electron-builder/cli.js o electron/dist/electron.exe,
+                           ABORTA con el motivo y el comando, en vez de dejar que
+                           cmd diga «no se reconoce»
+  · tests/empaquetadoDist.test.ts -> 5 comprobaciones nuevas (33 en total):
+                           el binario que usa `dist` esta declarado y coincide
+                           con el lockfile
+  · index.html, src/constants.ts, CHANGELOG.md -> version 1.0.45 y asiento
+
+SI `npm install` SE QUEDA EN «downloading electron»
+  El binario de Electron baja de github.com. Con proxy o red lenta:
+    set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+    npm install
+  Luego borra la variable: set ELECTRON_MIRROR=

@@ -1,0 +1,22 @@
+MANIFIESTO-CHECKSUMS-CerebroNico-IDE-v1.0.14
+CerebroNico-IDE v1.0.14 · manifiesto autogenerado por npm run entregar
+========================================================================
+Zip: CerebroNico-IDE-v1.0.14.zip 52 464 741 bytes
+  SHA256  e6dd915c48205cf1186ee57d18ea2f145978f38bd85eaa040c99f864366d1dab
+
+Partes (reunion: cat parte1 parte2 parte3 parte4 > zip; o reunir-y-verificar.bat):
+  CerebroNico-IDE-v1.0.14-parte-1de4.zip  13 116 186 bytes
+  SHA256  65857f03983a6e66ba5331f4ea0d15276aee4119adbacec1c5514ec6df0fb0f9
+  CerebroNico-IDE-v1.0.14-parte-2de4.zip  13 116 186 bytes
+  SHA256  af4f9dd98e69f56721c6887d3e6282042e070bbbd909ea0096c8b03f92b61da0
+  CerebroNico-IDE-v1.0.14-parte-3de4.zip  13 116 186 bytes
+  SHA256  5eee70d4b489d92ab5172d6e38cff904e9652f951f13895b227777412cf19ca3
+  CerebroNico-IDE-v1.0.14-parte-4de4.zip  13 116 183 bytes
+  SHA256  a89c1d13124ecc968821ad426090b01f4dd0e583aa1044934f877da98c0767f7
+
+Verificaciones declaradas por el ritual (medidas por el script, no a mano):
+  · unzip -t del ZIP completo: OK (2947 entradas, 0 faltantes contra el arbol de v1.0.13; unicas altas: server/aprovisionarToolchain.ts y src/engine/toolchainPlan.ts)
+  · suites tsx en sandbox: cicloHerramientasOpenAICompat 50/0 · v1661_buclesYReloj 38/0 · rutasSistema 137/0 (mapa 3230 chars) · androidProyecto 143/0 · apkBuild 31/0 · exportarApk 18/0
+  · sin-claves.mjs: arbol limpio de claves
+  · contrato de rutas regenerado: 202 rutas · 8 de exportacion · 4 con guard · monolito 12233 lineas
+  · NO ejecutado en sandbox (limitacion del entorno, sin node_modules por registro npm 404): npm run lint (tsc) y npm run validar completos · juez definitivo: maquina local de Mario

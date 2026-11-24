@@ -1,0 +1,67 @@
+[
+ [
+  "recetarioUI",
+  "APLICADO",
+  "suites ok: ninguna lo mira"
+ ],
+ [
+  "kbPoderX50",
+  "APLICADO",
+  "suites ok: ninguna lo mira"
+ ],
+ [
+  "kbArquitectura",
+  "APLICADO",
+  "suites ok: configEstructurada.test.ts"
+ ],
+ [
+  "kbCodigo",
+  "APLICADO",
+  "suites ok: espejo.test.ts, motor-datos.test.ts, motor-estructura.test.ts"
+ ],
+ [
+  "kbMotor",
+  "APLICADO",
+  "suites ok: motor-estructura.test.ts"
+ ],
+ [
+  "knowledgeBase",
+  "REVERTIDO",
+  "motor-datos.test.ts :: Node.js v22.23.2; motor-estructura.test.ts :: Node.js v22.23.2"
+ ],
+ [
+  "grafoProyecto",
+  "APLICADO",
+  "suites ok: grafoProyecto.test.ts, motorContexto.test.ts"
+ ],
+ [
+  "importChecker",
+  "APLICADO",
+  "suites ok: grafoProyecto.test.ts, validadorAST.test.ts"
+ ],
+ [
+  "dependenciasProyecto",
+  "APLICADO",
+  "suites ok: dependenciasProyecto.test.ts, grafoProyecto.test.ts"
+ ],
+ [
+  "parchesSemilla",
+  "APLICADO",
+  "suites ok: parchesSemilla.test.ts, perfilParches.test.ts"
+ ],
+ [
+  "manuals",
+  "APLICADO",
+  "suites ok: abordaje.test.ts, contratoAccion.test.ts, herramientasParaTodos.test.ts, parteAbordaje.test.ts, rutasSistema.test.ts, sandboxContrato.test.ts"
+ ],
+ [
+  "motorContexto",
+  "REVERTIDO",
+  "motorCertezaValidacionBucleContexto.test.ts :: Node.js v22.23.2; motorContexto.test.ts :: Node.js v22.23.2"
+ ],
+ [
+  "conciencia",
+  "APLICADO",
+  "suites ok: bucleAutonomo.test.ts, capasSkills.test.ts, cierreDeuda71b.test.ts, concienciaArtista.test.ts, concienciaCache.test.ts, concienciaSandbox.test.ts, concienciaVector.test.ts, hechosEntorno.test.ts, permisos.test.ts, rutaTrabajo.test.ts"
+ ]
+]

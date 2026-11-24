@@ -1,0 +1,1098 @@
+{
+  "manual": "motor-cerebronico",
+  "version": 2,
+  "motor": "v1.98.x",
+  "total_herramientas": 103,
+  "proposito": "Que cualquier modelo opere el motor. Lectura por maquina.",
+  "canales": {
+    "nativo": "Usa el protocolo tool_calls si lo tienes.",
+    "texto": "Si no, emite la llamada como texto; el motor la detecta."
+  },
+  "rutas_de_trabajo": {
+    "raiz_datos": "PROJECT_DIR si existe; si no, <instalacion>/.proyectos",
+    "proyecto": "<raiz_datos>/<nombre-del-proyecto>/  (hija directa, una por proyecto)",
+    "estado_migrable": "<raiz_datos>/.cerebro-db/ y <raiz_datos>/.cerebronico/",
+    "conciencia": "<raiz_datos>/cerebro/  (indice.json + notas .md por tema)",
+    "creador": "<raiz_datos>/.creador/  (sitios + exportaciones)",
+    "papelera": "<raiz_datos>/.cerebro-papelera/",
+    "instalacion": "<instalacion>/app/  (src, server, dist, runtime, scripts, manual-motor, docs)",
+    "variables": {
+      "PROJECT_DIR": "raiz de datos del motor (Node/TS)",
+      "CN_PROJECT_DIR": "la MISMA raiz para el puente Python :5000 — si no coincide, el almacenamiento se parte en dos",
+      "CN_CREADOR_ROOT": "donde guarda sus sitios el creador web :5102",
+      "CN_HINDSITE_MIRROR": "archivo del espejo de memoria :5100",
+      "CN_BOVEDA_RAIZ": "boveda de claves (C:\\CN en Windows, ~/CN en el resto)",
+      "CN_EMBED_MODEL": "modelo de embeddings (por defecto snowflake-arctic-embed:33m)"
+    },
+    "regla": "Rutas RELATIVAS a la raiz del proyecto. Nunca absolutas de Windows."
+  },
+  "puertos": {
+    "3000": "IDE (editor + chat + planificador)",
+    "3500": "sandbox / previsualizador",
+    "5000": "puente PC (pack pc)",
+    "5100": "memoria / cerebro (hindsight)",
+    "5102": "creador web",
+    "11434": "Ollama local"
+  },
+  "formatos_texto": [
+    {
+      "id": "valla-nombre-json",
+      "ejemplo": "```cerebronico:write_file\\n{\"path\":\"a.html\",\"content\":\"...\"}\\n```"
+    },
+    {
+      "id": "valla-con-ruta",
+      "ejemplo": "```html file=\"index.html\"\\n<!doctype html>...\\n```"
+    },
+    {
+      "id": "valla-ruta-sola",
+      "ejemplo": "```index.html\\n...\\n```"
+    },
+    {
+      "id": "valla-dos-puntos",
+      "ejemplo": "```ts:src/app.ts\\n...\\n```"
+    },
+    {
+      "id": "nombre-mas-json",
+      "ejemplo": "read_file\\n{\"path\":\"index.html\"}"
+    },
+    {
+      "id": "pseudo-xml",
+      "ejemplo": "<dots_function_call><write_file>{...}</write_file></dots_function_call>"
+    }
+  ],
+  "contrato_turno_v1_69": {
+    "que_es": "set_plan escribe las etapas en la pestana Planificador (primer plano, local y nube) y abre un contrato de aceptacion.",
+    "reglas": [
+      "El turno NO cierra con etapas sin tachar: el motor se auto-pregunta (inyecta la lista [x]/[ ]/[>]) y exige seguir en el mismo hilo.",
+      "Tope 3 exigencias; agotado, el cierre es PARCIAL y lista las etapas que faltan (nunca 'Hecho' con el plan abierto).",
+      "Tachar = update_task {task_id, status: completed, evidencia}. Sin evidencia queda cerrada_sin_verificar (puerta roja).",
+      "failed con causa tambien cierra la etapa: es la forma honesta de abandonar.",
+      "El plan sobrevive entre turnos (30 min): 'segui' retoma donde quedo; otro pedido se reemplaza con set_plan nuevo."
+    ]
+  },
+  "herramientas": {
+    "core": [
+      {
+        "name": "set_plan",
+        "args": [
+          "tasks"
+        ],
+        "opcional": [
+          "criterios_aceptacion",
+          "archivos",
+          "tipo",
+          "presupuesto_iteraciones"
+        ]
+      },
+      {
+        "name": "update_task",
+        "args": [
+          "task_id",
+          "status"
+        ],
+        "opcional": [
+          "evidencia"
+        ]
+      },
+      {
+        "name": "list_files",
+        "args": []
+      },
+      {
+        "name": "read_file",
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "read_file_range",
+        "args": [
+          "path",
+          "start",
+          "end"
+        ]
+      },
+      {
+        "name": "write_file",
+        "args": [
+          "path",
+          "content"
+        ]
+      },
+      {
+        "name": "edit_file",
+        "args": [
+          "path",
+          "find",
+          "replace"
+        ]
+      },
+      {
+        "name": "append_file",
+        "args": [
+          "path",
+          "content"
+        ]
+      },
+      {
+        "name": "search_in_files",
+        "args": [
+          "query"
+        ],
+        "opcional": [
+          "glob",
+          "max_results"
+        ]
+      },
+      {
+        "name": "find_symbol",
+        "args": [
+          "name"
+        ],
+        "opcional": [
+          "limit"
+        ]
+      },
+      {
+        "name": "make_dir",
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "delete_file",
+        "args": [
+          "path"
+        ],
+        "destructiva": true
+      },
+      {
+        "name": "run_command",
+        "args": [
+          "command"
+        ]
+      },
+      {
+        "name": "run_tests",
+        "args": [],
+        "opcional": [
+          "command"
+        ]
+      },
+      {
+        "name": "revisar_cambios",
+        "args": []
+      },
+      {
+        "name": "deshacer_cambios",
+        "args": []
+      },
+      {
+        "name": "ingresar_archivo_workspace",
+        "args": [
+          "path",
+          "content",
+          "origen"
+        ]
+      },
+      {
+        "name": "promover_archivo_sandbox",
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "abrir_previsualizador",
+        "args": [],
+        "opcional": [
+          "motivo"
+        ]
+      },
+      {
+        "name": "forjar_complemento",
+        "args": [
+          "receta"
+        ]
+      }
+    ],
+    "pc": [
+      {
+        "name": "pc_info",
+        "args": []
+      },
+      {
+        "name": "pc_exec",
+        "args": [
+          "command"
+        ],
+        "nota": "lista blanca: dir, echo, findstr, tasklist, type. Bloquea && ; ( ) &"
+      },
+      {
+        "name": "pc_write_file",
+        "args": [
+          "path",
+          "content"
+        ]
+      },
+      {
+        "name": "pc_read_file",
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "pc_list_dir",
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "pc_delete",
+        "args": [
+          "path"
+        ],
+        "destructiva": true
+      },
+      {
+        "nombre": "fs_read",
+        "args": [
+          "path"
+        ],
+        "descripcion": "Lee un archivo de la PC real (via puente :5000). path absoluto o atajo (Desktop/, Documents/, ~)."
+      },
+      {
+        "nombre": "fs_write",
+        "args": [
+          "path",
+          "content"
+        ],
+        "descripcion": "Escribe un archivo de TEXTO en la PC real. Para binarios (PDF, PNG, ZIP) usar fs_write_b64: el texto literal corrompe el binario."
+      },
+      {
+        "nombre": "fs_write_b64",
+        "args": [
+          "path",
+          "data_b64"
+        ],
+        "descripcion": "Escribe un archivo BINARIO en la PC decodificando base64 sin saltos de linea. Devuelve bytes reales escritos."
+      },
+      {
+        "nombre": "fs_list",
+        "args": [
+          "path"
+        ],
+        "descripcion": "Lista un directorio de la PC real."
+      },
+      {
+        "nombre": "fs_delete",
+        "args": [
+          "path"
+        ],
+        "descripcion": "Elimina UN archivo de la PC. No destruye: lo mueve a .cerebro-papelera/ y devuelve recuperable:true."
+      },
+      {
+        "nombre": "fs_mkdir",
+        "args": [
+          "path"
+        ],
+        "descripcion": "Crea un directorio en la PC real."
+      },
+      {
+        "nombre": "exec",
+        "args": [
+          "command"
+        ],
+        "descripcion": "Ejecuta un comando permitido en la PC real via el puente :5000. Sujeta a lista blanca y al guardian de metacaracteres."
+      }
+    ],
+    "git": [
+      {
+        "name": "git_status",
+        "args": []
+      },
+      {
+        "name": "git_diff",
+        "args": [],
+        "opcional": [
+          "path"
+        ]
+      },
+      {
+        "name": "git_commit",
+        "args": [
+          "message"
+        ]
+      }
+    ],
+    "web_datos": [
+      {
+        "name": "fetch_url",
+        "args": [
+          "url"
+        ],
+        "opcional": [
+          "max_chars"
+        ]
+      },
+      {
+        "name": "convertir_formato",
+        "args": [
+          "texto",
+          "desde",
+          "hacia"
+        ],
+        "opcional": [
+          "ordenar_claves",
+          "separador_csv",
+          "inferir_tipos_csv"
+        ]
+      }
+    ],
+    "sistema": [
+      {
+        "name": "ollama_estado",
+        "args": []
+      },
+      {
+        "name": "ollama_expulsar",
+        "args": [],
+        "opcional": [
+          "model"
+        ]
+      },
+      {
+        "name": "recursos_maquina",
+        "args": []
+      }
+    ],
+    "cerebro": [
+      {
+        "name": "cerebro_recordar",
+        "args": [
+          "tema",
+          "titulo",
+          "texto"
+        ],
+        "opcional": [
+          "resumen",
+          "palabras"
+        ]
+      },
+      {
+        "name": "cerebro_consultar",
+        "args": [
+          "consulta"
+        ],
+        "opcional": [
+          "max"
+        ]
+      },
+      {
+        "name": "consultar_espejo",
+        "args": [
+          "llamadas"
+        ],
+        "nota": "hasta 8 llamadas [{espejo, datos}] por golpe"
+      }
+    ],
+    "creador_web": [
+      {
+        "name": "estado_creador",
+        "args": []
+      },
+      {
+        "name": "plantillas_disponibles",
+        "args": []
+      },
+      {
+        "name": "listar_sitios",
+        "args": []
+      },
+      {
+        "name": "previsualizar_sitio",
+        "args": [
+          "sitio"
+        ]
+      },
+      {
+        "name": "crear_sitio",
+        "args": [
+          "nombre"
+        ],
+        "opcional": [
+          "tipo",
+          "bloques",
+          "paleta",
+          "tipografia",
+          "titulo",
+          "subtitulo",
+          "cta",
+          "descripcion",
+          "contacto",
+          "caracteristicas",
+          "planes",
+          "testimonios",
+          "faq",
+          "galeria",
+          "equipo",
+          "pasos",
+          "estadisticas",
+          "logos",
+          "media",
+          "hero_imagen",
+          "hero_variante",
+          "url_canonica",
+          "sobrescribir"
+        ]
+      },
+      {
+        "name": "crear_sitio_multipagina",
+        "args": [
+          "nombre",
+          "paginas"
+        ],
+        "opcional": [
+          "paleta",
+          "idioma",
+          "contacto",
+          "base_url",
+          "sobrescribir"
+        ]
+      },
+      {
+        "name": "crear_pagina",
+        "args": [
+          "sitio",
+          "ruta"
+        ],
+        "opcional": [
+          "nombre",
+          "titulo",
+          "subtitulo",
+          "bloques",
+          "caracteristicas",
+          "faq",
+          "planes",
+          "testimonios",
+          "contacto",
+          "cta"
+        ]
+      },
+      {
+        "name": "crear_bloque",
+        "args": [
+          "sitio",
+          "bloque"
+        ],
+        "opcional": [
+          "reemplazar",
+          "paleta",
+          "titulo",
+          "subtitulo"
+        ]
+      },
+      {
+        "name": "crear_archivo",
+        "args": [
+          "sitio",
+          "ruta"
+        ],
+        "opcional": [
+          "contenido",
+          "tipo",
+          "sobrescribir"
+        ]
+      },
+      {
+        "name": "insertar_imagen",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "origen",
+          "datos_base64",
+          "svg",
+          "url",
+          "nombre_archivo",
+          "sobrescribir"
+        ]
+      },
+      {
+        "name": "crear_pwa",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "nombre",
+          "descripcion",
+          "paleta"
+        ]
+      },
+      {
+        "name": "crear_og_image",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "titulo",
+          "subtitulo",
+          "nombre",
+          "paleta"
+        ]
+      },
+      {
+        "name": "componente_modo_oscuro",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "paleta_alternativa"
+        ]
+      },
+      {
+        "name": "componente_consentimiento",
+        "args": [
+          "sitio",
+          "politica_url"
+        ],
+        "opcional": [
+          "categorias",
+          "texto"
+        ]
+      },
+      {
+        "name": "formulario_destino",
+        "args": [
+          "sitio",
+          "accion"
+        ],
+        "opcional": [
+          "metodo"
+        ]
+      },
+      {
+        "name": "generar_schema_jsonld",
+        "args": [
+          "sitio",
+          "tipo",
+          "nombre"
+        ],
+        "opcional": [
+          "url",
+          "direccion",
+          "telefono",
+          "email",
+          "horario",
+          "redes",
+          "migas"
+        ]
+      },
+      {
+        "name": "generar_hreflang",
+        "args": [
+          "sitio",
+          "idiomas",
+          "base_url"
+        ]
+      },
+      {
+        "name": "auditar_pagina",
+        "args": [
+          "archivo"
+        ]
+      },
+      {
+        "name": "auditar_sitio",
+        "args": [
+          "sitio"
+        ]
+      },
+      {
+        "name": "auditar_contraste",
+        "args": [],
+        "opcional": [
+          "sitio",
+          "pares",
+          "objetivo"
+        ]
+      },
+      {
+        "name": "mejorar_pagina",
+        "args": [
+          "archivo"
+        ],
+        "opcional": [
+          "aplicar"
+        ]
+      },
+      {
+        "name": "mejorar_hasta_estable",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "paginas",
+          "max_iteraciones",
+          "exigir_sin_marcadores"
+        ]
+      },
+      {
+        "name": "preflight_rendimiento",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "presupuesto"
+        ]
+      },
+      {
+        "name": "forjar_desde_brief",
+        "args": [
+          "brief"
+        ]
+      },
+      {
+        "name": "forjar_y_entregar",
+        "args": [
+          "brief"
+        ],
+        "opcional": [
+          "rondas",
+          "exigir_sin_marcadores",
+          "salida_zip"
+        ]
+      },
+      {
+        "name": "plan_de_construccion",
+        "args": [
+          "nombre"
+        ],
+        "opcional": [
+          "titulo",
+          "paginas",
+          "secciones",
+          "schema",
+          "politica_url",
+          "accion_formulario",
+          "max_iteraciones",
+          "exigir_sin_marcadores"
+        ]
+      },
+      {
+        "name": "planificar_ruta_trabajo",
+        "args": [
+          "orden",
+          "artefactos"
+        ],
+        "opcional": [
+          "nombre",
+          "requisitos",
+          "tamano_lote"
+        ]
+      },
+      {
+        "name": "ejecutar_ruta_paralelo",
+        "args": [
+          "orden",
+          "artefactos"
+        ],
+        "opcional": [
+          "nombre",
+          "sitio",
+          "requisitos",
+          "tamano_lote",
+          "max_correcciones",
+          "permitir_reservas",
+          "forzar"
+        ]
+      },
+      {
+        "name": "exportar_sitio_zip",
+        "args": [
+          "sitio"
+        ],
+        "opcional": [
+          "salida"
+        ]
+      },
+      {
+        "name": "desplegar_carpeta",
+        "args": [
+          "sitio",
+          "destino"
+        ],
+        "opcional": [
+          "aplicar",
+          "limpiar"
+        ]
+      },
+      {
+        "name": "verificar_despliegue",
+        "args": [
+          "sitio",
+          "destino"
+        ]
+      },
+      {
+        "name": "listar_exportaciones",
+        "args": []
+      }
+    ],
+    "memoria": [
+      {
+        "name": "memory_estado",
+        "args": []
+      },
+      {
+        "name": "memory_recall",
+        "args": [
+          "query"
+        ],
+        "opcional": [
+          "fact_types",
+          "max_tokens"
+        ]
+      },
+      {
+        "name": "memory_guardar_aprendizaje",
+        "args": [
+          "contenido"
+        ],
+        "opcional": [
+          "tipo",
+          "tags"
+        ]
+      },
+      {
+        "name": "memory_leer_page",
+        "args": [
+          "page_id"
+        ]
+      },
+      {
+        "name": "memory_listar_pages",
+        "args": []
+      },
+      {
+        "name": "memory_guardar_page",
+        "args": [
+          "page_id",
+          "name",
+          "source_query"
+        ],
+        "opcional": [
+          "content"
+        ]
+      },
+      {
+        "name": "memory_borrar_page",
+        "args": [
+          "page_id"
+        ]
+      },
+      {
+        "name": "memory_reflect",
+        "args": [
+          "query"
+        ],
+        "opcional": [
+          "budget",
+          "max_tokens"
+        ]
+      },
+      {
+        "name": "memory_ingest",
+        "args": [
+          "title",
+          "content"
+        ]
+      },
+      {
+        "name": "memory_aprender_de_error",
+        "args": [
+          "contexto",
+          "error",
+          "causa",
+          "correccion",
+          "verificacion"
+        ],
+        "opcional": [
+          "tags"
+        ]
+      },
+      {
+        "name": "memory_repasar",
+        "args": [],
+        "opcional": [
+          "aplicar",
+          "sin_cita_dias",
+          "tope_unidades"
+        ]
+      },
+      {
+        "name": "memory_indexar_proyecto",
+        "args": [],
+        "opcional": [
+          "documento",
+          "max_archivos",
+          "max_bytes_por_archivo"
+        ]
+      },
+      {
+        "name": "memory_conflictos",
+        "args": [],
+        "opcional": [
+          "tema",
+          "acta",
+          "top_k"
+        ]
+      },
+      {
+        "name": "memory_exportar",
+        "args": [],
+        "opcional": [
+          "formato",
+          "nombre"
+        ]
+      },
+      {
+        "name": "memory_importar",
+        "args": [
+          "nombre"
+        ],
+        "opcional": [
+          "sobrescribir_paginas",
+          "destructive_hint"
+        ]
+      },
+      {
+        "name": "memory_olvidar",
+        "args": [],
+        "opcional": [
+          "id",
+          "ids"
+        ]
+      },
+      {
+        "name": "listar_skills",
+        "args": [],
+        "opcional": [
+          "filtro",
+          "limite",
+          "desde"
+        ]
+      },
+      {
+        "name": "leer_skill",
+        "args": [
+          "skill"
+        ],
+        "opcional": [
+          "archivo"
+        ]
+      },
+      {
+        "name": "skill_buscar",
+        "args": [
+          "query"
+        ],
+        "opcional": [
+          "top_k"
+        ]
+      }
+    ],
+    "documentos": [
+      {
+        "name": "generar_pdf",
+        "args": [
+          "path",
+          "contenido"
+        ],
+        "opcional": [
+          "titulo"
+        ]
+      },
+      {
+        "name": "generar_docx",
+        "args": [
+          "path",
+          "contenido"
+        ],
+        "opcional": [
+          "titulo"
+        ]
+      },
+      {
+        "name": "generar_xlsx",
+        "args": [
+          "path",
+          "hojas"
+        ]
+      }
+    ],
+    "terminal": [
+      {
+        "name": "terminal_abrir",
+        "args": [],
+        "opcional": [
+          "cwd",
+          "shell"
+        ]
+      },
+      {
+        "name": "terminal_enviar",
+        "args": [
+          "id",
+          "data"
+        ],
+        "opcional": [
+          "reposo_ms"
+        ]
+      },
+      {
+        "name": "terminal_leer",
+        "args": [
+          "id"
+        ]
+      },
+      {
+        "name": "terminal_listar",
+        "args": []
+      },
+      {
+        "name": "terminal_cerrar",
+        "args": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "espejos": {
+    "nota": "consultar_espejo acepta hasta 8 llamadas por golpe; deterministas, ~1 ms",
+    "poderes": {
+      "espejo.matematicos": [
+        "estadistica",
+        "resolver",
+        "matrices",
+        "bases",
+        "mcd_mcm",
+        "interes"
+      ],
+      "espejo.artes": [
+        "contraste",
+        "daltonismo",
+        "gradiente"
+      ],
+      "espejo.codigos": [
+        "dependencias",
+        "firmas",
+        "duplicados"
+      ],
+      "espejo.lenguajes": [
+        "frecuencias",
+        "convertir",
+        "diff"
+      ],
+      "espejo.planificadores": [
+        "ordenar",
+        "lotes"
+      ],
+      "espejo.disenios": [
+        "escala",
+        "breakpoints"
+      ],
+      "espejo.cientificos": [
+        "tam_amostral",
+        "ic"
+      ],
+      "espejo.cuantico": [
+        "entrelazamiento"
+      ]
+    },
+    "contratos": {
+      "artes": "usa a y b (no base/frente)",
+      "codigos": "usa codigo (no ruta)",
+      "cientificos": "margen en DECIMAL (0.05, no 5)",
+      "fisicos": "evaluador de expresiones con constantes (c, g); NO convierte unidades"
+    }
+  },
+  "alias_nombres": {
+    "list_dir": "list_files",
+    "ls": "list_files",
+    "dir": "list_files",
+    "create_file": "write_file",
+    "crear_archivo": "write_file",
+    "leer_archivo": "read_file",
+    "borrar_archivo": "delete_file",
+    "eliminar_archivo": "delete_file",
+    "ejecutar": "run_command",
+    "shell": "run_command",
+    "bash": "run_command",
+    "terminal": "run_command"
+  },
+  "alias_campos": {
+    "ruta": "path",
+    "archivo": "path",
+    "fichero": "path",
+    "contenido": "content",
+    "texto": "content",
+    "cuerpo": "content",
+    "comando": "command",
+    "cmd": "command",
+    "buscar": "find",
+    "reemplazar": "replace",
+    "consulta": "query"
+  },
+  "reglas": [
+    "Rutas relativas a la raiz del proyecto, nunca absolutas de Windows.",
+    "El PC del usuario no es el sandbox: mete la imagen al proyecto antes de usarla.",
+    "No reescribas un archivo identico byte a byte; el motor corta el turno.",
+    "Un .js es JavaScript puro, sin tipos TypeScript (nada de ': number' ni 'as').",
+    "Actos, no discursos: ante 'no cambia nada' emite una escritura real o pregunta.",
+    "revisar_cambios antes de declarar terminado; abrir_previsualizador si es web.",
+    "No inventes herramientas ni rutas: si no esta en este archivo, no existe.",
+    "Nunca afirmes haber ejecutado algo que no ejecutaste; si fallo, di el error.",
+    "Destructivo (delete_file, pc_delete, matar procesos) = confirmacion SIEMPRE.",
+    "Si una herramienta falla, no la repitas igual: cambia de ruta o de enfoque."
+  ],
+  "nunca_anadir": {
+    "secretos": [
+      ".env",
+      ".pem",
+      ".key",
+      ".p12",
+      "id_rsa",
+      ".npmrc",
+      ".netrc",
+      "credentials.json",
+      ".aws/",
+      ".ssh/",
+      "terraform.tfstate"
+    ],
+    "artefactos": [
+      "node_modules/",
+      ".git/",
+      "dist/",
+      "build/",
+      "out/",
+      "coverage/",
+      ".venv/",
+      "__pycache__/",
+      "target/",
+      ".cache/"
+    ],
+    "efimeros": [
+      ".log",
+      ".tmp",
+      ".bak",
+      ".swp",
+      ".DS_Store",
+      ".pid"
+    ],
+    "espejo_sandbox": [
+      ".proyectos/",
+      "proyectos/"
+    ],
+    "regla": "Pregunta antes de anadir material grafico, datos o extensiones desconocidas."
+  }
+}

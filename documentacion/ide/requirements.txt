@@ -1,0 +1,10 @@
+# requirements.txt · copia de la doc — ÁMBITO: LEGACY (referencia del agente FastAPI)
+# ============================================================================
+# Es una COPIA de referencia del componente legacy `core-agent/` para el manual
+# de la IDE: no la lee ningún proceso de arranque. El requirements.txt de la
+# RAÍZ pide CERO paquetes (v1.0.23) porque los daemons y el puente son stdlib.
+# Si alguna vez divergen, manda `core-agent/requirements.txt`.
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+python-dotenv==1.2.3
+pydantic==2.13.5

@@ -1,0 +1,29 @@
+LEEME-ANDROID — qué es cada archivo de Android que hay en esta carpeta
+=======================================================================
+
+CerebroNico-DEMO-Android10.apk  (861 KB)
+  El APK de DEMOSTRACIÓN (app "Flujo de Confirmación", Android 10+). Es una web
+  dentro de un WebView — sirve para ver cómo queda el envoltorio, NO es tu app.
+
+CerebroNico-DEMO-Android10-APK-renombrado-a-zip.zip  (861 KB)
+  ES EL MISMO APK DE ARRIBA, renombrado. Byte a byte idéntico (mismo SHA256).
+  ¿Por qué? Porque WhatsApp, Gmail y varios navegadores BLOQUEAN los archivos
+  .apk: con extensión .zip viajan sin problema. En el celular se renombra de
+  vuelta a .apk y se instala. Si no vas a mandarlo a ningún lado, ignorá este
+  archivo (o borralo): el APK real es el de arriba.
+
+App-Android-Studio-DEMO.zip  (14 KB)
+  El PROYECTO FUENTE de Android de esa demo (carpeta android/ con build.gradle,
+  wrapper de Gradle y un README-CEREBRONICO.md). Se abre en Android Studio
+  (Open → la carpeta android/) y con Build APK se compila. Es la muestra de lo
+  que genera el módulo androidProyecto de la casa: Activity + WebView de
+  framework, sin Capacitor, sin dependencias externas.
+
+¿Y MI app en APK?
+  No hace falta el demo: con la v1.57.17 el chat tiene la herramienta
+  exportar_apk. Pedile al agente "exportame en apk": primero GENERAR (escribe el
+  proyecto android/ de TU app; exige la web compilada con index.html), después
+  COMPILAR (lanza Gradle; es largo, se consulta con ESTADO) y el APK queda en
+  android/app/build/outputs/apk/debug/app-debug.apk (también se descarga desde
+  el botón de la interfaz). Si a la máquina le falta JDK 17 / Android SDK /
+  Gradle, la herramienta lo dice con la solución concreta en vez de fallar mudo.

@@ -1,0 +1,35 @@
+{
+  "_comment": "Packs de herramientas EXTERNOS. Cada entrada se carga al arrancar el servidor: hace GET <url>/tools y registra las herramientas que devuelva, sin tocar código. enabled=false para desactivar. v1.16.1: las herramientas de un pack se EJECUTAN por POST <url>/tools/call {name, arguments}; si el pack vive en loopback se le añade automáticamente el token del puente (X-Cerebro-Token). Recarga manual: POST /api/tools/packs/recargar.",
+  "packs": [
+    {
+      "id": "puente-mcp",
+      "label": "Servidores MCP del puente (:5000)",
+      "url": "http://127.0.0.1:5000",
+      "enabled": true
+    },
+    {
+      "id": "creador-web",
+      "label": "Creador de sitios y apps web (:5102)",
+      "url": "http://127.0.0.1:5102",
+      "enabled": true
+    },
+    {
+      "id": "memoria-hindsight",
+      "label": "Memoria híbrida CerebroNico × Hindsight (:5100)",
+      "url": "http://127.0.0.1:5100",
+      "enabled": true
+    },
+    {
+      "id": "memoria-hindsight-sdk",
+      "label": "wrapper Node del SDK oficial de agentes de Hindsight (:5101, requiere npm install y Hindsight arriba)",
+      "url": "http://127.0.0.1:5101",
+      "enabled": false
+    },
+    {
+      "id": "ejemplo",
+      "label": "Pack de ejemplo",
+      "url": "http://127.0.0.1:5200",
+      "enabled": false
+    }
+  ]
+}

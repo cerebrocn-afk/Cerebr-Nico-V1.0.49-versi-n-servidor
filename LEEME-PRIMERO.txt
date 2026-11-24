@@ -1,0 +1,4 @@
+CerebróNico 1.0.55 — EDICIÓN SERVIDOR EXPERIMENTAL
+Leer SERVIDOR.md y VALIDACION-SERVIDOR.md.
+No usar el lanzador Windows para esta edición.
+Los documentos de versiones anteriores se conservan como historial.

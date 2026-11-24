@@ -1,0 +1,36 @@
+PARCHE 1.0.48 — electron-builder muere en el SDK vendor (enlace roto)
+=====================================================================
+
+QUE PASO
+  ENOENT: no such file or directory, stat
+    '...\node_modules\@vectorize-io\hindsight-agent-sdk'
+
+  La dependencia es file:vendor/hindsight-agent-sdk, asi que npm la instala
+  como ENLACE (junction en Windows) con una RUTA ABSOLUTA dentro. Al mover o
+  copiar la carpeta del proyecto -o al reutilizar node_modules de otra ruta- el
+  enlace apunta a un sitio que ya no existe. Node no se entera hasta que importa
+  el modulo; electron-builder recorre las dependencias al empezar, hace stat del
+  enlace roto y aborta. No es el antivirus ni Electron.
+
+ARREGLO INMEDIATO (en la carpeta del proyecto, p. ej. v1.0.48)
+       npm run prep:sdk
+       npm run dist
+
+  prep:sdk deja una COPIA REAL del SDK en node_modules (si ya es carpeta, no
+  toca nada; si es enlace, lo retira sin tocar vendor\). Debe imprimir:
+       [prep:sdk] copia real lista: node_modules/@vectorize-io/hindsight-agent-sdk
+
+QUE CAMBIA EN 1.0.48
+  · scripts/preparar-sdk.mjs -> nuevo, materializa el SDK vendor (idempotente)
+  · package.json  -> script "prep:sdk" y `dist` lo ejecuta tras archivar el
+    cerebro y antes del guardian y de electron-builder
+  · scripts/verificar-artefactos.mjs -> comprobacion nueva: el SDK debe poder
+    leerse en node_modules; si falta, dice `npm run prep:sdk`
+  · tests/empaquetadoDist.test.ts -> 35 comprobaciones (2 nuevas)
+  · index.html, src/constants.ts, CHANGELOG.md -> version 1.0.48
+
+RECOMENDACION
+  No copies node_modules entre carpetas (v1.0.46 -> v1.0.47 -> v1.0.48):
+  los enlaces guardan rutas absolutas. Copia el proyecto SIN node_modules y
+  ejecuta `npm install` en la carpeta final. Si quieres conservar el cache de
+  Electron:  set ELECTRON_CACHE=%LOCALAPPDATA%\electron\Cache

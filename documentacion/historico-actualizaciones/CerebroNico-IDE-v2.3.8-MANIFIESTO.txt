@@ -1,0 +1,11 @@
+{
+  "version": "2.3.8",
+  "archivo": "CerebroNico-IDE-v2.3.8.zip",
+  "archivos": 2233,
+  "bytes": 76054690,
+  "sha256": "NO-MEDIDO-EN-ESTA-SESION",
+  "veredicto": "PARCIAL - 10754 comprobaciones, 0 fallos (277 suites) en la ultima corrida COMPLETA; las suites nuevas de esta sesion (clausulasAdjunto 79, topeAdjuntos 16, limpiezaTarea 55, autoevaluacion 60) se corrieron por separado y dieron 0 fallos",
+  "tsc": "0 errores (medido en la corrida completa del 04/11)",
+  "medido": "2026-11-04",
+  "nota": "Los numeros de archivos y bytes son MEDIDOS hoy sobre el arbol real. El sha256 NO se midio en esta sesion: no se inventa. El veredicto completo de npm run validar con las suites nuevas dentro NO existe todavia: la corrida se quedo en tsc y no escribio resultado. Lo que SI esta verificado por ejecucion: valla de huerfanos 104/0 con HUERFANO 0 y 24/386 contra techo 24, y las cuatro suites nuevas corridas una por una con 0 fallidas."
+}

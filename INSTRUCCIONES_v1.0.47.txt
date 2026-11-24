@@ -1,0 +1,44 @@
+PARCHE 1.0.47 — sigue faltando electron.exe (npm 12 bloquea el postinstall)
+===========================================================================
+
+CAUSA
+  npm 12 bloquea por defecto TODOS los preinstall/install/postinstall de las
+  dependencias; solo corre los que figuren en "allowScripts" del package.json.
+  El proyecto no declaraba ninguno. Por eso `npm install` avisa
+  «install scripts blocked ... not covered by allowScripts» y el paquete
+  `electron` queda sin dist\electron.exe. `npm rebuild` tampoco sirve si el
+  paquete no esta aprobado. El antivirus NO tiene nada que ver.
+
+ARREGLO (30 segundos, una de las dos formas)
+  A) doble clic en:  arreglar-electron.bat
+  B) o pega en la carpeta del proyecto:
+       npm run electron:bin
+
+  Ese comando lanza node_modules\electron\install.js con node, sin pasar por la
+  politica de npm. Debe terminar con:
+       [electron:bin] OK: node_modules\electron\dist\electron.exe
+
+  Despues:
+       npm run build
+       npm run dist
+
+SI `npm run electron:bin` FALLA
+  · ETIMEDOUT / ECONNRESET / 403 -> es red (github):
+       set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+       npm run electron:bin
+  · El instalador dice OK pero el .exe desaparece: antivirus. Excluye la carpeta
+    del proyecto (o C:\ELECTRON) y repite. Con el .exe ya bajado, alternativa:
+       set ELECTRON_OVERRIDE_DIST_PATH=C:\ELECTRON
+       empaquetar-windows.bat
+    (C:\ELECTRON debe contener electron.exe de la MISMA version 44.9.3)
+
+QUE CAMBIA EN 1.0.47
+  · package.json  -> "allowScripts": electron, esbuild, protobufjs,
+    electron-winstaller (los unicos del arbol con scripts legitimos), y
+    script nuevo "electron:bin" -> node scripts/electron-bin.mjs
+  · package-lock.json -> version 1.0.47 + el mismo allowScripts
+  · scripts/electron-bin.mjs -> nuevo: baja el binario y comprueba el resultado
+  · scripts/verificar-artefactos.mjs -> la comprobacion EB sugiere
+    `npm run electron:bin` como primer camino
+  · arreglar-electron.bat, empaquetar-windows.bat -> usan electron:bin
+  · index.html, src/constants.ts, CHANGELOG.md -> version 1.0.47

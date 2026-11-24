@@ -1,0 +1,48 @@
+{
+  "id": "mcp-server-main",
+  "name": "Webflow MCP · diseño y gestión de sitios con IA",
+  "version": "2.0.0",
+  "description": "Servidor MCP de Webflow: permite al agente interactuar con la API de Webflow para diseñar, gestionar colecciones, items, componentes y scripts de sitios. Requiere cuenta Webflow y OAuth. Funcionalidad parcial si no hay sesión.",
+  "author": "Webflow (integración CerebroNico)",
+  "main": "panel.html",
+  "engines": { "cerebronico": "^2.0.0" },
+  "permissions": ["network.fetch", "tools.register"],
+  "contributes": {
+    "panels": [
+      {
+        "id": "webflow.panel",
+        "title": "Webflow MCP",
+        "icon": "Globe",
+        "entry": "panel.html",
+        "position": "right-tab"
+      }
+    ],
+    "commands": [
+      {
+        "id": "webflow.status",
+        "title": "Ver estado de conexión Webflow",
+        "slash": "webflow"
+      }
+    ],
+    "tools": [
+      {
+        "name": "webflow_list_sites",
+        "description": "Lista los sitios Webflow del usuario autenticado. Requiere OAuth previo.",
+        "cheap": true,
+        "handler": "command:webflow.status",
+        "parameters": { "type": "object", "properties": {}, "required": [] }
+      },
+      {
+        "name": "webflow_get_collections",
+        "description": "Obtiene las colecciones CMS de un sitio Webflow. Parámetro: siteId.",
+        "cheap": true,
+        "handler": "command:webflow.status",
+        "parameters": {
+          "type": "object",
+          "properties": { "siteId": { "type": "string", "description": "ID del sitio Webflow" } },
+          "required": ["siteId"]
+        }
+      }
+    ]
+  }
+}

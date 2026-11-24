@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flujo: botón de confirmación + modal ágil</title>
+<style>
+  :root{
+    --bg:#0f131a; --panel:#161c26; --linea:#263040; --txt:#e7edf5;
+    --suave:#9fb0c3; --acento:#5bc0ff; --peligro:#ff5d6c; --ok:#49d08b;
+    --radio:.7rem; --rapido:.14s; --suaveT:.26s;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif;
+       background:radial-gradient(1200px 600px at 70% -10%,#1b2735,var(--bg));
+       color:var(--txt);min-height:100vh;padding:2.5rem 1rem}
+  .wrap{max-width:720px;margin:0 auto}
+  h1{font-size:1.5rem;margin:0 0 .3rem}
+  p.sub{color:var(--suave);margin:0 0 1.8rem}
+  .tarjeta{background:var(--panel);border:1px solid var(--linea);
+           border-radius:var(--radio);padding:1.1rem 1.2rem;margin-bottom:1rem}
+  .fila{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .fila + .fila{border-top:1px solid var(--linea);padding-top:.9rem;margin-top:.9rem}
+  .nombre{font-weight:600}
+  .meta{color:var(--suave);font-size:.85rem}
+  /* ---- botones por FUNCIÓN (no todos iguales) ---- */
+  .btn{display:inline-flex;align-items:center;gap:.45rem;cursor:pointer;
+       border:1px solid var(--linea);background:#1d2531;color:var(--txt);
+       padding:.5rem .9rem;border-radius:.55rem;font-size:.92rem;
+       transition:transform var(--rapido),background var(--rapido),border-color var(--rapido)}
+  .btn:hover{background:#232d3b}
+  .btn:active{transform:translateY(1px)}
+  .btn:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .btn-peligro{border-color:#5a2730;color:#ffb3bb;background:#241419}
+  .btn-peligro:hover{background:#301820;border-color:var(--peligro)}
+  .btn-fantasma{background:transparent;border-color:transparent;color:var(--suave)}
+  .btn-fantasma:hover{color:var(--txt);background:#1d2531}
+  /* ---- modal nativo <dialog>: lo abre/cierra el navegador ---- */
+  dialog{border:none;border-radius:var(--radio);padding:0;color:var(--txt);
+         background:var(--panel);max-width:420px;width:calc(100% - 2rem)}
+  dialog::backdrop{background:rgba(6,10,16,.6);backdrop-filter:blur(3px)}
+  /* animación de entrada ágil (no el salto brusco de siempre) */
+  dialog[open]{animation:surge var(--suaveT) cubic-bezier(.2,.9,.25,1)}
+  @keyframes surge{from{opacity:0;transform:translateY(14px) scale(.97)}
+                   to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){dialog[open]{animation:none}}
+  .modal-cabz{display:flex;gap:.8rem;align-items:flex-start;padding:1.3rem 1.3rem .4rem}
+  .modal-icono{flex:0 0 auto;width:40px;height:40px;border-radius:50%;
+               display:grid;place-items:center;background:#2a1820;color:var(--peligro)}
+  .modal-cuerpo{padding:0 1.3rem 1rem}
+  .modal-titulo{margin:.1rem 0 .25rem;font-size:1.1rem}
+  .modal-txt{color:var(--suave);margin:0}
+  .modal-pie{display:flex;justify-content:flex-end;gap:.6rem;
+             padding:1rem 1.3rem;border-top:1px solid var(--linea)}
+  /* ---- toast con DESHACER: evita el modal repetitivo ---- */
+  .toasts{position:fixed;left:50%;bottom:1.4rem;transform:translateX(-50%);
+          display:flex;flex-direction:column;gap:.5rem;z-index:50;width:min(92vw,420px)}
+  .toast{display:flex;align-items:center;gap:.8rem;background:#11203a;
+         border:1px solid #27405f;border-radius:.6rem;padding:.7rem .9rem;
+         box-shadow:0 10px 30px rgba(0,0,0,.35);animation:surge var(--rapido) ease}
+  .toast .crece{flex:1;min-width:0}
+  .barra{height:3px;border-radius:3px;background:var(--acento);
+         margin-top:.5rem;transform-origin:left;animation:vaciar 5s linear forwards}
+  @keyframes vaciar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+  .vacio{color:var(--suave);font-style:italic;padding:.4rem 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Flujo de confirmación ágil</h1>
+  <p class="sub">Un patrón que NO abusa del modal: solo pregunta cuando el riesgo lo pide, y para lo reversible usa un aviso con <strong>Deshacer</strong>.</p>
+
+  <div class="tarjeta" id="lista">
+    <!-- las filas se pintan por JS -->
+  </div>
+
+  <p class="meta">Regla del patrón: borrar un elemento es reversible → se hace al momento y se ofrece deshacer (toast). Vaciar TODO es grave e irreversible → ahí sí abrimos el modal de confirmación.</p>
+  <button class="btn btn-peligro" id="vaciar">Vaciar la lista entera</button>
+</div>
+
+<!-- Un ÚNICO modal reutilizable, parametrizable; no uno por cada acción -->
+<dialog id="modal" aria-labelledby="mTit" aria-describedby="mTxt">
+  <div class="modal-cabz">
+    <div class="modal-icono" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+      </svg>
+    </div>
+    <div class="crece">
+      <h2 class="modal-titulo" id="mTit">¿Seguro?</h2>
+    </div>
+  </div>
+  <div class="modal-cuerpo">
+    <p class="modal-txt" id="mTxt">Esta acción no se puede deshacer.</p>
+  </div>
+  <div class="modal-pie">
+    <button class="btn btn-fantasma" id="mCancel">Cancelar</button>
+    <button class="btn btn-peligro" id="mConfirm">Confirmar</button>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+  // ---- datos de ejemplo ----
+  let items = [
+    { id: 1, nombre: 'Informe trimestral.pdf', meta: '2,4 MB · hoy' },
+    { id: 2, nombre: 'Logo-final-v7.png',       meta: '880 KB · ayer' },
+    { id: 3, nombre: 'notas-reunión.txt',       meta: '12 KB · lunes' },
+  ];
+
+  const $lista  = document.getElementById('lista');
+  const $toasts = document.getElementById('toasts');
+  const modal   = document.getElementById('modal');
+  const mTit    = document.getElementById('mTit');
+  const mTxt    = document.getElementById('mTxt');
+  const mConfirm= document.getElementById('mConfirm');
+  const mCancel = document.getElementById('mCancel');
+
+  // ---- modal reutilizable basado en Promesa: una función, mil usos ----
+  let resolver = null;
+  function pedirConfirmacion({ titulo, texto, etiqueta }) {
+    mTit.textContent = titulo;
+    mTxt.textContent = texto;
+    mConfirm.textContent = etiqueta || 'Confirmar';
+    modal.showModal();
+    return new Promise(res => { resolver = res; });
+  }
+  function cerrar(ok) {
+    if (resolver) { resolver(ok); resolver = null; }
+    if (modal.open) modal.close();
+  }
+  mConfirm.addEventListener('click', () => cerrar(true));
+  mCancel .addEventListener('click', () => cerrar(false));
+  // cerrar con Escape o clic fuera cuenta como cancelar
+  modal.addEventListener('cancel', e => { e.preventDefault(); cerrar(false); });
+  modal.addEventListener('click', e => { if (e.target === modal) cerrar(false); });
+
+  // ---- toast con DESHACER ----
+  function toast(mensaje, { onDeshacer } = {}) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    const txt = document.createElement('div');
+    txt.className = 'crece';
+    txt.textContent = mensaje;            // textContent = a prueba de inyección
+    const barra = document.createElement('div');
+    barra.className = 'barra';
+    txt.appendChild(barra);
+    el.appendChild(txt);
+
+    let temporizador;
+    const quitar = () => { clearTimeout(temporizador); el.remove(); };
+
+    if (onDeshacer) {
+      const b = document.createElement('button');
+      b.className = 'btn btn-fantasma';
+      b.textContent = 'Deshacer';
+      b.addEventListener('click', () => { onDeshacer(); quitar(); });
+      el.appendChild(b);
+    }
+    $toasts.appendChild(el);
+    temporizador = setTimeout(quitar, 5000);
+  }
+
+  // ---- pintar la lista ----
+  function render() {
+    $lista.textContent = '';
+    if (items.length === 0) {
+      const v = document.createElement('div');
+      v.className = 'vacio';
+      v.textContent = 'No queda nada en la lista.';
+      $lista.appendChild(v);
+      return;
+    }
+    for (const it of items) {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+
+      const info = document.createElement('div');
+      const n = document.createElement('div'); n.className = 'nombre'; n.textContent = it.nombre;
+      const m = document.createElement('div'); m.className = 'meta';   m.textContent = it.meta;
+      info.append(n, m);
+
+      const bBorrar = document.createElement('button');
+      bBorrar.className = 'btn btn-peligro';
+      bBorrar.textContent = 'Borrar';
+      bBorrar.setAttribute('aria-label', 'Borrar ' + it.nombre);
+      // Borrar es REVERSIBLE: no molestamos con modal, borramos y ofrecemos deshacer
+      bBorrar.addEventListener('click', () => {
+        const idx = items.indexOf(it);
+        const copia = it;
+        items = items.filter(x => x !== it);
+        render();
+        toast('Se borró «' + copia.nombre + '»', {
+          onDeshacer: () => { items.splice(Math.min(idx, items.length), 0, copia); render(); }
+        });
+      });
+
+      fila.append(info, bBorrar);
+      $lista.appendChild(fila);
+    }
+  }
+
+  // ---- acción GRAVE e irreversible: aquí sí, modal ----
+  document.getElementById('vaciar').addEventListener('click', async () => {
+    if (items.length === 0) { toast('La lista ya está vacía'); return; }
+    const ok = await pedirConfirmacion({
+      titulo: '¿Vaciar los ' + items.length + ' elementos?',
+      texto: 'Se eliminarán todos a la vez y esto NO se puede deshacer.',
+      etiqueta: 'Sí, vaciar todo'
+    });
+    if (ok) { items = []; render(); toast('Lista vaciada'); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

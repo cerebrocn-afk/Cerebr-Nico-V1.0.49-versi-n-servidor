@@ -1,0 +1,6 @@
+{
+  "name": "CerebróNico V1.0.49",
+  "description": "CerebróNico V1.0.49 — Entorno de desarrollo con IA local (Ollama) y cloud, sandbox en vivo, puente PC, motor de planes con imágenes gratis, 50 entidades del consejo (10 espejos), complementos cn.*, forja de plugins desde el chat y creador web. Por Mario Nicolas Quintero.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

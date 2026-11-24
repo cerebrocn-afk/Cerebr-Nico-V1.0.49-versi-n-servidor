@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "panel_con_mas_acciones": "chat-input",
+  "max_acciones_visibles_sin_plegar": 3,
+  "paneles": {
+    "explorador": {
+      "visibles_default": 1,
+      "plegadas": 4,
+      "llevaAvanzado": true
+    },
+    "chat-input": {
+      "visibles_default": 1,
+      "plegadas": 0,
+      "llevaAvanzado": false,
+      "_v2.3.2": "el usuario jubiló el ⚙ de la barra del chat: Canal directo, Adjuntar y Encolar quedan a la vista (contrato chat-input.avanzadas=[])"
+    },
+    "chats-cola": {
+      "visibles_default": 1,
+      "plegadas": 0,
+      "llevaAvanzado": false
+    },
+    "ajustes-pc": {
+      "visibles_default": 1,
+      "plegadas": 0,
+      "llevaAvanzado": false,
+      "exenta": "tabs"
+    }
+  }
+}

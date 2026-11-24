@@ -1,0 +1,84 @@
+**Plan de Preparación y Arquitectura — CerebroNico v1.69.0 Showcase**
+
+### 1. Concepto y Enfoque Disruptivo ("Tira a Cerebrónico por la ventana")
+Romper con el corporativismo aburrido de las landing pages de IA. Diseño brutalista técnico, oscuro, basado en métricas reales de salud del motor (7,907 pruebas superadas, 0 errores, 182 suites, 97 herramientas deterministas). Velocidad extrema, sin frameworks inflados (HTML5/CSS vainilla puro + PWA), código transparente y visualización en tiempo real de los 4 puertos del motor (3000, 3500, 5000, 11434).
+
+---
+
+### 2. Estructura de Arquitectura y Secciones
+- **`index.html` (Hero & Core Metrics):**
+  - Titular agresivo: *"El IDE autónomo que no pide permiso."*
+  - Banner en vivo con el veredicto del motor: `7,907 comprobaciones · 0 fallos · 182 suites`.
+  - CTA principal de arranque instantáneo al sandbox (`:3500`).
+- **`arquitectura.html` (El Motor al Desnudo):**
+  - Diagrama interactivo de los 4 puertos (IDE, Sandbox, Puente PC, Ollama).
+  - Explicación técnica del bucle autónomo y autovalidación fiscal (`src/engine/autovalido.ts`).
+- **`herramientas.html` (Matriz de las 97 Herramientas):**
+  - Buscador filtrable de las 97 capacidades deterministas (creación web, auditorías WCAG/rendimiento, memoria híbrida, git).
+- **`galeria.html` (El Laboratorio Visual):**
+  - Exposición de las fotos del directorio `C:\Users\BirdBox\Downloads\cerebro fotos` integradas mediante `insertar_imagen`.
+
+---
+
+### 3. Inventario de Herramientas del Creador a Utilizar
+1. **`ingresar_archivo_workspace` / `insertar_imagen`**: Procesamiento e incorporación segura de las fotos desde `C:\Users\BirdBox\Downloads\cerebro fotos` a `assets/`.
+2. **`crear_sitio_multipagina`**: Generación inicial de la estructura con paleta oscura (`noche`) y tipografía de sistema/mono.
+3. **`crear_pwa`**: Conversión a aplicación web progresiva con caché offline (Service Worker).
+4. **`generar_schema_jsonld`**: Inyección de metadatos estructurados (SoftwareApplication / Organization).
+5. **`auditor_contraste` & `preflight_rendimiento`**: Verificación WCAG AA/AAA y control estricto de peso (cero scripts bloqueantes).
+6. **`exportar_sitio_zip`**: Empaquetado determinista final con hash SHA-256 verificado.### Arquitectura Propuesta: "CerebroNico NextGen"
+
+*   **Estructura:** Sitio estático multipágina (OnePage mejorada) con arquitectura *Performance-First*.
+*   **Fundamentos:**
+    *   **Core:** HTML5 / CSS (Paleta 'noche' para identidad técnica).
+    *   **Interacción:** Vanilla JS modular (sin dependencias innecesarias).
+    *   **PWA:** Service Worker (offline-first) + Web Manifest.
+    *   **Optimización:** Auditorías automáticas (WCAG 2.1, Rendimiento, SEO derivado).
+*   **Stack de Herramientas:**
+    1.  `planificar_ruta_trabajo`: Definición del árbol y requisitos.
+    2.  `crear_sitio_multipagina`: Generación base.
+    3.  `insertar_imagen`: Procesamiento y optimización de activos (tras autorización).
+    4.  `crear_pwa`: Activación de capacidades offline.
+    5.  `mejorar_hasta_estable`: Bucle de autoverificación y saneamiento de código.
+    6.  `auditar_sitio` + `preflight_rendimiento`: Validación final.
+
+### Plan de Preparación
+
+```cerebronico:plan
+{"tasks":[
+{"id":"t1","description":"Analizar archivos de imagen en C:\\Users\\BirdBox\\Downloads\\cerebro fotos para catálogo.","tipo":"investigar"},
+{"id":"t2","description":"Definir estructura de datos del sitio y esquema JSON-LD.","tipo":"crear"},
+{"id":"t3","description":"Forjar esqueleto del sitio multipágina con paleta 'noche'.","tipo":"crear"},
+{"id":"t4","description":"Integrar imágenes y configurar PWA.","tipo":"modificar"},
+{"id":"t5","description":"Ejecutar auditoría de rendimiento y contraste WCAG.","tipo":"reparar"}
+]}
+```
+
+### Aduana del Árbol: Autorización de Activos
+
+He detectado fotos en `C:\Users\BirdBox\Downloads\cerebro fotos`. Para proceder, necesito listar los archivos encontrados y obtener tu consentimiento para añadirlos al proyecto, ya que no son código fuente y entran bajo las reglas de protección.
+
+¿Deseas que liste el contenido de dicha carpeta para que selecciones cuáles añadir al sitio, o prefieres continuar sin activos gráficos por ahora?Listando archivos en C:\Users\BirdBox\Downloads\cerebro fotos para evaluar activos antes de integrar, paso único.
+
+Analizando error de ruta: intentaré listar `C:\Users\BirdBox` para verificar permisos y formato de acceso.
+
+El puente de acceso a carpetas externas no está operativo; cambiaré de enfoque para explorar la raíz del proyecto actual y definir la estructura del sitio CerebroNico.
+
+Definiendo tareas de construcción para el sitio CerebroNico en la raíz del proyecto.
+
+Ejecutando la creación del sitio base con estructura multipágina y paleta 'noche'.
+
+Ejecutando proceso de mejora automática para sanear el sitio y corregir errores de auditoría.
+
+Leyendo `index.html` para aplicar correcciones manuales en `<title>` y `<h1>` según el informe de auditoría.
+
+El archivo no se encontró en la ruta esperada. Listando el directorio `.creador/cerebro-nico-site` para identificar las rutas correctas.
+
+Buscando la ubicación exacta de `index.html` dentro del proyecto.
+
+El resultado de la búsqueda se centra en el servidor estático. Listando el directorio `.creador` para localizar la estructura generada.
+
+El directorio `.creador` no aparece en la raíz. Ejecutando comando `dir` en terminal para localizar `index.html`.
+
+El archivo está en `.creador/cerebro-nico-site/index.html`. Procedo a leerlo.
+

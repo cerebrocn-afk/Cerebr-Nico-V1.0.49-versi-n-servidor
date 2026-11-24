@@ -1,0 +1,363 @@
+{
+  "meta": {
+    "titulo": "Log de sesion — CerebroNico v2.0.0",
+    "fecha": "2026-11-01",
+    "hora_local": "America/Montevideo",
+    "agente": "CerebroNico-Core-v2",
+    "modelo": "deepseek-v4-1-flash-1017 (mistral)",
+    "version_proyecto": "2.0.0",
+    "raiz_datos": "C:\\Cerebronico",
+    "instalacion_ide": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app",
+    "escritorio": "C:\\Users\\BirdBox\\Desktop",
+    "proposito": "Bitacora completa de la sesion: lo hecho, lo verificado por ejecucion, lo NO verificado, rutas relativas, funciones no encontradas y pendientes."
+  },
+
+  "resumen_ejecutivo": {
+    "objetivo_sesion": "Empaquetar la IDE v2.0.0 en 4 ZIP verificados, corregir el arranque del daemon de memoria (:5100) y documentar el estado real del proyecto.",
+    "resultado": "COMPLETADO CON RESERVAS",
+    "entregables_verificados": 6,
+    "archivos_en_paquete": 2304,
+    "bytes_paquete": 54444461,
+    "veredicto_reensamblado": "IDENTICO",
+    "pendientes_abiertos": 7
+  },
+
+  "linea_de_tiempo": [
+    {
+      "n": 1,
+      "tema": "empaquetado inicial",
+      "accion": "Se dividio el arbol de la IDE en 4 ZIP excluyendo node_modules, dist, caches y temporales.",
+      "resultado": "4 partes generadas: 2090 archivos, 50682321 bytes (~48.3 MB).",
+      "verificado": true,
+      "evidencia": "listado de tamano en disco de las 4 partes"
+    },
+    {
+      "n": 2,
+      "tema": "verificacion de reensamblado",
+      "accion": "Se extrajeron y unieron las 4 partes y se comparo hash a hash contra el arbol original.",
+      "resultado": "PARTE 4 CORRUPTA: zipfile no encontraba la firma PK; archivo truncado al escribirse.",
+      "verificado": true,
+      "evidencia": "excepcion _RealGetContents al abrir parte4-de-4.zip"
+    },
+    {
+      "n": 3,
+      "tema": "regeneracion de parte 4",
+      "accion": "Se regenero la parte 4 desde cero y se repitio la verificacion completa.",
+      "resultado": "4/4 CRC OK, 2090 archivos, 49.58 MB. Veredicto IDENTICO (0 faltantes, 0 sobrantes, 0 hash distinto).",
+      "verificado": true,
+      "evidencia": "original: 2090 / paquete: 2090 / coinciden: 2090"
+    },
+    {
+      "n": 4,
+      "tema": "diagnostico puerto 5100",
+      "accion": "Se comprobaron puertos y procesos vivos para explicar por que la IDE marcaba la memoria apagada.",
+      "resultado": "Puerto 5100 cerrado (WinError 10061). Procesos vivos: creador :5102 y puente :5000. El hindsight_daemon.py NO estaba corriendo. No existia memoria.log.",
+      "verificado": true,
+      "evidencia": "netstat + listado de procesos + ausencia de C:\\Cerebronico\\logs\\arranque\\memoria.log"
+    },
+    {
+      "n": 5,
+      "tema": "arranque manual del daemon",
+      "accion": "Se lanzo scripts/hindsight_daemon.py manualmente.",
+      "resultado": "Vivo en 1 segundo, PID 3760. /health devuelve v1.1.0-hybrid, 200 skills, embedder snowflake-arctic-embed:33m activo.",
+      "verificado": true,
+      "evidencia": "GET http://127.0.0.1:5100/health -> 200"
+    },
+    {
+      "n": 6,
+      "tema": "comparacion con version vieja",
+      "accion": "Se comparo agent_bridge_5000.py v1.7.0 (aportado por el usuario) contra el puente actual.",
+      "resultado": "El actual es POSTERIOR y superior: 51117 bytes, 53 herramientas, 46 binarios permitidos vs 15, 9 nativos Windows vs 7, config externa puente-permitidos.json, acceso_absoluto fail-closed, agente_pc_activo, papelera en fs_delete, tabla de despacho unificada. El viejo tenia la lista de despacho rota (documentado en su propio docstring).",
+      "verificado": true,
+      "evidencia": "lectura de ambos archivos + conteo de entradas de las listas blancas"
+    },
+    {
+      "n": 7,
+      "tema": "endurecimiento del daemon de memoria",
+      "accion": "Se anadieron al hindsight_daemon.py: contencion de rutas de sistema (_BLOQUEADAS_SISTEMA ampliada con C:\\Windows), validacion de origen (_origen_ok) y aviso en stderr al descartar rutas.",
+      "resultado": "Daemon pasa a v1.2.0-hybrid. 5/5 pruebas de contencion en verde.",
+      "verificado": true,
+      "evidencia": "/health devuelve 1.2.0-hybrid; pruebas de ruta bloqueada devuelven True"
+    },
+    {
+      "n": 8,
+      "tema": "error de metodo propio — corrupcion del .bat",
+      "accion": "Primer parche del .bat leyo con newline traducido y escribio con newline vacio, mezclando CRLF y LF.",
+      "resultado": "ARCHIVO ROTO: 24 lineas detectadas, 332 LF sueltos. Se revirtio desde respaldo .bak-antes-health.",
+      "verificado": true,
+      "evidencia": "conteo de lineas y de LF sueltos antes y despues del revert"
+    },
+    {
+      "n": 9,
+      "tema": "error de metodo propio — parche mal colocado",
+      "accion": "Segundo parche (binario) se inserto DESPUES de la etiqueta :memoria_ok en vez de antes del goto.",
+      "resultado": "Bloque inalcanzable. La reparacion posterior genero 3 goto :memoria_ok duplicados y :memoria_tarde antes de su rama.",
+      "verificado": true,
+      "evidencia": "lectura linea por linea del tramo 235-275"
+    },
+    {
+      "n": 10,
+      "tema": "parche definitivo del .bat",
+      "accion": "Se restauro del respaldo y se aplico UN solo parche en modo binario, insertando entre el start del daemon y el goto :memoria_ok original.",
+      "resultado": "Estructura correcta: start -> verificacion -> :wait_memoria (sondeo netstat hasta 12 s) -> :memoria_verificada o :memoria_tarde -> una sola etiqueta :memoria_ok. 355 lineas, 0 LF sueltos.",
+      "verificado": true,
+      "evidencia": "lectura del archivo en disco tras el parche"
+    },
+    {
+      "n": 11,
+      "tema": "falso positivo del 403",
+      "accion": "Se investigo un POST /tools/call -> 403 en el log de memoria.",
+      "resultado": "NO era defecto del parche: ocurrio una sola vez al arrancar y las dos llamadas siguientes devolvieron 200. _origen_ok es correcto: exige loopback y descarta el puerto con urlparse().hostname, por lo que http://127.0.0.1:3000 pasa. No se toco el codigo.",
+      "verificado": true,
+      "evidencia": "log de memoria: 1x403 seguido de 2x200"
+    },
+    {
+      "n": 12,
+      "tema": "reempaquetado final",
+      "accion": "Se reempaqueto desde cero con el estado actual (daemon v1.2.0, .bat corregido) y se reemplazaron los 4 ZIP del Escritorio.",
+      "resultado": "4 partes, 2304 archivos, 54444461 bytes (51.9 MB), 4/4 CRC OK. Reensamblado verificado IDENTICO.",
+      "verificado": true,
+      "evidencia": "original: 2304 / paquete: 2304 / coinciden: 2304 / solo en original: 0 / solo en paquete: 0 / hash distinto: 0"
+    },
+    {
+      "n": 13,
+      "tema": "verificacion del motor",
+      "accion": "Se comprobaron imports rotos, paridad de herramientas del creador y coherencia de version.",
+      "resultado": "0 imports rotos reales (los 4 marcados eran texto dentro de comentarios y plantillas markdown). Creador: paridad 32 = 32. Version 2.0.0 coherente entre constants.ts y package.json.",
+      "verificado": true,
+      "evidencia": "cn_verif_motor.py y cn_verif_creador2.py"
+    }
+  ],
+
+  "entregables": [
+    {
+      "archivo": "CerebroNico-IDE-v2.0.0-parte1-de-4.zip",
+      "ruta": "C:\\Users\\BirdBox\\Desktop\\CerebroNico-IDE-v2.0.0-parte1-de-4.zip",
+      "bytes": 12799198,
+      "archivos": 574,
+      "crc": "OK",
+      "verificado": true
+    },
+    {
+      "archivo": "CerebroNico-IDE-v2.0.0-parte2-de-4.zip",
+      "ruta": "C:\\Users\\BirdBox\\Desktop\\CerebroNico-IDE-v2.0.0-parte2-de-4.zip",
+      "bytes": 14334820,
+      "archivos": 45,
+      "crc": "OK",
+      "verificado": true
+    },
+    {
+      "archivo": "CerebroNico-IDE-v2.0.0-parte3-de-4.zip",
+      "ruta": "C:\\Users\\BirdBox\\Desktop\\CerebroNico-IDE-v2.0.0-parte3-de-4.zip",
+      "bytes": 17598993,
+      "archivos": 496,
+      "crc": "OK",
+      "verificado": true
+    },
+    {
+      "archivo": "CerebroNico-IDE-v2.0.0-parte4-de-4.zip",
+      "ruta": "C:\\Users\\BirdBox\\Desktop\\CerebroNico-IDE-v2.0.0-parte4-de-4.zip",
+      "bytes": 9711450,
+      "archivos": 1189,
+      "crc": "OK",
+      "verificado": true
+    },
+    {
+      "archivo": "CerebroNico-IDE-v2.0.0-MANIFIESTO.txt",
+      "ruta": "C:\\Users\\BirdBox\\Desktop\\CerebroNico-IDE-v2.0.0-MANIFIESTO.txt",
+      "contenido": "SHA-256 de cada parte + comandos de reconstruccion",
+      "verificado": true
+    },
+    {
+      "archivo": "INFORME-SESION-CerebroNico-v2.0.0.md",
+      "ruta": "C:\\Users\\BirdBox\\Desktop\\INFORME-SESION-CerebroNico-v2.0.0.md",
+      "bytes": 13010,
+      "contenido": "Informe completo: hecho, verificado, NO verificado, rutas relativas, funciones no encontradas",
+      "verificado": true
+    }
+  ],
+
+  "archivos_modificados": [
+    {
+      "archivo": "scripts/hindsight_daemon.py",
+      "ruta_relativa": "scripts/hindsight_daemon.py",
+      "bytes_antes": 73657,
+      "cambio": "Contencion de rutas de sistema + validacion de origen + aviso en stderr al descartar rutas",
+      "version_antes": "1.1.0-hybrid",
+      "version_despues": "1.2.0-hybrid",
+      "verificado": true,
+      "evidencia": "/health responde 1.2.0-hybrid tras reinicio"
+    },
+    {
+      "archivo": "iniciar_todo_windows.bat",
+      "ruta_relativa": "iniciar_todo_windows.bat",
+      "lineas_antes": 332,
+      "lineas_despues": 355,
+      "cambio": "Bloque de verificacion /health tras el start del daemon: sondeo netstat hasta 12 s, rama :memoria_verificada y rama :memoria_tarde con ruta del log",
+      "respaldo": "iniciar_todo_windows.bat.bak-antes-health",
+      "verificado": true,
+      "evidencia": "lectura en disco: 355 lineas, 0 LF sueltos, una sola etiqueta :memoria_ok"
+    }
+  ],
+
+  "estado_puertos": [
+    { "servicio": "IDE", "puerto": 3000, "estado": "escuchando", "verificado": true },
+    { "servicio": "sandbox/preview", "puerto": 3500, "estado": "cerrado", "motivo": "sin preview activo", "verificado": true },
+    { "servicio": "puente PC", "puerto": 5000, "estado": "escuchando", "verificado": true },
+    { "servicio": "memoria (hindsight)", "puerto": 5100, "estado": "escuchando", "version": "1.2.0-hybrid", "skills": 200, "embedder": "snowflake-arctic-embed:33m vivo", "verificado": true },
+    { "servicio": "creador web", "puerto": 5102, "estado": "escuchando", "verificado": true },
+    { "servicio": "Ollama", "puerto": 11434, "estado": "escuchando", "nota": "opcional, no dependiente", "verificado": true }
+  ],
+
+  "no_verificado": [
+    {
+      "id": "NV-1",
+      "punto": "El .bat nunca se ejecuto con el parche final de /health.",
+      "riesgo": "ALTO",
+      "por_que": "La estructura esta verificada leyendo el archivo, no ejecutandolo. Un error de sintaxis de cmd solo aparece al correr.",
+      "como_cerrarlo": "Doble clic en iniciar_todo_windows.bat y comprobar que la ventana 'Memoria :5100' queda abierta y que C:\\Cerebronico\\logs\\arranque\\memoria.log crece."
+    },
+    {
+      "id": "NV-2",
+      "punto": "Los 253 tests no se corrieron (npm run validar quedo pendiente).",
+      "riesgo": "ALTO",
+      "por_que": "Se agoto el presupuesto de pasos del turno antes de lanzarlo.",
+      "como_cerrarlo": "cd a la instalacion y ejecutar npm run validar; revisar el conteo de suites y fallos."
+    },
+    {
+      "id": "NV-3",
+      "punto": "index.html declara la version 2.3.1 mientras constants.ts y package.json dicen 2.0.0.",
+      "riesgo": "MEDIO",
+      "por_que": "Incoherencia real detectada por lectura, no corregida en esta sesion.",
+      "como_cerrarlo": "Alinear el titulo/meta de index.html con VERSION_SEMVER o con package.json."
+    },
+    {
+      "id": "NV-4",
+      "punto": "El indice de memoria esta en unidades: 0.",
+      "riesgo": "MEDIO",
+      "por_que": "El daemon corre en modo espejo (backend_configurado: false), sin Hindsight real. Responde, pero no ha indexado nada.",
+      "como_cerrarlo": "Configurar el backend real o lanzar memory_indexar_proyecto y comprobar que unidades > 0."
+    },
+    {
+      "id": "NV-5",
+      "punto": "node_modules y dist no van en el ZIP.",
+      "riesgo": "BAJO",
+      "por_que": "Exclusion deliberada por tamano y por ser artefactos regenerables.",
+      "como_cerrarlo": "Tras descomprimir: npm install y npm run build."
+    },
+    {
+      "id": "NV-6",
+      "punto": "Los logs de arranque (memoria.log, creador.log) viajan dentro de los ZIP.",
+      "riesgo": "BAJO",
+      "por_que": "Estan dentro del arbol empaquetado. No son secretos, pero acompanan al paquete si circula.",
+      "como_cerrarlo": "Reempaquetar excluyendo C:\\Cerebronico\\logs si se va a distribuir."
+    },
+    {
+      "id": "NV-7",
+      "punto": "La instancia de :5100 la lanzo el agente a mano, no el .bat.",
+      "riesgo": "MEDIO",
+      "por_que": "Si se cierra la IDE o se reinicia la maquina, el daemon no vuelve solo hasta que el .bat arranque correctamente.",
+      "como_cerrarlo": "Cubierto por NV-1."
+    }
+  ],
+
+  "rutas_relativas": {
+    "nota": "Todas las rutas de trabajo son relativas a la raiz de datos o a la instalacion. Nunca absolutas dentro del proyecto.",
+    "raiz_datos": "C:\\Cerebronico",
+    "instalacion": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app",
+    "claves": [
+      { "ruta_relativa": "scripts/hindsight_daemon.py", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\scripts\\hindsight_daemon.py", "existe": true },
+      { "ruta_relativa": "iniciar_todo_windows.bat", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\iniciar_todo_windows.bat", "existe": true },
+      { "ruta_relativa": "agent_bridge_5000.py", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\agent_bridge_5000.py", "existe": true, "bytes": 50110 },
+      { "ruta_relativa": "puente-permitidos.json", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\puente-permitidos.json", "existe": true },
+      { "ruta_relativa": "src/constants.ts", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\src\\constants.ts", "existe": true },
+      { "ruta_relativa": "package.json", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\package.json", "existe": true },
+      { "ruta_relativa": "index.html", "absoluta": "C:\\Users\\BirdBox\\Downloads\\CerebroNico-IDE-v2.0.0\\app\\index.html", "existe": true },
+      { "ruta_relativa": "logs/arranque/memoria.log", "absoluta": "C:\\Cerebronico\\logs\\arranque\\memoria.log", "existe": true },
+      { "ruta_relativa": "logs/arranque/creador.log", "absoluta": "C:\\Cerebronico\\logs\\arranque\\creador.log", "existe": true }
+    ]
+  },
+
+  "funciones_no_encontradas": [
+    {
+      "simbolo": "src/services/appKernel",
+      "aparece_en": "src/engine/fallbackAutonomo.ts:75",
+      "tipo": "falso positivo",
+      "detalle": "Solo aparece como texto dentro de una plantilla markdown de informe. No es un import ejecutable.",
+      "accion": "ninguna"
+    },
+    {
+      "simbolo": "import en src/engine/ejecucionReal.ts:35",
+      "tipo": "falso positivo",
+      "detalle": "Dentro de un bloque de comentario /** */ como ejemplo de cableado futuro.",
+      "accion": "ninguna"
+    },
+    {
+      "simbolo": "import en src/engine/packTerminal.ts:9 y :12",
+      "tipo": "falso positivo",
+      "detalle": "Dentro del docstring de cabecera, son instrucciones de montaje.",
+      "accion": "ninguna"
+    },
+    {
+      "simbolo": "src/engine/ejecucionReal.ts",
+      "tipo": "modulo huerfano",
+      "detalle": "Declarado por su propio codigo pero sin consumidores detectados en el grafo de imports.",
+      "accion": "revisar si debe cablearse o retirarse"
+    },
+    {
+      "simbolo": "src/engine/packTerminal.ts",
+      "tipo": "modulo huerfano",
+      "detalle": "Declarado por su propio codigo pero sin consumidores detectados en el grafo de imports.",
+      "accion": "revisar si debe cablearse o retirarse"
+    }
+  ],
+
+  "metricas_verificadas": {
+    "puente_pc": { "bytes": 50110, "herramientas": 53, "defensas_activas": 4, "verificado": true },
+    "daemon_memoria": { "version": "1.2.0-hybrid", "skills": 200, "unidades_indexadas": 0, "embedder_vivo": true, "verificado": true },
+    "creador_web": { "herramientas_manifiesto": 32, "herramientas_ejecutores": 32, "paridad": "OK", "verificado": true },
+    "motor": { "imports_rotos_reales": 0, "falsos_positivos_descartados": 4, "verificado": true },
+    "version": { "constants_ts": "2.0.0", "package_json": "2.0.0", "index_html": "2.3.1", "coherente": false }
+  },
+
+  "errores_propios_de_la_sesion": [
+    {
+      "error": "Parte 4 del primer empaque salio truncada",
+      "causa": "Escritura incompleta del ZIP",
+      "correccion": "Regeneracion desde cero + verificacion CRC de las 4 partes",
+      "leccion": "Un CRC valido por parte no garantiza el conjunto: hay que reensamblar y comparar hashes."
+    },
+    {
+      "error": "Corrupcion del .bat al mezclar CRLF y LF",
+      "causa": "Lectura con newline traducido y escritura con newline vacio",
+      "correccion": "Revertir desde respaldo y parchear en modo binario",
+      "leccion": "Nunca encadenar parches sobre un archivo ya tocado: restaurar y aplicar una sola pasada."
+    },
+    {
+      "error": "Parche insertado despues de la etiqueta en vez de antes del goto",
+      "causa": "texto.find(':memoria_ok') encontro el goto, no la etiqueta",
+      "correccion": "Ancla sobre el goto y lectura linea por linea para confirmar",
+      "leccion": "Verificar la posicion leyendo el archivo en disco, no confiando en el find."
+    },
+    {
+      "error": "4 imports rotos reportados que no existian",
+      "causa": "El verificador contaba texto dentro de comentarios y plantillas como codigo",
+      "correccion": "Filtrar por contexto (comentario/markdown) antes de reportar",
+      "leccion": "Un verificador que no distingue texto de codigo produce ruido, no diagnostico."
+    },
+    {
+      "error": "Paridad del creador reportada como 9 vs 32",
+      "causa": "El script leia el esquema JSON en vez de los campos name",
+      "correccion": "Contar sobre los name de las herramientas",
+      "leccion": "Antes de declarar una asimetria, comprobar que se esta contando lo mismo en ambos lados."
+    }
+  ],
+
+  "siguiente_paso_recomendado": [
+    "1. Ejecutar iniciar_todo_windows.bat y confirmar que la ventana de memoria queda abierta (cierra NV-1 y NV-7).",
+    "2. Lanzar npm run validar y anotar el conteo de suites y fallos (cierra NV-2).",
+    "3. Alinear la version de index.html con 2.0.0 (cierra NV-3).",
+    "4. Decidir si se configura el backend real de memoria o se indexa el proyecto (cierra NV-4).",
+    "5. Antes de distribuir los ZIP, decidir si se excluyen los logs de arranque (cierra NV-6)."
+  ]
+}

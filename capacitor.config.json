@@ -1,0 +1,6 @@
+{
+  "appId": "com.finanzas.dark",
+  "appName": "Finanzas Dark",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
