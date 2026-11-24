@@ -1,8 +1,7 @@
 # CerebróNico v1.0.55 — edición servidor
 
-Fuente de Gemini sobre v1.0.49, con autenticación, proyecto compartido por modelo/editor y sesiones en la raíz persistente. No reemplaza tu edición PC.
+Fuente sobre v1.0.49, con autenticación, proyecto compartido por modelo/editor y sesiones en la raíz persistente. No reemplaza tu edición PC.
 
-Lee **SUBIR-A-GITHUB.md** para el repositorio y despliegue; **SERVIDOR.md** para alcance y límites; **VALIDACION-SERVIDOR.md** para resultados y pruebas pendientes. Las secciones de escritorio que siguen son documentación histórica conservada, no instrucciones para desplegar esta edición.
 
 ---
 
@@ -20,14 +19,13 @@ Lee **SUBIR-A-GITHUB.md** para el repositorio y despliegue; **SERVIDOR.md** para
 
 # CerebróNico
 
-> **Autor y propietario:** Mario Nicolas Quintero Marin
+> **Autor y propietario:** Mario Quintero
 > **Copyright © 2026 Mario Nicolas Quintero Marin.** Todos los derechos reservados.
 > Versión de paquete 1.0.0 (línea base del proyecto en funcionamiento real).
 
 ## Mapa de documentos — UN archivo por tipo (unificación v1.0.0)
 
-«Que no haya varios CHANGELOG: la información centralizada en un archivo por cada
-documento» (Mario, 24/10). El papeleo vive una sola vez, acá:
+
 
 | Qué | Dónde (único) |
 |---|---|
@@ -55,12 +53,12 @@ IDE de alto rendimiento para ingeniería de software autónomo con inferencia lo
 
 - **[Z.ai](https://z.ai)** — Acceso al modelo GLM-4.5-Flash (gratis, sin tarjeta) que
   permitió prototipar, depurar y validar el motor agéntico sin gastar un centavo.
-- **[Accio Work](https://www.accio.com//** — El entorno de trabajo (workbench) sobre
+- **[Accio Work](https://www.accio.com//)** — El entorno de trabajo (workbench) sobre
   el que se ensamblaron, probaron y empaquetaron casi todas las iteraciones de la IDE.
 - **[Google AI Studio](https://aistudio.google.com)** — Donde se modelaron, midieron y
   afinaron los prompts y los flujos del Cerebro antes de pasarlos al motor local.
 
-> **Mario Nicolas Quintero Marin** reconoce públicamente que estas tres herramientas
+> **Mario ** reconoce públicamente que estas tres herramientas
 > fueron infraestructura crítica del proyecto, no meros complementos. CerebroNico es
 > también un homenaje a quiénes las construyeron y las mantienen abiertas para todos.
 
@@ -76,7 +74,7 @@ IDE de alto rendimiento para ingeniería de software autónomo con inferencia lo
 | 5101 | Wrapper SDK Node (OPCIONAL) | `scripts/hindsight_agent_server.mjs` — pack `memoria-hindsight-sdk`, `enabled: false` |
 
 
-## Pack creador de sitios y apps web (v1.19.0 → v1.21.0 · opcional)
+## Pack creador de sitios y apps web (opcional)
 
 `npm run creador` (Windows) / `npm run creador:linux` levanta `:5102`, otro pack
 externo con el mismo contrato. Veintisiete herramientas. Nueve familias: crear (`crear_sitio`, `crear_sitio_multipagina`, `crear_pagina`, `crear_bloque`, `crear_pwa`, `crear_og_image`, `generar_schema_jsonld`), auditar (`auditar_pagina`, `auditar_sitio`, `auditar_contraste`), corregir (`mejorar_pagina`), componentes (`componente_modo_oscuro`, `componente_consentimiento`, `formulario_destino`), medir (`preflight_rendimiento`), una sola pasada (`forjar_desde_brief`), **bucle (`mejorar_hasta_estable`)**, plan (`plan_de_construccion`), operación (`listar_sitios`, `previsualizar_sitio`, `plantillas_disponibles`, `estado_creador`) y —nueve en v1.21.0— **ENTREGA**: `exportar_sitio_zip` (ZIP determinista con sha256), `desplegar_carpeta` (en seco por defecto, solo a raíces autorizadas), `verificar_despliegue` (hash a hash: idéntico o divergente con nombres), `listar_exportaciones` y `generar_hreflang` (declara idiomas, **no traduce nada**: lista lo que falta). Once de v1.19: `crear_sitio`, `crear_bloque`,
@@ -98,8 +96,7 @@ Tres reglas que lo hacen seguro de usar:
 - **No abre servidores ni puertos por su cuenta.** `previsualizar_sitio` explica
   cómo hacerlo; quien decide es el usuario.
 
-## Panel de Tareas: ya no tapa los botones (v1.20.0)
-
+## Panel de Tareas:
 El panel de tareas del motor estaba fijo arriba a la derecha y su caja se comía los
 clics del pie de cada burbuja («Escuchar»/«Copiar») y del compositor. Ahora el
 contenedor ignora punteros (solo el botón y la hoja reciben eventos), la hoja abre
@@ -110,23 +107,15 @@ quedan libres. Con el panel cerrado la variable vale `0px` — nada se desplaza.
 Guías: `skills/cerebronico-creador`, `skills/cerebronico-creador-bucle` y
 `skills/cerebronico-web-qa`.
 
-## Editor web: solo el previsualizador (v1.60.15)
+## Editor web: 
 
-La vista del editor web mostraba a la izquierda un recuadro «Editor Web & IA»
-(campo de instrucciones + bloques rápidos + registro «Actividad del agente» con
-su botón Limpiar) y, a la derecha, el previsualizador, separados por un
-desplazador de ancho y un botón Mostrar/Ocultar IA. Ese panel duplicaba lo que
-ya ocurre en el chat central: las órdenes del editor se dan ahí (chip «Editor
-ON»), que es el único punto de entrada, y la actividad del agente también se ve
-en el propio chat.
-
-Desde v1.60.15 ese recuadro se eliminó por completo. El editor web es ahora
+ El editor web es ahora
 **solo la mesa de trabajo**: barra superior + previsualizador a todo el ancho.
 No hay panel izquierdo, ni desplazador, ni botón Mostrar/Ocultar IA. Con el
 panel se fueron sus estados y helpers internos (ancho persistido, arrastre,
 bloques rápidos, badge de fase e indicador de ocupado), que ya no tenían uso.
 
-## Capa de memoria híbrida (v1.17.0 · CerebroNico × Hindsight)
+## Capa de memoria híbrida (CerebroNico × Hindsight)
 
 El motor puede recordar y aprender entre sesiones sin depender del contexto de la
 ventana. Es **opcional por construcción**: si el demonio no está, la IDE arranca
@@ -232,7 +221,7 @@ Salida esperada: `OVERALL: ALL PASS` con 8 tests (ollama_short, ollama_long,
 openrouter, custom_provider, gemini_fallback, python_bridge, regression_old_bug,
 regression_new_code).
 
-## Servidores MCP (v1.16.1) — navegación web por el puente
+## Servidores MCP — navegación web por el puente
 
 El puente Python (:5000) habla **MCP (Model Context Protocol)**: lee
 `mcp_servers.json`, lanza cada servidor como proceso stdio (JSON-RPC, 100 %
@@ -313,8 +302,7 @@ curl http://127.0.0.1:3000/api/telemetry/ports
 
 ---
 
-# Descripción extensa del sistema (v1.6.12)
-
+# Descripción extensa del sistema 
 ## Qué es
 
 CerebróNico es un entorno integrado de desarrollo que combina **inferencia local**
@@ -392,8 +380,8 @@ Este repositorio contiene un sistema en desarrollo activo. Lo que **no** está
 hecho se dice aquí y no se disimula:
 
 - **No hay generación de imágenes.** El registro de herramientas no incluye
-  ninguna capacidad de imagen, ni de generación ni de edición.
-- **La vía rápida de previsualización es una foto fija**: no ofrece recarga en
+  ninguna capacidad de imagen, ni de generación ni de edición, pero se generan gratis por  Pollinations, solo se le pide al modelo y listo! lo ves en el sandbox.
+- **La vía rápida de previsualización es una foto fija**: y ofrece recarga en
   caliente.
 - **La orden del editor web** se envía al modelo como texto; el panel informa de
   que el mensaje se envió, no de que los archivos se hayan escrito.
@@ -407,5 +395,5 @@ hecho se dice aquí y no se disimula:
 
 ## Licencia y titularidad
 
-**Autor y propietario:** Mario Nicolas Quintero Marin.
+**Autor y propietario:** Mario  Quintero.
 **Copyright © 2026 Mario Nicolas Quintero Marin.** Todos los derechos reservados.
