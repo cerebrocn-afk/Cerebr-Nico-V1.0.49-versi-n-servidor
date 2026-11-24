@@ -1,3 +1,26 @@
+# Ajuste de publicación — v1.0.55, sin incremento
+
+## Ejecutado sobre este parche
+
+```text
+VEREDICTO configuracionPublicacion: 23 PASS · 0 FAIL
+VEREDICTO configServidor: 9 PASS · 0 FAIL
+VEREDICTO edicionServidor: 26 PASS · 0 FAIL
+EMPAQUETADO DIST (v1.0.49): 35 correctas · 0 fallos
+SIN CLAVES (v1.48.1): 26 correctas · 0 fallidas
+ordenDeObra: 91 correctas · 0 fallidas
+censoSuites: 1/1 OK
+VEREDICTO ritualVeredictos: 9 PASS · 0 FAIL
+```
+
+Las versiones entre paréntesis son nombres históricos de suites, no versión del paquete. npm run build: salida 0. Entrada real iniciar-servidor.mjs --comprobar con valores ficticios: salida 0, sin importar backend ni abrir puertos. Auditoría final del árbol: salida 0.
+
+La suite completa de 344 suites NO se repitió para este ajuste de arranque. Su resultado anterior se conserva abajo como antecedente, no como ejecución de este parche. Las pruebas de las rutas de autenticación y el workspace son simuladas; no se ejecutó aquí una IDE con herramientas de shell por HTTP. Cloud Run, Docker remoto, preview visual y persistencia al reiniciar siguen pendientes del usuario.
+
+Los registros del parche se incluyen en validacion-parche-publicacion/. No subir esos registros ni LEEME-PARCHE-PUBLICACION-v1.0.55.txt a GitHub. No hay cambio de versión ni de cliente/backend TypeScript: sólo entrada, configuración, documentación y receta Docker.
+
+---
+
 # Validación de la edición servidor 1.0.55
 
 Base: fuente v1.0.49 modificado por Gemini. Repositorio de servidor independiente; no reemplaza la edición PC.

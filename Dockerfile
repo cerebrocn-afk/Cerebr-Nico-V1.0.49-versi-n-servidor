@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 python3
 WORKDIR /app
 COPY --from=build --chown=node:node /app /app
 RUN mkdir -p /datos/proyecto && chown -R node:node /datos
-ENV NODE_ENV=production CN_SERVER_MODE=1 HOST=0.0.0.0 PORT=8080 PROJECT_DIR=/datos/proyecto
+ENV NODE_ENV=production CN_SERVER_MODE=1 CN_DEPLOY_TARGET=cloudrun HOST=0.0.0.0 PORT=8080 PROJECT_DIR=/datos/proyecto
 USER node
 EXPOSE 8080
 CMD ["node", "scripts/iniciar-servidor.mjs"]

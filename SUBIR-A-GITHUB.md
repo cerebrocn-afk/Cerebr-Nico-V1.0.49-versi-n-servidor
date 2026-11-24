@@ -32,6 +32,18 @@ Copia `.env.servidor.example` a `.env` únicamente en tu máquina o configura su
 - `HOST` y `PORT`: valores exigidos por el alojamiento. En Cloud Run, escucha en `0.0.0.0` y en el puerto asignado al contenedor. En tu máquina puede quedar `127.0.0.1`.
 - Claves de proveedores: configúralas de forma privada en el alojamiento o en la interfaz. Ollama no es obligatorio: puedes mantener Gemini u otro proveedor. Su campo de API key es una mejora adicional, no cambia tu plan contratado.
 
+## Ajuste de publicación sin cambio de versión — v1.0.55
+
+`npm start` y `npm run start:server` pasan ahora por el mismo arranque protegido. No uses `node dist/server.mjs` ni `npm run dev` como comando de publicación: omiten la comprobación previa.
+
+Antes de arrancar, `npm run verificar:publicacion` valida configuración, escritura en el workspace y presencia de backend compilado SIN abrir puertos. `npm run probar:publicacion` prueba el comprobador con valores ficticios, sin servidor ni claves reales.
+
+Cloud Run se identifica por K_SERVICE o CN_DEPLOY_TARGET=cloudrun. Si HOST quedó en loopback se corrige a 0.0.0.0; PORT conserva el asignado por el alojamiento. En otros sandboxes configura HOST=0.0.0.0 sólo para que el alojamiento alcance el contenedor; no expongas servicios auxiliares.
+
+PROJECT_DIR es obligatorio y debe estar separado del código: ./workspace sirve para prueba en sandbox, pero no demuestra persistencia. CN_PROJECT_DIR=. no lo sustituye. El dominio de ejemplo es rechazado: configura CN_PUBLIC_ORIGIN con el origen HTTPS REAL de la IDE (sin ruta ni barra final). ACCESS_TOKEN debe ser un secreto privado propio de al menos 24 caracteres. CN_COOKIE_SECURE=1 se conserva; no se elimina autenticación.
+
+El diagnóstico reúne los errores de configuración antes de importar el backend. No genera claves, no adivina el dominio, no monta un volumen y no arregla permisos IAM/Cloud Logging.
+
 Arranque protegido:
 
 ```text

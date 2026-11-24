@@ -27,7 +27,7 @@ Copiar `.env.servidor.example` a `.env` y completar:
 - PROJECT_DIR: raíz real persistente de trabajo. En un contenedor con la app instalada aparte, puede ser `/workspace`. Si ai.studio instala la IDE en `/workspace`, NO usar esa misma carpeta para los proyectos: elegir `/workspace/proyecto` y mantener el código de la IDE separado. La interfaz sigue llamando `/workspace` a su raíz de trabajo lógica.
 - OLLAMA_URL: `https://ollama.com` para nube o URL de Ollama accesible desde el backend. No agregar `/api` al final.
 - OLLAMA_API_KEY: opcional, clave del administrador. También se puede introducir en la interfaz. No subir el archivo `.env` a un repositorio público.
-- HOST/PORT: interfaz y puerto que solicite el alojamiento. En un VPS con proxy local puede quedar HOST=127.0.0.1; si el proveedor exige escuchar la interfaz del contenedor, configurar HOST=0.0.0.0. Los servicios auxiliares no se publican.
+- HOST/PORT: interfaz y puerto que solicite el alojamiento. En un VPS con proxy local puede quedar HOST=127.0.0.1; en Cloud Run el arranque corrige loopback a 0.0.0.0; si el proveedor exige escuchar la interfaz del contenedor, configurar HOST=0.0.0.0. Los servicios auxiliares no se publican.
 
 Usar HTTPS real, preservar cookies y permitir respuestas de streaming sin buffering en el proxy de la IDE. No agregar CORS abierto a la API. El backend y la interfaz deben publicarse en la raíz del mismo origen. El parche no promete soporte para publicar la IDE completa bajo un subdirectorio arbitrario.
 
@@ -73,3 +73,7 @@ PROJECT_DIR es obligatorio en servidor y una ruta inválida detiene el arranque,
 Dockerfile es una receta pendiente de construir/probar, no un despliegue confirmado. Cloud Run debe montar un volumen durable en /datos y suministrar ACCESS_TOKEN y CN_PUBLIC_ORIGIN como configuración privada. Su sistema de archivos predeterminado es efímero: crear /datos en la imagen NO aporta persistencia. Esta edición es para un único usuario de confianza; ejecución arbitraria de proyectos y escalado multiinstancia siguen sin aislamiento/coordinarse. Mantener una sola instancia, y usar almacenamiento compatible con escritura y renombrado de archivos; comprobar reinicio antes de confiarle proyectos.
 
 La clave de Ollama es una opción independiente del arreglo. El modelo puede ser Gemini u otro proveedor; se conserva su motor de herramientas. La prueba pública modelo→archivo→editor→guardar→preview todavía debe hacerse en el alojamiento real.
+
+## Parche de publicación, misma v1.0.55
+
+Consultar SUBIR-A-GITHUB.md: npm start pasa por arranque protegido; precheck sin abrir puertos con npm run verificar:publicacion. El origen de ejemplo y PROJECT_DIR=. se rechazan con diagnóstico antes de importar el backend. La plantilla ya no trae un dominio ficticio, mantiene autenticación obligatoria y ofrece HOST=0.0.0.0 para el contenedor del sandbox. No configura ni confirma el alojamiento.

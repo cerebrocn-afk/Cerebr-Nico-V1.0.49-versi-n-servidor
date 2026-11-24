@@ -21,7 +21,7 @@
     "sonda": "node scripts/sonda-arranque.mjs",
     "dev:isolated": "cross-env NODE_ENV=development tsx server.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --packages=external --sourcemap --metafile=dist/server.meta.json --outfile=dist/server.mjs",
-    "start": "node dist/server.mjs",
+    "start": "node scripts/iniciar-servidor.mjs",
     "start:isolated": "cross-env NODE_ENV=production node dist/server.mjs",
     "preview": "vite preview",
     "clean": "node scripts/limpiar-dist.mjs",
@@ -90,7 +90,9 @@
     "prep:sdk": "node scripts/preparar-sdk.mjs",
     "start:server": "node scripts/iniciar-servidor.mjs",
     "build:server": "npm run build",
-    "validar:server": "tsx tests/configServidor.test.ts && tsx tests/edicionServidor.test.ts"
+    "validar:server": "tsx tests/configServidor.test.ts && tsx tests/edicionServidor.test.ts",
+    "verificar:publicacion": "node scripts/iniciar-servidor.mjs --comprobar",
+    "probar:publicacion": "node scripts/comprobar-config-publicacion.mjs"
   },
   "dependencies": {
     "@google/genai": "^3.6.1",

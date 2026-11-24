@@ -1,0 +1,30 @@
+[
+  {
+    "check": "config-publicacion",
+    "exit": 0
+  },
+  {
+    "check": "configServidor",
+    "exit": 0
+  },
+  {
+    "check": "edicionServidor",
+    "exit": 0
+  },
+  {
+    "check": "empaquetadoDist",
+    "exit": 0
+  },
+  {
+    "check": "sinClaves",
+    "exit": 0
+  },
+  {
+    "check": "build",
+    "exit": 0
+  },
+  {
+    "check": "precheck-real",
+    "exit": 0
+  }
+]

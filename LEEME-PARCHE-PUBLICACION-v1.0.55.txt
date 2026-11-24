@@ -1,0 +1,31 @@
+PARCHE DE PUBLICACIÓN — CEREBRÓNICO SERVIDOR v1.0.55
+NO CAMBIA LA VERSIÓN. NO ES EL PAQUETE COMPLETO. NO APLICAR A LA EDICIÓN PC.
+
+1. Guarda una copia del repositorio SERVIDOR actual.
+2. Extrae este ZIP y copia su CONTENIDO en la raíz de ese repositorio, sobrescribiendo los archivos correspondientes. La carpeta scripts se fusiona: no borres su contenido existente. No crees una subcarpeta adicional para el parche.
+3. Sube a GitHub los 10 archivos de aplicación/documentación del parche, incluyendo los tres scripts y la plantilla .env.servidor.example. Conserva el package-lock.json existente: no cambia ninguna dependencia ni la versión.
+4. No subas este LEEME ni validacion-parche-publicacion/ al repositorio. Tampoco subas .env completado, tokens, proyectos o sesiones.
+
+CONFIGURACIÓN PRIVADA OBLIGATORIA EN AI STUDIO / ALOJAMIENTO:
+- CN_SERVER_MODE=1
+- HOST=0.0.0.0 para que el alojamiento alcance el contenedor.
+- PORT: conserva el valor asignado por el alojamiento; no uses 3500/5000 como puerto de la IDE.
+- PROJECT_DIR=./workspace sirve para la prueba en sandbox. No uses "." ni sólo CN_PROJECT_DIR. Para persistencia publicada, usa la carpeta del volumen durable montado y separado del código.
+- CN_PUBLIC_ORIGIN: origen HTTPS REAL de la IDE, sin ruta ni barra final. No uses ide.example.com.
+- ACCESS_TOKEN: secreto privado propio de al menos 24 caracteres. No lo envíes ni lo subas a GitHub.
+- CN_COOKIE_SECURE=1
+- En Cloud Run, CN_DEPLOY_TARGET=cloudrun. K_SERVICE también lo detecta automáticamente.
+
+La plantilla deja vacío dominio y secreto adrede. Esos datos no pueden inventarse ni obtenerse de un ZIP. Si faltan, el arranque se detiene con un diagnóstico claro, antes de importar el backend.
+
+INSTALACIÓN / COMPROBACIÓN:
+npm ci --ignore-scripts
+npm run probar:publicacion
+npm run build
+npm run verificar:publicacion
+
+El último comando requiere las variables privadas configuradas, comprueba escritura real, no abre puertos y no acredita volumen durable. Arranque de publicación: npm start o npm run start:server. El Dockerfile ya utiliza ese arranque. No publiques con node dist/server.mjs ni npm run dev, que omiten este precheck.
+
+VALIDADO EN EL PARCHE: configuración 23 PASS, configServidor 9 PASS, edicionServidor 26 PASS, empaquetadoDist 35 correctas, sinClaves 26 correctas, ordenDeObra 91 correctas, censoSuites 1/1 OK, ritualVeredictos 9 PASS. Build y precheck real: salida 0. Registros completos incluidos. No se repitieron las 344 suites heredadas para este ajuste.
+
+PENDIENTE DE TU VEREDICTO: publicación real, permisos Google/Cloud Logging, modelo→archivo→editor→preview HTTPS y continuidad del volumen al reiniciar. El parche no arregla permisos IAM ni aporta aislamiento multiusuario.

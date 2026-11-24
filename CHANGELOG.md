@@ -1,3 +1,7 @@
+## Ajuste de publicación — se mantiene v1.0.55
+
+Mismo número de versión: npm start unificado con inicio protegido; precheck sin escuchar puertos; Cloud Run detectado por K_SERVICE o CN_DEPLOY_TARGET; corrección de HOST loopback y respeto de PORT asignado; errores de configuración agrupados sin secretos; rechazo del dominio de ejemplo y cookie insegura. PROJECT_DIR continúa obligatorio y separado del código, sin fallback silencioso ni promesa de volumen durable. Nueva comprobación de configuración: scripts/comprobar-config-publicacion.mjs. No se modifica la edición PC.
+
 ## v1.0.55 — Edición servidor experimental
 
 Corrección de los rojos de integración: metadatos Electron e icono original restaurados (sin construir EXE); vallas de raíz dirigidas al módulo extraído; sondeos de Gemini conservados con pausa por pestaña oculta; BAT en CRLF y protección con .gitattributes; inventario de suites completo; lector N/M y FAIL probado sin contar fallos sembrados; instalación limpia y reconstrucción verificadas por separado. Se entregan instrucciones para un repositorio de servidor independiente, sin secretos ni estado privado.
