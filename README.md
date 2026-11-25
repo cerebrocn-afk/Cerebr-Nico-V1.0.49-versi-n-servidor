@@ -6,7 +6,7 @@ Fuente sobre v1.0.49, con autenticación, proyecto compartido por modelo/editor 
 ---
 
 # Entrega 1.0.55 — edición servidor experimental
-
+(https://cerebronico-v1-0-49-version-servidor-939285477553.us-east1.run.app/)
 **Leer primero SERVIDOR.md y VALIDACION-SERVIDOR.md.** Ésta no reemplaza el EXE validado. Incluye backend y cliente compilados, fuente, pruebas y configuración de servidor.
 
 ---
